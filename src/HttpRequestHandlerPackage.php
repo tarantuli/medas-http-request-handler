@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Medas\RequestHandler;
+namespace Medas\HttpRequestHandler;
 
 use Medas\ServiceManager\{AsSingleton, BasePackage};
 
-class RequestHandlerPackage extends BasePackage
+class HttpRequestHandlerPackage extends BasePackage
 {
     use AsSingleton;
 
