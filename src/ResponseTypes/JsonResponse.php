@@ -6,5 +6,5 @@ namespace Medas\HttpRequestHandler\ResponseTypes;
 
 interface JsonResponse extends Response
 {
-    public function outputJsonResponse(): void;
+    public function getJsonResponse(): mixed;
 }

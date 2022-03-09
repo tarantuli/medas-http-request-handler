@@ -19,11 +19,12 @@ class JsonHandler implements ResponseHandler
 
     public function handleResponse(Request $request, Response $response): bool
     {
+        /** @noinspection PhpConditionAlreadyCheckedInspection */
         if (!$request->serverData->acceptsMimeType('application/json') || !$response instanceof JsonResponse) {
             return false;
         }
 
-        $response->outputJsonResponse();
+        echo json_encode($response->getJsonResponse());
         return true;
     }
 

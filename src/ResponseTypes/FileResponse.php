@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler\ResponseTypes;
 
+use Medas\Core\FileEntity;
+
 interface FileResponse extends Response
 {
-    public function outputFileResponse(): void;
+    public function getFileResponse(): FileEntity;
 }

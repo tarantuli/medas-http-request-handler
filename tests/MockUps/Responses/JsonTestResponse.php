@@ -8,8 +8,8 @@ use Medas\HttpRequestHandler\ResponseTypes\JsonResponse;
 
 class JsonTestResponse implements JsonResponse
 {
-    public function outputJsonResponse(): void
+    public function getJsonResponse(): array
     {
-        echo '{"data":"value"}';
+        return ['data' => 'value'];
     }
 }

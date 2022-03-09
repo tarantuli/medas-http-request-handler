@@ -23,7 +23,17 @@ class FileHandler implements ResponseHandler
             return false;
         }
 
-        $response->outputFileResponse();
+        $file = $response->getFileResponse();
+
+        $mimetype = $file->mimetype();
+        $fileName = $file->name() ?: str_replace('/', '.', $mimetype);
+
+        header('Access-Control-Allow-Origin: *');
+        header(sprintf('Content-type: %s', $mimetype));
+        header(sprintf('Content-Disposition: inline; filename="%s"', $fileName));
+
+        echo $file->content();
+
         return true;
     }
 
