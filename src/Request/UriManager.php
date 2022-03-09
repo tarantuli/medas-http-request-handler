@@ -14,7 +14,7 @@ class UriManager
         $uri = new Uri($string);
 
         if (false !== $pos = strpos($uri->endpoint, '?')) {
-            $uri->query = substr($uri->endpoint, $pos + 1);
+            parse_str(substr($uri->endpoint, $pos + 1), $uri->query);
             $uri->endpoint = substr($uri->endpoint, 0, $pos);
         }
 

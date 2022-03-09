@@ -8,7 +8,7 @@ class Uri
 {
     public string|null $extension = null;
     public string $endpoint;
-    public string|null $query = null;
+    public array $query = [];
 
     public function __construct(
         public string $uri,
