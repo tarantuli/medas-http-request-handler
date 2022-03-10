@@ -41,7 +41,7 @@ class RequestDataManager
     {
         return match (true) {
             empty($_SERVER['REMOTE_ADDR']) and !isset($_SERVER['HTTP_USER_AGENT']) and count($_SERVER['argv']) > 0 => throw new NotAnHttpRequestException(),
-            isset($_REQUEST[':method']) => Method::from($_REQUEST['::method']),
+            isset($_REQUEST[':method']) => Method::from($_REQUEST[':method']),
             isset($_SERVER['REQUEST_METHOD']) => Method::from($_SERVER['REQUEST_METHOD']),
         };
     }
