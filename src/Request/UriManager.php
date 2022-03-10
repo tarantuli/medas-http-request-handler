@@ -23,7 +23,9 @@ class UriManager
             $uri->extension = mb_strtolower($parts[2]);
         }
 
-        $uri->endpoint = rtrim($uri->endpoint, '/');
+        if (strlen($uri->endpoint) > 1) {
+            $uri->endpoint = rtrim($uri->endpoint, '/');
+        }
 
         return $uri;
     }
