@@ -12,7 +12,6 @@ use Medas\ServiceManager\Attributes\Service;
 #[Service]
 class HtmlHandler implements ResponseHandler
 {
-
     public function priority(): int
     {
         return -2;
@@ -34,7 +33,7 @@ class HtmlHandler implements ResponseHandler
             return false;
         }
 
-        printf('<p>%s:%u [%u]] %s</p>', $exception->getFile(), $exception->getLine(), $exception->getCode(), $exception->getMessage());
+        printf('<p>%s:%u [%u] %s</p>', $exception->getFile(), $exception->getLine(), $exception->getCode(), $exception->getMessage());
         return true;
     }
 }
