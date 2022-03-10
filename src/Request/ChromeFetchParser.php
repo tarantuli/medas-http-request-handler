@@ -28,7 +28,7 @@ class ChromeFetchParser
             throw new Exceptions\InvalidChromeFetchStringException($fetch);
         }
 
-        if (!preg_match('/^(?<scheme>\w+):\/\/(?<serverName>[^\/]+)\/(?<uri>.*)$/', $parts['host'], $host)) {
+        if (!preg_match('/^(?<scheme>\w+):\/\/(?<serverName>[^\/]+)(?<uri>\/.*)?$/', $parts['host'], $host)) {
             throw new Exceptions\InvalidHostStringException($parts['host']);
         }
 
