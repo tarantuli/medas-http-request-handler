@@ -14,7 +14,7 @@ class ServerData
     {
     }
 
-    public function acceptsMimeType(string $mimeType): bool
+    public function acceptsMimeType(string $mimeType, bool $ignoreDoubleWild = true): bool
     {
         if (array_key_exists($mimeType, $this->getAcceptTypes())) {
             return true;
@@ -22,6 +22,10 @@ class ServerData
 
         foreach ($this->getAcceptTypes() as $acceptType => $quality) {
             if (!str_contains($acceptType, '*')) {
+                continue;
+            }
+
+            if ($ignoreDoubleWild && $acceptType === '*/*') {
                 continue;
             }
 
