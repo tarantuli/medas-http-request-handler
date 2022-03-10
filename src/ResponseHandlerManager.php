@@ -36,5 +36,7 @@ class ResponseHandlerManager
                 return;
             }
         }
+
+        printf("%s:%u [%u]] %s\n", $exception->getFile(), $exception->getLine(), $exception->getCode(), $exception->getMessage());
     }
 }
