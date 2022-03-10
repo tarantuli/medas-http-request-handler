@@ -14,7 +14,7 @@ class HtmlHandler implements ResponseHandler
 {
     public function priority(): int
     {
-        return -2;
+        return -20;
     }
 
     public function handleResponse(Request $request, Response $response): bool

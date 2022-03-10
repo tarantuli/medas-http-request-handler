@@ -14,7 +14,7 @@ class FileHandler implements ResponseHandler
 {
     public function priority(): int
     {
-        return -3;
+        return -30;
     }
 
     public function handleResponse(Request $request, Response $response): bool

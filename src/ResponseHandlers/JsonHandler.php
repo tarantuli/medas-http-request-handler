@@ -15,7 +15,7 @@ class JsonHandler implements ResponseHandler
 {
     public function priority(): int
     {
-        return -1;
+        return -10;
     }
 
     public function handleResponse(Request $request, Response $response): bool
