@@ -18,7 +18,7 @@ class RequestFaker
     {
     }
 
-    public function request(Method $method, string $uri, array $serverData = [], array $postData = []): string
+    public function request(Method $method, string $uri, array $serverData = [], array $postData = []): void
     {
         $this->dataManager->set(new Request(
             $method,
@@ -27,8 +27,6 @@ class RequestFaker
             new PostData($postData)
         ));
 
-        ob_start();
         $this->requestHandler->handle();
-        return ob_get_clean();
     }
 }
