@@ -4,12 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler;
 
-use Medas\HttpRequestHandler\Request\Method;
-use Medas\HttpRequestHandler\Request\PostData;
-use Medas\HttpRequestHandler\Request\Request;
-use Medas\HttpRequestHandler\Request\RequestDataManager;
-use Medas\HttpRequestHandler\Request\ServerData;
-use Medas\HttpRequestHandler\Request\UriManager;
+use Medas\HttpRequestHandler\Request\{Method, PostData, Request, RequestDataManager, ServerData, UriManager};
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
