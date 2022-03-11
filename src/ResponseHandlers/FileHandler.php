@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler\ResponseHandlers;
 
+use Medas\HttpRequestHandler\Exceptions\MimeTypeIsNotAcceptedException;
 use Medas\HttpRequestHandler\Request\Request;
 use Medas\HttpRequestHandler\ResponseTypes\FileResponse;
 use Medas\HttpRequestHandler\ResponseTypes\Response;
@@ -19,13 +20,17 @@ class FileHandler implements ResponseHandler
 
     public function handleResponse(Request $request, Response $response): bool
     {
-        if (!$request->serverData->acceptsMimeType('*/*') || !$response instanceof FileResponse) {
+        if (!$response instanceof FileResponse) {
             return false;
         }
 
         $file = $response->getFileResponse();
-
         $mimetype = $file->mimetype();
+
+        if (!$request->serverData->acceptsMimeType($mimetype)) {
+            throw new MimeTypeIsNotAcceptedException($mimetype);
+        }
+
         $fileName = $file->name() ?: str_replace('/', '.', $mimetype);
 
         header('Access-Control-Allow-Origin: *');
@@ -39,18 +44,6 @@ class FileHandler implements ResponseHandler
 
     public function handleException(Request $request, \Exception|\TypeError|\Error $exception): bool
     {
-        if (!$request->serverData->acceptsMimeType('*/*')) {
-            return false;
-        }
-
-        echo json_encode([
-            'message' => $exception->getMessage(),
-            'code' => $exception->getCode(),
-            'fileName' => $exception->getFile(),
-            'lineNumber' => $exception->getLine(),
-
-        ]);
-
-        return true;
+        return false;
     }
 }
