@@ -13,9 +13,9 @@ use Medas\ServiceManager\Attributes\Service;
 class HttpRequestHandler
 {
     public function __construct(
-        private RequestDataManager     $requestDataManager,
-        private ResponseHandlerManager $responseHandlerManager,
-        private HandlerManager         $requestHandlerManager,
+        private readonly RequestDataManager     $requestDataManager,
+        private readonly ResponseHandlerManager $responseHandlerManager,
+        private readonly HandlerManager         $requestHandlerManager,
     )
     {
     }

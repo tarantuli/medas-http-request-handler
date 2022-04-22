@@ -15,7 +15,7 @@ class ResponseHandlerFinder
     private array $handlers;
 
     public function __construct(
-        private CacheManager $cacheManager,
+        private readonly CacheManager $cacheManager,
     )
     {
     }
@@ -40,7 +40,7 @@ class ResponseHandlerFinder
         return $this->handlers;
     }
 
-    private function processClass(string $className)
+    private function processClass(string $className): void
     {
         $class = new \ReflectionClass($className);
 

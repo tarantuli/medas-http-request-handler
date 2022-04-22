@@ -11,8 +11,8 @@ use Medas\ServiceManager\Cache\CacheManager;
 class ChromeFetchParser
 {
     public function __construct(
-        private CacheManager $cacheManager,
-        private UriManager   $uriManager,
+        private readonly CacheManager $cacheManager,
+        private readonly UriManager   $uriManager,
     )
     {
     }

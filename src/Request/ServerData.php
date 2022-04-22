@@ -9,7 +9,7 @@ class ServerData
     private array $acceptTypes;
 
     public function __construct(
-        private array $data
+        private readonly array $data
     )
     {
     }

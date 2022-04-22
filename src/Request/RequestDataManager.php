@@ -13,7 +13,7 @@ class RequestDataManager
     private Request $request;
 
     public function __construct(
-        private UriManager $uriManager,
+        private readonly UriManager $uriManager,
     )
     {
     }

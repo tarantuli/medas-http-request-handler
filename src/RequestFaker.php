@@ -11,9 +11,9 @@ use Medas\ServiceManager\Attributes\Service;
 class RequestFaker
 {
     public function __construct(
-        private HttpRequestHandler $requestHandler,
-        private RequestDataManager $dataManager,
-        private UriManager         $uriManager,
+        private readonly HttpRequestHandler $requestHandler,
+        private readonly RequestDataManager $dataManager,
+        private readonly UriManager         $uriManager,
     )
     {
     }

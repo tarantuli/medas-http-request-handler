@@ -7,7 +7,7 @@ namespace Medas\HttpRequestHandler\Request;
 class PostData
 {
     public function __construct(
-        private array $data
+        private readonly array $data
     )
     {
     }

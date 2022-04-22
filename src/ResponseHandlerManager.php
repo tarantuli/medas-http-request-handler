@@ -13,7 +13,7 @@ use Medas\ServiceManager\Attributes\Service;
 class ResponseHandlerManager
 {
     public function __construct(
-        private ResponseHandlerFinder $handlerFinder,
+        private readonly ResponseHandlerFinder $handlerFinder,
     )
     {
     }
