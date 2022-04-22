@@ -8,7 +8,9 @@ use Medas\HttpRequestHandler\Exceptions\NoJsonLdResponseException;
 use Medas\HttpRequestHandler\Request\Request;
 use Medas\HttpRequestHandler\ResponseTypes\JsonLdResponse;
 use Medas\HttpRequestHandler\ResponseTypes\Response;
+use Medas\ServiceManager\Attributes\Service;
 
+#[Service]
 class JsonLdHandler implements ResponseHandler
 {
     public function priority(): int
