@@ -33,6 +33,7 @@ class JsonHandler implements ResponseHandler
             return false;
         }
 
+        header('Content-Type: application/json');
         echo json_encode($response->getJsonResponse());
         return true;
     }
@@ -43,6 +44,7 @@ class JsonHandler implements ResponseHandler
             return false;
         }
 
+        header('Content-Type: application/json');
         echo json_encode([
             'message' => $exception->getMessage(),
             'code' => $exception->getCode(),

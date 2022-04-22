@@ -31,6 +31,7 @@ class JsonLdHandler implements ResponseHandler
             return false;
         }
 
+        header('Content-Type: application/ld+json');
         echo json_encode($response->getJsonLdResponse());
         return true;
     }
@@ -42,6 +43,7 @@ class JsonLdHandler implements ResponseHandler
         }
 
         // todo: craft a real jsonld error response
+        header('Content-Type: application/ld+json');
         echo json_encode([
             'message' => $exception->getMessage(),
             'code' => $exception->getCode(),
