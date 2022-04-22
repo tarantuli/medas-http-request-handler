@@ -11,11 +11,11 @@ class CannotHandleResponseException extends BaseException
 {
     public function __construct(Response $response)
     {
-        parent::__construct($response);
+        parent::__construct($response::class);
     }
 
     public function pattern(): string
     {
-        return 'No handler found for response %s';
+        return 'No handler found that can process a response of type %s for this request';
     }
 }
