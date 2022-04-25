@@ -32,6 +32,8 @@ class JsonLdHandler implements ResponseHandler
         }
 
         header('Content-Type: application/ld+json');
+        header('Access-Control-Allow-Origin: *');
+
         echo json_encode($response->getJsonLdResponse());
         return true;
     }
@@ -44,6 +46,8 @@ class JsonLdHandler implements ResponseHandler
 
         // todo: craft a real jsonld error response
         header('Content-Type: application/ld+json');
+        header('Access-Control-Allow-Origin: *');
+
         echo json_encode([
             'message' => $exception->getMessage(),
             'code' => $exception->getCode(),
