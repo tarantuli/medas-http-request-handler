@@ -10,4 +10,6 @@ enum Method: string
     case Post = 'POST';
     case Put = 'PUT';
     case Delete = 'DELETE';
+    case Options = 'OPTIONS';
+    case Patch = 'PATCH';
 }
