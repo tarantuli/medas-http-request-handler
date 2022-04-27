@@ -40,7 +40,7 @@ class RequestDataManager
 
     private function determineMethod(): Method
     {
-        if (empty($_SERVER['REMOTE_ADDR']) and !isset($_SERVER['HTTP_USER_AGENT']) and count($_SERVER['argv']) > 0){
+        if (empty($_SERVER['REMOTE_ADDR']) and !isset($_SERVER['HTTP_USER_AGENT']) and count($_SERVER['argv']) > 0) {
             throw new NotAnHttpRequestException();
         }
 
@@ -49,7 +49,7 @@ class RequestDataManager
         try {
             return Method::from($name);
         }
-        catch (\Exception) {
+        catch (\ValueError) {
             throw new UnknownMethodException($name);
         }
     }
