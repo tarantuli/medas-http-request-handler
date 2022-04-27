@@ -33,8 +33,10 @@ class JsonHandler implements ResponseHandler
             return false;
         }
 
-        header('Content-Type: application/json');
-        header('Access-Control-Allow-Origin: *');
+        if (!headers_sent()) {
+            header('Content-Type: application/json');
+            header('Access-Control-Allow-Origin: *');
+        }
 
         echo json_encode($response->getJsonResponse());
 
@@ -47,8 +49,10 @@ class JsonHandler implements ResponseHandler
             return false;
         }
 
-        header('Content-Type: application/json');
-        header('Access-Control-Allow-Origin: *');
+        if (!headers_sent()) {
+            header('Content-Type: application/json');
+            header('Access-Control-Allow-Origin: *');
+        }
 
         echo json_encode([
             'message' => $exception->getMessage(),
