@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler\ResponseHandlers;
 
+use Medas\HttpRequestHandler\Request\Method;
 use Medas\HttpRequestHandler\Request\Request;
 use Medas\HttpRequestHandler\ResponseTypes\HtmlResponse;
 use Medas\HttpRequestHandler\ResponseTypes\Response;
@@ -19,7 +20,11 @@ class HtmlHandler implements ResponseHandler
 
     public function handleResponse(Request $request, Response $response): bool
     {
-        if (!$request->serverData->acceptsMimeType('text/html') || !$response instanceof HtmlResponse) {
+        if (!$response instanceof HtmlResponse) {
+            return false;
+        }
+
+        if ($request->method !== Method::Options && !$request->serverData->acceptsMimeType('text/html')) {
             return false;
         }
 
