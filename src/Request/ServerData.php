@@ -14,6 +14,11 @@ class ServerData
     {
     }
 
+    public function data(): array
+    {
+        return $this->data;
+    }
+
     public function acceptsMimeType(string $mimeType, bool $ignoreDoubleWild = true): bool
     {
         if (array_key_exists($mimeType, $this->getAcceptTypes())) {
