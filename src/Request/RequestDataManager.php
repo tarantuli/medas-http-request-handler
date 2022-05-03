@@ -34,7 +34,8 @@ class RequestDataManager
             $this->determineMethod(),
             $this->determineEndpoint(),
             new ServerData($_SERVER),
-            new PostData($_POST)
+            new PostData($_POST),
+            $this->determineBody(),
         );
     }
 
@@ -62,5 +63,25 @@ class RequestDataManager
     public function set(Request $request): void
     {
         $this->request = $request;
+    }
+
+    private function determineBody(): BodyData
+    {
+        $raw = file_get_contents('php://input');
+
+        if ($raw === '') {
+            $body = [];
+        }
+        elseif (str_contains($_SERVER['HTTP_CONTENT_TYPE'] ?? '', 'application/json')) {
+            $body = json_decode($raw, true);
+        }
+        elseif (str_contains($_SERVER['HTTP_CONTENT_TYPE'] ?? '', 'application/json')) {
+            parse_str($raw, $body);
+        }
+        else {
+            throw new \Exception('cannot determine body values from ' . $raw);
+        }
+
+        return new BodyData($body);
     }
 }

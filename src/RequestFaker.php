@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler;
 
-use Medas\HttpRequestHandler\Request\{Method, PostData, Request, RequestDataManager, ServerData, UriManager};
+use Medas\HttpRequestHandler\Request\{BodyData, Method, PostData, Request, RequestDataManager, ServerData, UriManager};
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
@@ -18,13 +18,14 @@ class RequestFaker
     {
     }
 
-    public function request(Method $method, string $uri, array $serverData = [], array $postData = []): void
+    public function request(Method $method, string $uri, array $serverData = [], array $postData = [], array $bodyData = []): void
     {
         $this->dataManager->set(new Request(
             $method,
             $this->uriManager->fromString($uri),
             new ServerData($serverData),
-            new PostData($postData)
+            new PostData($postData),
+            new BodyData($bodyData),
         ));
 
         $this->requestHandler->handle();

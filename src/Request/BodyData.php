@@ -6,6 +6,7 @@ namespace Medas\HttpRequestHandler\Request;
 
 use Medas\Core\BaseArrayCollection;
 
-class PostData extends BaseArrayCollection
+class BodyData extends BaseArrayCollection
 {
+
 }

@@ -39,6 +39,7 @@ class ChromeFetchParser
             $this->uriManager->fromString($host['uri']),
             new ServerData($this->determineServerData($host['scheme'], $host['serverName'], $params)),
             new PostData($this->determinePostData($params)),
+            new BodyData([]),
         );
     }
 

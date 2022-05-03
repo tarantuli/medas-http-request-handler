@@ -4,20 +4,11 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler\Request;
 
-class ServerData
+use Medas\Core\BaseArrayCollection;
+
+class ServerData extends BaseArrayCollection
 {
     private array $acceptTypes;
-
-    public function __construct(
-        private readonly array $data
-    )
-    {
-    }
-
-    public function data(): array
-    {
-        return $this->data;
-    }
 
     public function acceptsMimeType(string $mimeType, bool $ignoreDoubleWild = true): bool
     {
@@ -48,7 +39,7 @@ class ServerData
     {
         if (!isset($this->acceptTypes)) {
             $this->acceptTypes = [];
-            $acceptHeader = strtolower(str_replace(' ', '', $this->data['HTTP_ACCEPT'] ?? ''));
+            $acceptHeader = strtolower(str_replace(' ', '', $this['HTTP_ACCEPT'] ?? ''));
             $headerParts = explode(',', $acceptHeader);
 
             foreach ($headerParts as $headerPart) {
