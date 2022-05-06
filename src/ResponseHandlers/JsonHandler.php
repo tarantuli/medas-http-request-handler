@@ -6,6 +6,7 @@ namespace Medas\HttpRequestHandler\ResponseHandlers;
 
 use Medas\HttpRequestHandler\Exceptions\NoJsonResponseException;
 use Medas\HttpRequestHandler\Request\Request;
+use Medas\HttpRequestHandler\ResponseHandlerManager;
 use Medas\HttpRequestHandler\ResponseTypes\JsonResponse;
 use Medas\HttpRequestHandler\ResponseTypes\Response;
 use Medas\ServiceManager\Attributes\Service;
@@ -18,7 +19,9 @@ class JsonHandler implements ResponseHandler
         return -10;
     }
 
-    public function handleResponse(Request $request, Response $response): bool
+    public function handleResponse(Request                $request,
+                                   Response               $response,
+                                   ResponseHandlerManager $manager): bool
     {
         if ($request->uri->extension === 'json') {
             /** @noinspection PhpConditionAlreadyCheckedInspection */
@@ -33,26 +36,24 @@ class JsonHandler implements ResponseHandler
             return false;
         }
 
-        if (!headers_sent()) {
-            header('Content-Type: application/json');
-            header('Access-Control-Allow-Origin: *');
-        }
+        $manager->setHeader('Content-Type', 'application/json');
+        $manager->setHeader('Access-Control-Allow-Origin', '*');
 
         echo json_encode($response->getJsonResponse());
 
         return true;
     }
 
-    public function handleException(Request $request, \Exception|\TypeError|\Error $exception): bool
+    public function handleException(Request                      $request,
+                                    \Exception|\TypeError|\Error $exception,
+                                    ResponseHandlerManager       $manager): bool
     {
         if (!$request->serverData->acceptsMimeType('application/json')) {
             return false;
         }
 
-        if (!headers_sent()) {
-            header('Content-Type: application/json');
-            header('Access-Control-Allow-Origin: *');
-        }
+        $manager->setHeader('Content-Type', 'application/json');
+        $manager->setHeader('Access-Control-Allow-Origin', '*');
 
         echo json_encode([
             'message' => $exception->getMessage(),

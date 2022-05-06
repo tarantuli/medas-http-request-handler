@@ -6,6 +6,7 @@ namespace Medas\HttpRequestHandler\ResponseHandlers;
 
 use Medas\HttpRequestHandler\Exceptions\NoJsonLdResponseException;
 use Medas\HttpRequestHandler\Request\Request;
+use Medas\HttpRequestHandler\ResponseHandlerManager;
 use Medas\HttpRequestHandler\ResponseTypes\JsonLdResponse;
 use Medas\HttpRequestHandler\ResponseTypes\Response;
 use Medas\ServiceManager\Attributes\Service;
@@ -18,7 +19,9 @@ class JsonLdHandler implements ResponseHandler
         return -5;
     }
 
-    public function handleResponse(Request $request, Response $response): bool
+    public function handleResponse(Request                $request,
+                                   Response               $response,
+                                   ResponseHandlerManager $manager): bool
     {
         if ($request->uri->extension === 'jsonld') {
             if (!$response instanceof JsonLdResponse) {
@@ -31,22 +34,24 @@ class JsonLdHandler implements ResponseHandler
             return false;
         }
 
-        header('Content-Type: application/ld+json');
-        header('Access-Control-Allow-Origin: *');
+        $manager->setHeader('Content-Type', 'applicationld+json');
+        $manager->setHeader('Access-Control-Allow-Origin', '*');
 
         echo json_encode($response->getJsonLdResponse());
         return true;
     }
 
-    public function handleException(Request $request, \Exception|\TypeError|\Error $exception): bool
+    public function handleException(Request                      $request,
+                                    \Exception|\TypeError|\Error $exception,
+                                    ResponseHandlerManager       $manager): bool
     {
         if (!$request->serverData->acceptsMimeType('application/ld+json')) {
             return false;
         }
 
         // todo: craft a real jsonld error response
-        header('Content-Type: application/ld+json');
-        header('Access-Control-Allow-Origin: *');
+        $manager->setHeader('Content-Type', 'application/ld+json');
+        $manager->setHeader('Access-Control-Allow-Origin', '*');
 
         echo json_encode([
             'message' => $exception->getMessage(),
