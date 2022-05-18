@@ -30,7 +30,7 @@ class ResponseHandlerManager
             }
         }
 
-        // Dump the open output buffer before throwhing the exception
+        // Dump the open output buffer before throwing the exception
         ob_end_clean();
         throw new CannotHandleResponseException($response);
     }
