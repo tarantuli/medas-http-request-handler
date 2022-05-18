@@ -12,6 +12,7 @@ class Request
         public ServerData $serverData,
         public PostData   $postData,
         public BodyData   $bodyData,
+        public FileData   $fileData,
     )
     {
     }

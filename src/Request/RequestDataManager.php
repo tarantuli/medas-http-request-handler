@@ -36,6 +36,7 @@ class RequestDataManager
             new ServerData($_SERVER),
             new PostData($_POST),
             $this->determineBody(),
+            new FileData($_FILES),
         );
     }
 

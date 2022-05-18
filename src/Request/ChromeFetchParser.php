@@ -40,6 +40,7 @@ class ChromeFetchParser
             new ServerData($this->determineServerData($host['scheme'], $host['serverName'], $params)),
             new PostData($this->determinePostData($params)),
             new BodyData([]),
+            new FileData([]),
         );
     }
 
