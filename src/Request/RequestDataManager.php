@@ -76,7 +76,7 @@ class RequestDataManager
         elseif (str_contains($_SERVER['CONTENT_TYPE'] ?? '', 'application/json')) {
             $body = json_decode($raw, true);
         }
-        elseif (str_contains($_SERVER['CONTENT_TYPE'] ?? '', 'application/json')) {
+        elseif (str_contains($_SERVER['CONTENT_TYPE'] ?? '', 'application/x-www-form-urlencoded')) {
             parse_str($raw, $body);
         }
         else {
