@@ -27,7 +27,7 @@ class HtmlHandler implements ResponseHandler
             return false;
         }
 
-        if ($request->method !== Method::Options && !$request->serverData->acceptsMimeType('text/html')) {
+        if (!$this->isHtmlRequest($request)) {
             return false;
         }
 
@@ -45,5 +45,10 @@ class HtmlHandler implements ResponseHandler
 
         printf('<p>%s:%u [%u] %s</p>', $exception->getFile(), $exception->getLine(), $exception->getCode(), $exception->getMessage());
         return true;
+    }
+
+    protected function isHtmlRequest(Request $request): bool
+    {
+        return $request->method === Method::Options || $request->serverData->acceptsMimeType('text/html');
     }
 }
