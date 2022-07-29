@@ -37,17 +37,21 @@ class ResponseHandlerManager
 
     public function handleException(Request $request, \Exception|\TypeError|\Error $exception): void
     {
-        ob_start();
-        foreach ($this->handlerFinder->get() as $responseHandler) {
-            if ($responseHandler->handleException($request, $exception, $this)) {
-                $this->printOutput();
-                return;
+        try {
+            ob_start();
+            foreach ($this->handlerFinder->get() as $responseHandler) {
+                if ($responseHandler->handleException($request, $exception, $this)) {
+                    $this->printOutput();
+                    return;
+                }
             }
-        }
 
-        // Dump the open output buffer before outputting a default exception message
-        ob_end_clean();
-        printf("%s:%u [%u]] %s\n", $exception->getFile(), $exception->getLine(), $exception->getCode(), $exception->getMessage());
+            // Dump the open output buffer before outputting a default exception message
+            ob_end_clean();
+            printf("%s:%u [%u]] %s\n", $exception->getFile(), $exception->getLine(), $exception->getCode(), $exception->getMessage());
+        } catch (\Exception|\TypeError|\Error $exception) {
+            printf("%s:%u [%u]] %s\n", $exception->getFile(), $exception->getLine(), $exception->getCode(), $exception->getMessage());
+        }
     }
 
     public function setHeader(string $name, string $value): void
