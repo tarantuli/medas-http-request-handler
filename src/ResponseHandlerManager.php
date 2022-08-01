@@ -46,11 +46,10 @@ class ResponseHandlerManager
                 }
             }
 
-            // Dump the open output buffer before outputting a default exception message
-            ob_end_clean();
-            printf("%s:%u [%u]] %s\n", $exception->getFile(), $exception->getLine(), $exception->getCode(), $exception->getMessage());
-        } catch (\Exception|\TypeError|\Error $exception) {
-            printf("%s:%u [%u]] %s\n", $exception->getFile(), $exception->getLine(), $exception->getCode(), $exception->getMessage());
+            $this->lastEffortExceptionPrinting($exception);
+        }
+        catch (\Exception|\TypeError|\Error) {
+            $this->lastEffortExceptionPrinting($exception);
         }
     }
 
@@ -68,5 +67,17 @@ class ResponseHandlerManager
         }
 
         ob_end_flush();
+    }
+
+    private function lastEffortExceptionPrinting(\Exception|\TypeError|\Error $exception): void
+    {
+        // Dump the open output buffer before outputting a default exception message
+        ob_end_clean();
+
+        if (isset($_SERVER['HTTP_HOST'])) {
+            echo '<pre>';
+        }
+
+        printf("%s:%u [%u]\n%s\n\n", $exception->getFile(), $exception->getLine(), $exception->getCode(), $exception->getMessage());
     }
 }
