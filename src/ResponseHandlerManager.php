@@ -78,6 +78,12 @@ class ResponseHandlerManager
             echo '<pre>';
         }
 
-        printf("%s:%u [%u]\n%s\n\n", $exception->getFile(), $exception->getLine(), $exception->getCode(), $exception->getMessage());
+        foreach (array_reverse($exception->getTrace()) as $trace) {
+            printf("%s:%u\n   %s::%s()\n",
+                $trace['file'], $trace['line'], $trace['class'] ?? '[main]', $trace['function']
+            );
+        }
+
+        printf("\n%s:%u [%u]\n%s\n\n", $exception->getFile(), $exception->getLine(), $exception->getCode(), $exception->getMessage());
     }
 }
