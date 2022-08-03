@@ -31,7 +31,7 @@ class HttpRequestHandler
                 throw new NoRequestHandlerFoundException($request->method, $request->uri);
             }
 
-            $response = $requestHandler->handle($request->uri->endpoint);
+            $response = $requestHandler->handle($request->method->value, $request->uri->endpoint);
             $this->responseHandlerManager->handleResponse($request, $response);
         }
         catch (\Exception|\TypeError|\Error $exception) {
