@@ -6,8 +6,8 @@ namespace Medas\HttpRequestHandler;
 
 use Medas\HttpRequestHandler\Exceptions\NoRequestHandlerFoundException;
 use Medas\HttpRequestHandler\Request\RequestDataManager;
-use Medas\Routing\HandlerManager;
 use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\RequestHandling\RequestHandlerManager;
 
 #[Service]
 class HttpRequestHandler
@@ -15,7 +15,7 @@ class HttpRequestHandler
     public function __construct(
         private readonly RequestDataManager     $requestDataManager,
         private readonly ResponseHandlerManager $responseHandlerManager,
-        private readonly HandlerManager         $requestHandlerManager,
+        private readonly RequestHandlerManager  $requestHandlerManager,
     )
     {
     }

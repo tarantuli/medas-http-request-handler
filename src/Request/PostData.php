@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler\Request;
 
-use Medas\Core\BaseArrayCollection;
+use Medas\Core\Collections\BaseArrayCollection;
 
 class PostData extends BaseArrayCollection
 {
