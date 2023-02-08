@@ -37,6 +37,8 @@ class ResponseHandlerManager
 
     public function handleException(Request $request, \Exception|\TypeError|\Error $exception): void
     {
+        http_response_code(500);
+
         try {
             ob_start();
             foreach ($this->handlerFinder->get() as $responseHandler) {
