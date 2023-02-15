@@ -94,5 +94,9 @@ class ResponseHandlerManager
         }
 
         printf("\n%s:%u [%u]\n%s\n\n", $exception->getFile(), $exception->getLine(), $exception->getCode(), $exception->getMessage());
+
+        if (isset($_SERVER['HTTP_HOST'])) {
+            echo '</pre>';
+        }
     }
 }
