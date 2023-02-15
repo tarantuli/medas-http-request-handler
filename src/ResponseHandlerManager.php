@@ -81,9 +81,16 @@ class ResponseHandlerManager
         }
 
         foreach (array_reverse($exception->getTrace()) as $trace) {
-            printf("%s:%u\n   %s::%s()\n\n",
-                $trace['file'], $trace['line'], $trace['class'] ?? '[main]', $trace['function']
-            );
+            if (isset($trace['file'])) {
+                printf("%s:%u\n   %s::%s()\n\n",
+                    $trace['file'], $trace['line'], $trace['class'] ?? '[main]', $trace['function']
+                );
+            }
+            else {
+                printf("[main]\n   %s::%s()\n\n",
+                    $trace['class'] ?? '[main]', $trace['function']
+                );
+            }
         }
 
         printf("\n%s:%u [%u]\n%s\n\n", $exception->getFile(), $exception->getLine(), $exception->getCode(), $exception->getMessage());
