@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler;
 
-use Medas\HttpRequestHandler\Exceptions\NoRequestHandlerFoundException;
+use Medas\HttpRequestHandler\Exceptions\NoRequestHandlerFound;
 use Medas\HttpRequestHandler\Request\RequestDataManager;
 use Medas\ServiceManager\Attributes\Service;
 use Medas\ServiceManager\RequestHandling\RequestHandlerManager;
@@ -28,7 +28,7 @@ class HttpRequestHandler
             $requestHandler = $this->requestHandlerManager->find($request->method->value, $request->uri->endpoint);
 
             if ($requestHandler === null) {
-                throw new NoRequestHandlerFoundException($request->method, $request->uri);
+                throw new NoRequestHandlerFound($request->method, $request->uri);
             }
 
             $response = $requestHandler->handle($request->method->value, $request->uri->endpoint);

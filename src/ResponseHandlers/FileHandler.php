@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler\ResponseHandlers;
 
-use Medas\HttpRequestHandler\Exceptions\MimeTypeIsNotAcceptedException;
+use Medas\HttpRequestHandler\Exceptions\MimeTypeIsNotAccepted;
 use Medas\HttpRequestHandler\Request\Request;
 use Medas\HttpRequestHandler\ResponseHandlerManager;
 use Medas\HttpRequestHandler\ResponseTypes\FileResponse;
@@ -31,7 +31,7 @@ class FileHandler implements ResponseHandler
         $mimetype = $file->mimetype();
 
         if (!$request->serverData->acceptsMimeType($mimetype)) {
-            throw new MimeTypeIsNotAcceptedException($mimetype);
+            throw new MimeTypeIsNotAccepted($mimetype);
         }
 
         $fileName = $file->name() ?: str_replace('/', '.', $mimetype);

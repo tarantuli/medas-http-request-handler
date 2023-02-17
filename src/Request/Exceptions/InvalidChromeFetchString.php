@@ -6,15 +6,15 @@ namespace Medas\HttpRequestHandler\Request\Exceptions;
 
 use Medas\Core\Exceptions\BaseException;
 
-class InvalidHostStringException extends BaseException
+class InvalidChromeFetchString extends BaseException
 {
-    public function __construct(string $host)
+    public function __construct(string $fetch)
     {
-        parent::__construct($host);
+        parent::__construct($fetch);
     }
 
     public function pattern(): string
     {
-        return 'Invalid host string %s';
+        return 'Invalid Chrome fetch string %s';
     }
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler\ResponseHandlers;
 
-use Medas\HttpRequestHandler\Exceptions\NoJsonLdResponseException;
+use Medas\HttpRequestHandler\Exceptions\DoesNotImplementJsonLdResponse;
 use Medas\HttpRequestHandler\Request\Request;
 use Medas\HttpRequestHandler\ResponseHandlerManager;
 use Medas\HttpRequestHandler\ResponseTypes\JsonLdResponse;
@@ -25,7 +25,7 @@ class JsonLdHandler implements ResponseHandler
     {
         if ($request->uri->extension === 'jsonld') {
             if (!$response instanceof JsonLdResponse) {
-                throw new NoJsonLdResponseException($response);
+                throw new DoesNotImplementJsonLdResponse($response);
             }
 
             // Else, fall through to the echo command

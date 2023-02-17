@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandlerTest\Functional;
 
-use Medas\HttpRequestHandler\Exceptions\CannotHandleResponseException;
+use Medas\HttpRequestHandler\Exceptions\CannotHandleResponseType;
 use Medas\HttpRequestHandler\Request\ChromeFetchParser;
 use Medas\HttpRequestHandler\Request\Request;
 use Medas\HttpRequestHandler\ResponseHandlerManager;
@@ -20,7 +20,7 @@ class ResponseHandlerManagerTest extends TestCase
         $request = $this->getHtmlRequest();
         $response = new JsonTestResponse();
 
-        self::expectException(CannotHandleResponseException::class);
+        self::expectException(CannotHandleResponseType::class);
         $manager->handleResponse($request, $response);
     }
 

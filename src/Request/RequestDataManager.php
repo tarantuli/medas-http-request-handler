@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler\Request;
 
-use Medas\HttpRequestHandler\Exceptions\NotAnHttpRequestException;
-use Medas\HttpRequestHandler\Exceptions\UnknownMethodException;
+use Medas\HttpRequestHandler\Exceptions\NotAnHttpRequest;
+use Medas\HttpRequestHandler\Exceptions\UnknownMethod;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
@@ -43,7 +43,7 @@ class RequestDataManager
     private function determineMethod(): Method
     {
         if (empty($_SERVER['REMOTE_ADDR']) and !isset($_SERVER['HTTP_USER_AGENT']) and count($_SERVER['argv']) > 0) {
-            throw new NotAnHttpRequestException();
+            throw new NotAnHttpRequest();
         }
 
         $name = $_REQUEST['::method'] ?? $_SERVER['REQUEST_METHOD'] ?? null;
@@ -52,7 +52,7 @@ class RequestDataManager
             return Method::from($name);
         }
         catch (\ValueError) {
-            throw new UnknownMethodException($name);
+            throw new UnknownMethod($name);
         }
     }
 

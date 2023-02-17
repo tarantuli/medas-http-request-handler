@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\HttpRequestHandler\ResponseHandlers;
 
 use Medas\Core\StringMaker;
-use Medas\HttpRequestHandler\Exceptions\NoJsonResponseException;
+use Medas\HttpRequestHandler\Exceptions\DoesNotImplementJsonResponse;
 use Medas\HttpRequestHandler\Request\Request;
 use Medas\HttpRequestHandler\ResponseHandlerManager;
 use Medas\HttpRequestHandler\ResponseTypes\JsonResponse;
@@ -27,7 +27,7 @@ class JsonHandler implements ResponseHandler
         if ($request->uri->extension === 'json') {
             /** @noinspection PhpConditionAlreadyCheckedInspection */
             if (!$response instanceof JsonResponse) {
-                throw new NoJsonResponseException($response);
+                throw new DoesNotImplementJsonResponse($response);
             }
 
             // Else, fall through to the echo command

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler;
 
-use Medas\HttpRequestHandler\Exceptions\CannotHandleResponseException;
+use Medas\HttpRequestHandler\Exceptions\CannotHandleResponseType;
 use Medas\HttpRequestHandler\Request\Request;
 use Medas\HttpRequestHandler\ResponseTypes\Response;
 use Medas\ServiceManager\Attributes\Service;
@@ -32,7 +32,7 @@ class ResponseHandlerManager
 
         // Dump the open output buffer before throwing the exception
         ob_end_clean();
-        throw new CannotHandleResponseException($response);
+        throw new CannotHandleResponseType($response);
     }
 
     public function handleException(Request $request, \Exception|\TypeError|\Error $exception): void

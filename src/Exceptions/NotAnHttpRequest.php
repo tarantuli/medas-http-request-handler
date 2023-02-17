@@ -6,7 +6,7 @@ namespace Medas\HttpRequestHandler\Exceptions;
 
 use Medas\Core\Exceptions\BaseException;
 
-class NotAnHttpRequestException extends BaseException
+class NotAnHttpRequest extends BaseException
 {
     public function pattern(): string
     {

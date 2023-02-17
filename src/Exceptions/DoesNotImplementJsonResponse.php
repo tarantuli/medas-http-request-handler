@@ -7,7 +7,7 @@ namespace Medas\HttpRequestHandler\Exceptions;
 use Medas\Core\Exceptions\BaseException;
 use Medas\HttpRequestHandler\ResponseTypes\Response;
 
-class NoJsonLdResponseException extends BaseException
+class DoesNotImplementJsonResponse extends BaseException
 {
     public function __construct(Response $response)
     {
@@ -16,6 +16,6 @@ class NoJsonLdResponseException extends BaseException
 
     public function pattern(): string
     {
-        return 'JSON LD response requested, but %s does not implement JsonLdResponse';
+        return 'JSON response requested, but %s does not implement JsonResponse';
     }
 }

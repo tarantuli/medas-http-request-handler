@@ -7,7 +7,7 @@ namespace Medas\HttpRequestHandler\Exceptions;
 use Medas\Core\Exceptions\BaseException;
 use Medas\HttpRequestHandler\ResponseTypes\Response;
 
-class NoJsonResponseException extends BaseException
+class CannotHandleResponseType extends BaseException
 {
     public function __construct(Response $response)
     {
@@ -16,6 +16,6 @@ class NoJsonResponseException extends BaseException
 
     public function pattern(): string
     {
-        return 'JSON response requested, but %s does not implement JsonResponse';
+        return 'No handler found that can process a response of type %s for this request';
     }
 }

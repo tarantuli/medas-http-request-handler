@@ -25,11 +25,11 @@ class ChromeFetchParser
     private function parse($fetch): Request
     {
         if (!preg_match('/^fetch\("(?<host>[^"]+)", (?<params>{.+})\);$/s', $fetch, $parts)) {
-            throw new Exceptions\InvalidChromeFetchStringException($fetch);
+            throw new Exceptions\InvalidChromeFetchString($fetch);
         }
 
         if (!preg_match('/^(?<scheme>\w+):\/\/(?<serverName>[^\/]+)(?<uri>\/.*)?$/', $parts['host'], $host)) {
-            throw new Exceptions\InvalidHostStringException($parts['host']);
+            throw new Exceptions\InvalidHostString($parts['host']);
         }
 
         $params = json_decode($parts['params'], true);
