@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler\ResponseHandlers;
 
-use Medas\Core\Str;
+use Medas\Core\StringMaker;
 use Medas\HttpRequestHandler\Exceptions\NoJsonResponseException;
 use Medas\HttpRequestHandler\Request\Request;
 use Medas\HttpRequestHandler\ResponseHandlerManager;
@@ -57,7 +57,7 @@ class JsonHandler implements ResponseHandler
         $manager->setHeader('Access-Control-Allow-Origin', '*');
 
         echo json_encode([
-            'message' => Str::forceUtf8($exception->getMessage()),
+            'message' => StringMaker::forceUtf8($exception->getMessage()),
             'code' => $exception->getCode(),
             'fileName' => $exception->getFile(),
             'lineNumber' => $exception->getLine(),
