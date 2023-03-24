@@ -21,17 +21,6 @@ class BodyDataResolver implements ParameterResolver
     {
     }
 
-    public function __serialize(): array
-    {
-        // Needed, so $this->result isn't cached
-        return [];
-    }
-
-    public function __unserialize(array $data): void
-    {
-        // Do nothing
-    }
-
     public function priority(): int
     {
         return -50;
@@ -56,6 +45,9 @@ class BodyDataResolver implements ParameterResolver
 
     public function result(): mixed
     {
-        return $this->result;
+        $returnValue = $this->result;
+        $this->result = null;
+
+        return $returnValue;
     }
 }
