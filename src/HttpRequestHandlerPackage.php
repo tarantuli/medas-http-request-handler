@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler;
 
-use Medas\ServiceManager\{AsSingleton, BasePackage};
+use Medas\ServiceManager\{AsSingleton, BasePackage, ServiceConfig};
 
 class HttpRequestHandlerPackage extends BasePackage
 {
@@ -19,5 +19,11 @@ class HttpRequestHandlerPackage extends BasePackage
     public function sourceDirectory(): string
     {
         return __DIR__;
+    }
+
+    public function initialize(ServiceConfig $config): void
+    {
+        $config->addParameterResolver(service(BodyDataResolver::class));
+        parent::initialize($config);
     }
 }
