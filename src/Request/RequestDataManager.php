@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler\Request;
 
-use Medas\HttpRequestHandler\Exceptions\NotAnHttpRequest;
-use Medas\HttpRequestHandler\Exceptions\UnknownMethod;
+use Medas\HttpRequestHandler\Exceptions\{NotAnHttpRequest, UnknownMethod};
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
@@ -13,10 +12,15 @@ class RequestDataManager
 {
     private Request $request;
 
-    public function __construct(
-        private readonly UriManager $uriManager,
-    )
+    public function __serialize(): array
     {
+        // This is needed to make sure $request isn't serialized
+        return [];
+    }
+
+    public function __unserialize(array $data): void
+    {
+        // Do nothing
     }
 
     public function get(): Request
@@ -58,12 +62,7 @@ class RequestDataManager
 
     private function determineEndpoint(): Uri
     {
-        return $this->uriManager->fromString($_SERVER['REQUEST_URI'] ?? '/');
-    }
-
-    public function set(Request $request): void
-    {
-        $this->request = $request;
+        return service(UriManager::class)->fromString($_SERVER['REQUEST_URI'] ?? '/');
     }
 
     private function determineBody(): BodyData
@@ -84,5 +83,10 @@ class RequestDataManager
         }
 
         return new BodyData($body);
+    }
+
+    public function set(Request $request): void
+    {
+        $this->request = $request;
     }
 }
