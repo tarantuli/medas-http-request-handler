@@ -9,7 +9,7 @@ use Medas\HttpRequestHandler\Request\Request;
 use Medas\HttpRequestHandler\ResponseHandlerManager;
 use Medas\HttpRequestHandler\ResponseTypes\JsonLdResponse;
 use Medas\HttpRequestHandler\ResponseTypes\Response;
-use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\Service;
 
 #[Service]
 class JsonLdHandler implements ResponseHandler
@@ -27,7 +27,6 @@ class JsonLdHandler implements ResponseHandler
             if (!$response instanceof JsonLdResponse) {
                 throw new DoesNotImplementJsonLdResponse($response);
             }
-
             // Else, fall through to the echo command
         }
         elseif (!$request->serverData->acceptsMimeType('application/ld+json') || !$response instanceof JsonLdResponse) {

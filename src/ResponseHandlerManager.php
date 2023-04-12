@@ -7,7 +7,7 @@ namespace Medas\HttpRequestHandler;
 use Medas\HttpRequestHandler\Exceptions\CannotHandleResponseType;
 use Medas\HttpRequestHandler\Request\Request;
 use Medas\HttpRequestHandler\ResponseTypes\Response;
-use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\Service;
 
 #[Service]
 class ResponseHandlerManager

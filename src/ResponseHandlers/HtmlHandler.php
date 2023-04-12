@@ -9,7 +9,7 @@ use Medas\HttpRequestHandler\Request\Request;
 use Medas\HttpRequestHandler\ResponseHandlerManager;
 use Medas\HttpRequestHandler\ResponseTypes\HtmlResponse;
 use Medas\HttpRequestHandler\ResponseTypes\Response;
-use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\Service;
 
 #[Service]
 class HtmlHandler implements ResponseHandler

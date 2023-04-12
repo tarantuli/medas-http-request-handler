@@ -10,7 +10,7 @@ use Medas\HttpRequestHandler\Request\Request;
 use Medas\HttpRequestHandler\ResponseHandlerManager;
 use Medas\HttpRequestHandler\ResponseTypes\JsonResponse;
 use Medas\HttpRequestHandler\ResponseTypes\Response;
-use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\Service;
 
 #[Service]
 class JsonHandler implements ResponseHandler
@@ -29,7 +29,6 @@ class JsonHandler implements ResponseHandler
             if (!$response instanceof JsonResponse) {
                 throw new DoesNotImplementJsonResponse($response);
             }
-
             // Else, fall through to the echo command
         }
         /** @noinspection PhpConditionAlreadyCheckedInspection */

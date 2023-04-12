@@ -6,8 +6,8 @@ namespace Medas\HttpRequestHandler;
 
 use Medas\HttpRequestHandler\Exceptions\NoRequestHandlerFound;
 use Medas\HttpRequestHandler\Request\RequestDataManager;
-use Medas\ServiceManager\Attributes\Service;
 use Medas\ServiceManager\RequestHandling\RequestHandlerManager;
+use Medas\ServiceManager\Service;
 
 #[Service]
 class HttpRequestHandler

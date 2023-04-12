@@ -11,9 +11,8 @@ use Medas\HttpRequestHandler\Request\{BodyData,
     Request,
     RequestDataManager,
     ServerData,
-    UriManager
-};
-use Medas\ServiceManager\Attributes\Service;
+    UriManager};
+use Medas\ServiceManager\Service;
 
 #[Service]
 class RequestFaker
