@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler\ResponseHandlers;
 
+use Medas\Core\Attributes\Service;
 use Medas\HttpRequestHandler\Exceptions\MimeTypeIsNotAccepted;
 use Medas\HttpRequestHandler\Request\Request;
 use Medas\HttpRequestHandler\ResponseHandlerManager;
 use Medas\HttpRequestHandler\ResponseTypes\FileResponse;
 use Medas\HttpRequestHandler\ResponseTypes\Response;
-use Medas\ServiceManager\Service;
 
 #[Service]
 class FileHandler implements ResponseHandler

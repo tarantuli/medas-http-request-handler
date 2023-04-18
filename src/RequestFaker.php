@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler;
 
+use Medas\Core\Attributes\Service;
 use Medas\HttpRequestHandler\Request\{BodyData,
     FileData,
     Method,
@@ -12,7 +13,6 @@ use Medas\HttpRequestHandler\Request\{BodyData,
     RequestDataManager,
     ServerData,
     UriManager};
-use Medas\ServiceManager\Service;
 
 #[Service]
 class RequestFaker

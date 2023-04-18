@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler\Request;
 
+use Medas\Core\Attributes\Service;
 use Medas\HttpRequestHandler\Exceptions\{NotAnHttpRequest, UnknownMethod};
-use Medas\ServiceManager\Service;
 
 #[Service]
 class RequestDataManager

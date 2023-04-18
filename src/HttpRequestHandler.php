@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler;
 
+use Medas\Core\Attributes\Service;
 use Medas\HttpRequestHandler\Exceptions\NoRequestHandlerFound;
 use Medas\HttpRequestHandler\Request\RequestDataManager;
 use Medas\ServiceManager\RequestHandling\RequestHandlerManager;
-use Medas\ServiceManager\Service;
 
 #[Service]
 class HttpRequestHandler

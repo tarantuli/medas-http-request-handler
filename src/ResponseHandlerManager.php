@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler;
 
+use Medas\Core\Attributes\Service;
 use Medas\HttpRequestHandler\Exceptions\CannotHandleResponseType;
 use Medas\HttpRequestHandler\Request\Request;
 use Medas\HttpRequestHandler\ResponseTypes\Response;
-use Medas\ServiceManager\Service;
 
 #[Service]
 class ResponseHandlerManager
