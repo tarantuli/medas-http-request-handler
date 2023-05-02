@@ -8,7 +8,7 @@ use Medas\Core\Attributes\Service;
 use Medas\HttpRequestHandler\Attributes\BodyArgument;
 use Medas\HttpRequestHandler\Exceptions\BodyArgumentIsMissing;
 use Medas\HttpRequestHandler\Request\RequestDataManager;
-use Medas\ServiceManager\ParameterResolving\ParameterResolver;
+use Medas\ObjectInstantiator\ParameterResolving\ParameterResolver;
 
 #[Service]
 class BodyDataResolver implements ParameterResolver

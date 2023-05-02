@@ -5,17 +5,17 @@ declare(strict_types=1);
 namespace Medas\HttpRequestHandler;
 
 use Medas\Core\Attributes\Service;
+use Medas\Core\Interfaces\RoutedRequestHandlerManager;
 use Medas\HttpRequestHandler\Exceptions\NoRequestHandlerFound;
 use Medas\HttpRequestHandler\Request\RequestDataManager;
-use Medas\ServiceManager\RequestHandling\RequestHandlerManager;
 
 #[Service]
 class HttpRequestHandler
 {
     public function __construct(
-        private readonly RequestDataManager     $requestDataManager,
-        private readonly ResponseHandlerManager $responseHandlerManager,
-        private readonly RequestHandlerManager  $requestHandlerManager,
+        private readonly RequestDataManager          $requestDataManager,
+        private readonly ResponseHandlerManager      $responseHandlerManager,
+        private readonly RoutedRequestHandlerManager $requestHandlerManager,
     )
     {
     }
