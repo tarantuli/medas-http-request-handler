@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler\Request;
 
-use Medas\Core\Collections\BaseArrayCollection;
+use Medas\Core\Collections\GenericCollection;
 
-class PostData extends BaseArrayCollection
+class PostData extends GenericCollection
 {
 }

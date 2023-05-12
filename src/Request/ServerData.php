@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler\Request;
 
-use Medas\Core\Collections\BaseArrayCollection;
+use Medas\Core\Collections\GenericCollection;
 
-class ServerData extends BaseArrayCollection
+class ServerData extends GenericCollection
 {
     private array $acceptTypes;
 
