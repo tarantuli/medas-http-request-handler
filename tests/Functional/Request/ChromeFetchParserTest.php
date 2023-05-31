@@ -18,8 +18,8 @@ class ChromeFetchParserTest extends TestCase
 
         self::assertEquals(Method::Get, $request->method);
         self::assertEquals('/process-image', $request->uri->endpoint);
-        self::assertEquals(true, $request->serverData->acceptsMimeType('text/html'));
-        self::assertEquals(false, $request->serverData->acceptsMimeType('application/json'));
+        self::assertTrue($request->serverData->acceptsMimeType('text/html'));
+        self::assertFalse($request->serverData->acceptsMimeType('application/json'));
     }
 
     public function testParseImage(): void
@@ -28,6 +28,6 @@ class ChromeFetchParserTest extends TestCase
         $request = service(ChromeFetchParser::class)->get($source);
 
         self::assertEquals(Method::Get, $request->method);
-        self::assertEquals(true, $request->serverData->acceptsMimeType('image/png'));
+        self::assertTrue($request->serverData->acceptsMimeType('image/png'));
     }
 }

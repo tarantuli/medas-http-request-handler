@@ -8,5 +8,8 @@ use Medas\Core\Collections\GenericCollection;
 
 class BodyData extends GenericCollection
 {
-
+    public function data(): array
+    {
+        return $this->data;
+    }
 }

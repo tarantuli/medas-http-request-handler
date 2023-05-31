@@ -8,4 +8,8 @@ use Medas\Core\Collections\GenericCollection;
 
 class PostData extends GenericCollection
 {
+    public function data(): array
+    {
+        return $this->data;
+    }
 }

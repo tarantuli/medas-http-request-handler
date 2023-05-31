@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandlerTest\MockUps;
 
-use Medas\ServiceManager\AsSingleton;
+use Medas\Core\AsSingleton;
 
 class ChromeFetches
 {
