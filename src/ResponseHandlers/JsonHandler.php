@@ -9,8 +9,7 @@ use Medas\Core\StringMaker;
 use Medas\HttpRequestHandler\Exceptions\DoesNotImplementJsonResponse;
 use Medas\HttpRequestHandler\Request\Request;
 use Medas\HttpRequestHandler\ResponseHandlerManager;
-use Medas\HttpRequestHandler\ResponseTypes\JsonResponse;
-use Medas\HttpRequestHandler\ResponseTypes\Response;
+use Medas\HttpRequestHandler\ResponseTypes\{JsonResponse, Response};
 
 #[Service]
 class JsonHandler implements ResponseHandler
@@ -55,14 +54,45 @@ class JsonHandler implements ResponseHandler
         $manager->setHeader('Content-Type', 'application/json');
         $manager->setHeader('Access-Control-Allow-Origin', '*');
 
+        $trace = $this->normalizeTrace($exception);
+
         echo json_encode([
             'message' => StringMaker::forceUtf8($exception->getMessage()),
             'code' => $exception->getCode(),
             'fileName' => $exception->getFile(),
             'lineNumber' => $exception->getLine(),
+            'trace' => $trace,
 
         ]);
 
         return true;
+    }
+
+    private function normalizeTrace(\Exception|\TypeError|\Error $exception): array
+    {
+        $paths = [];
+
+        foreach ($exception->getTrace() as $trace) {
+            $arguments = [];
+
+            foreach ($trace['args'] as $arg) {
+                $type = get_debug_type($arg);
+
+                if (class_exists($type) || !is_scalar($arg)) {
+                    $arguments[] = $type;
+                }
+                else {
+                    $arguments[] = StringMaker::forceUtf8($arg);
+                }
+            }
+
+            $paths[] = [
+                'file' => $trace['file'],
+                'line' => $trace['line'],
+                'function' => $trace['function'],
+                'arguments' => $arguments,
+            ];
+        }
+        return $paths;
     }
 }
