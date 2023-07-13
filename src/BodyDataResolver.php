@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Medas\HttpRequestHandler;
 
 use Medas\Core\Attributes\Service;
+use Medas\Core\Interfaces\ParameterResolver;
 use Medas\HttpRequestHandler\Attributes\BodyArgument;
 use Medas\HttpRequestHandler\Exceptions\BodyArgumentIsMissing;
 use Medas\HttpRequestHandler\Request\RequestDataManager;
-use Medas\ObjectInstantiator\ParameterResolving\ParameterResolver;
 
 #[Service]
 class BodyDataResolver implements ParameterResolver

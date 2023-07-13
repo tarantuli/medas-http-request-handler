@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Medas\HttpRequestHandler;
 
 use Medas\Core\Attributes\Service;
+use Medas\Core\Interfaces\CacheManager;
 use Medas\HttpRequestHandler\ResponseHandlers\ResponseHandler;
-use Medas\ServiceManager\Cache\CacheManager;
 
 #[Service]
 class ResponseHandlerFinder

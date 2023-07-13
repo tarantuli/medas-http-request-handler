@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\HttpRequestHandler\Request;
 
 use Medas\Core\Attributes\Service;
-use Medas\ServiceManager\Cache\CacheManager;
+use Medas\Core\Interfaces\CacheManager;
 
 #[Service]
 class ChromeFetchParser
