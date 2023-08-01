@@ -93,8 +93,8 @@ class ResponseHandlerManager
             }
 
             foreach ($trace['args'] ?? [] as $index => $argument) {
-                if (mb_detect_encoding($argument, 'UTF-8')) {
-                    printf("    %u: %s\n", $index, mb_substr($argument, 0, 20));
+                if (is_string($argument) && mb_detect_encoding($argument, 'UTF-8')) {
+                    printf("    %u: %s\n", $index, mb_substr($argument, 0, 78));
                 }
                 else {
                     printf("    %u: %s(%u)\n", $index, get_debug_type($argument), is_string($argument) ? strlen($argument) : 0);
