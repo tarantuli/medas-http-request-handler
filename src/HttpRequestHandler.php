@@ -15,7 +15,7 @@ class HttpRequestHandler
     public function __construct(
         private readonly RequestDataManager          $requestDataManager,
         private readonly ResponseHandlerManager      $responseHandlerManager,
-        private readonly RoutedRequestHandlerManager $requestHandlerManager,
+        private readonly RoutedRequestHandlerManager $routedRequestHandlerManager,
     )
     {
     }
@@ -25,7 +25,7 @@ class HttpRequestHandler
         $request = $this->requestDataManager->get();
 
         try {
-            $requestHandler = $this->requestHandlerManager->find($request->method->value, $request->uri->endpoint);
+            $requestHandler = $this->routedRequestHandlerManager->find($request->method->value, $request->uri->endpoint);
 
             if ($requestHandler === null) {
                 throw new NoRequestHandlerFound($request->method, $request->uri);
