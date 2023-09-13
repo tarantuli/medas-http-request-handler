@@ -8,11 +8,11 @@ use Medas\Core\Attributes\Service;
 use Medas\Core\Interfaces\CacheManager;
 
 #[Service]
-class ChromeFetchParser
+readonly class ChromeFetchParser
 {
     public function __construct(
-        private readonly CacheManager $cacheManager,
-        private readonly UriManager   $uriManager,
+        private CacheManager $cacheManager,
+        private UriManager   $uriManager,
     )
     {
     }

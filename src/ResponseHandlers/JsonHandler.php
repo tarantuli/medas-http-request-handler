@@ -57,7 +57,7 @@ class JsonHandler implements ResponseHandler
         $trace = $this->normalizeTrace($exception);
 
         echo json_encode([
-            'message' => StringMaker::forceUtf8($exception->getMessage()),
+            'message' => StringMaker::instance()->forceUtf8($exception->getMessage()),
             'code' => $exception->getCode(),
             'fileName' => $exception->getFile(),
             'lineNumber' => $exception->getLine(),
@@ -82,7 +82,7 @@ class JsonHandler implements ResponseHandler
                     $arguments[] = $type;
                 }
                 else {
-                    $arguments[] = StringMaker::forceUtf8($arg);
+                    $arguments[] = StringMaker::instance()->forceUtf8($arg);
                 }
             }
 

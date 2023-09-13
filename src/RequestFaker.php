@@ -15,12 +15,12 @@ use Medas\HttpRequestHandler\Request\{BodyData,
     UriManager};
 
 #[Service]
-class RequestFaker
+readonly class RequestFaker
 {
     public function __construct(
-        private readonly HttpRequestHandler $requestHandler,
-        private readonly RequestDataManager $dataManager,
-        private readonly UriManager         $uriManager,
+        private HttpRequestHandler $requestHandler,
+        private RequestDataManager $dataManager,
+        private UriManager         $uriManager,
     )
     {
     }

@@ -10,12 +10,12 @@ use Medas\HttpRequestHandler\Exceptions\NoRequestHandlerFound;
 use Medas\HttpRequestHandler\Request\RequestDataManager;
 
 #[Service]
-class HttpRequestHandler
+readonly class HttpRequestHandler
 {
     public function __construct(
-        private readonly RequestDataManager          $requestDataManager,
-        private readonly ResponseHandlerManager      $responseHandlerManager,
-        private readonly RoutedRequestHandlerManager $routedRequestHandlerManager,
+        private RequestDataManager          $requestDataManager,
+        private ResponseHandlerManager      $responseHandlerManager,
+        private RoutedRequestHandlerManager $routedRequestHandlerManager,
     )
     {
     }
