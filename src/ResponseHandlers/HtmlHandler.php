@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace Medas\HttpRequestHandler\ResponseHandlers;
 
 use Medas\Core\Attributes\Service;
-use Medas\HttpRequestHandler\Request\Method;
-use Medas\HttpRequestHandler\Request\Request;
-use Medas\HttpRequestHandler\ResponseHandlerManager;
-use Medas\HttpRequestHandler\ResponseTypes\HtmlResponse;
-use Medas\HttpRequestHandler\ResponseTypes\Response;
+use Medas\HttpRequestHandler\{
+    Request\Method,
+    Request\Request,
+    ResponseHandlerManager,
+    ResponseTypes\HtmlResponse,
+    ResponseTypes\Response
+};
 
 #[Service]
 class HtmlHandler implements ResponseHandler
@@ -19,9 +21,7 @@ class HtmlHandler implements ResponseHandler
         return -20;
     }
 
-    public function handleResponse(Request                $request,
-                                   Response               $response,
-                                   ResponseHandlerManager $manager): bool
+    public function handleResponse(Request $request, Response $response, ResponseHandlerManager $manager): bool
     {
         if (!$response instanceof HtmlResponse) {
             return false;
@@ -32,18 +32,28 @@ class HtmlHandler implements ResponseHandler
         }
 
         $response->outputHtmlResponse();
+
         return true;
     }
 
-    public function handleException(Request                      $request,
-                                    \Exception|\TypeError|\Error $exception,
-                                    ResponseHandlerManager       $manager): bool
+    public function handleException(
+        Request                      $request,
+        \Exception|\TypeError|\Error $exception,
+        ResponseHandlerManager       $manager
+    ): bool
     {
         if (!$request->serverData->acceptsMimeType('text/html')) {
             return false;
         }
 
-        printf('<p>%s:%u [%u] %s</p>', $exception->getFile(), $exception->getLine(), $exception->getCode(), $exception->getMessage());
+        printf(
+            '<p>%s:%u [%u] %s</p>',
+            $exception->getFile(),
+            $exception->getLine(),
+            $exception->getCode(),
+            $exception->getMessage()
+        );
+
         return true;
     }
 

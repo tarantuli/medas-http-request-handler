@@ -5,9 +5,6 @@ declare(strict_types=1);
 namespace Medas\HttpRequestHandler;
 
 use Medas\Core\Attributes\Service;
-use Medas\HttpRequestHandler\Exceptions\CannotHandleResponseType;
-use Medas\HttpRequestHandler\Request\Request;
-use Medas\HttpRequestHandler\ResponseTypes\Response;
 
 #[Service]
 class ResponseHandlerManager
@@ -20,30 +17,35 @@ class ResponseHandlerManager
     {
     }
 
-    public function handleResponse(Request $request, Response $response): void
+    public function handleResponse(Request\Request $request, ResponseTypes\Response $response): void
     {
         ob_start();
+
         foreach ($this->handlerFinder->get() as $responseHandler) {
             if ($responseHandler->handleResponse($request, $response, $this)) {
                 $this->printOutput();
+
                 return;
             }
         }
 
         // Dump the open output buffer before throwing the exception
         ob_end_clean();
-        throw new CannotHandleResponseType($response);
+
+        throw new Exceptions\CannotHandleResponseType($response);
     }
 
-    public function handleException(Request $request, \Exception|\TypeError|\Error $exception): void
+    public function handleException(Request\Request $request, \Exception|\TypeError|\Error $exception): void
     {
         http_response_code(500);
 
         try {
             ob_start();
+
             foreach ($this->handlerFinder->get() as $responseHandler) {
                 if ($responseHandler->handleException($request, $exception, $this)) {
                     $this->printOutput();
+
                     return;
                 }
             }
@@ -82,14 +84,16 @@ class ResponseHandlerManager
 
         foreach (array_reverse($exception->getTrace()) as $trace) {
             if (isset($trace['file'])) {
-                printf("%s:%u\n   %s::%s()\n",
-                    $trace['file'], $trace['line'], $trace['class'] ?? '[main]', $trace['function']
+                printf(
+                    "%s:%u\n   %s::%s()\n",
+                    $trace['file'],
+                    $trace['line'],
+                    $trace['class'] ?? '[main]',
+                    $trace['function']
                 );
             }
             else {
-                printf("[main]\n   %s::%s()\n",
-                    $trace['class'] ?? '[main]', $trace['function']
-                );
+                printf("[main]\n   %s::%s()\n", $trace['class'] ?? '[main]', $trace['function']);
             }
 
             foreach ($trace['args'] ?? [] as $index => $argument) {
@@ -97,14 +101,25 @@ class ResponseHandlerManager
                     printf("    %u: %s\n", $index, mb_substr($argument, 0, 78));
                 }
                 else {
-                    printf("    %u: %s(%u)\n", $index, get_debug_type($argument), is_string($argument) ? strlen($argument) : 0);
+                    printf(
+                        "    %u: %s(%u)\n",
+                        $index,
+                        get_debug_type($argument),
+                        is_string($argument) ? strlen($argument) : 0
+                    );
                 }
             }
 
             printf("\n");
         }
 
-        printf("\n%s:%u [%u]\n%s\n\n", $exception->getFile(), $exception->getLine(), $exception->getCode(), $exception->getMessage());
+        printf(
+            "\n%s:%u [%u]\n%s\n\n",
+            $exception->getFile(),
+            $exception->getLine(),
+            $exception->getCode(),
+            $exception->getMessage()
+        );
 
         if (isset($_SERVER['HTTP_HOST'])) {
             echo '</pre>';

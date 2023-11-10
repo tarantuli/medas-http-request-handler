@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace Medas\HttpRequestHandler\ResponseHandlers;
 
 use Medas\Core\Attributes\Service;
-use Medas\HttpRequestHandler\Exceptions\MimeTypeIsNotAccepted;
-use Medas\HttpRequestHandler\Request\Request;
-use Medas\HttpRequestHandler\ResponseHandlerManager;
-use Medas\HttpRequestHandler\ResponseTypes\FileResponse;
-use Medas\HttpRequestHandler\ResponseTypes\Response;
+use Medas\HttpRequestHandler\{
+    Exceptions\MimeTypeIsNotAccepted,
+    Request\Request,
+    ResponseHandlerManager,
+    ResponseTypes\FileResponse,
+    ResponseTypes\Response
+};
 
 #[Service]
 class FileHandler implements ResponseHandler
@@ -19,9 +21,7 @@ class FileHandler implements ResponseHandler
         return -30;
     }
 
-    public function handleResponse(Request                $request,
-                                   Response               $response,
-                                   ResponseHandlerManager $manager): bool
+    public function handleResponse(Request $request, Response $response, ResponseHandlerManager $manager): bool
     {
         if (!$response instanceof FileResponse) {
             return false;
@@ -45,9 +45,11 @@ class FileHandler implements ResponseHandler
         return true;
     }
 
-    public function handleException(Request                      $request,
-                                    \Exception|\TypeError|\Error $exception,
-                                    ResponseHandlerManager       $manager): bool
+    public function handleException(
+        Request                      $request,
+        \Exception|\TypeError|\Error $exception,
+        ResponseHandlerManager       $manager
+    ): bool
     {
         return false;
     }

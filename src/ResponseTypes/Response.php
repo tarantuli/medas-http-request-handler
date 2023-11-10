@@ -6,5 +6,4 @@ namespace Medas\HttpRequestHandler\ResponseTypes;
 
 interface Response
 {
-
 }
