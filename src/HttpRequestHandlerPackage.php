@@ -24,6 +24,7 @@ class HttpRequestHandlerPackage extends BasePackage
     public function initialize(ServiceConfig $config): void
     {
         parent::initialize($config);
+
         $config->addParameterResolver(service(BodyDataResolver::class));
     }
 }

@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler;
 
-use Medas\Core\Attributes\Service;
-use Medas\Core\Interfaces\CacheManager;
-use Medas\HttpRequestHandler\ResponseHandlers\ResponseHandler;
+use Medas\Core\{Attributes\Service, Interfaces\CacheManager};
 
 #[Service]
 class ResponseHandlerFinder
 {
-    /** @var ResponseHandler[] $handlers */
+    /** @var ResponseHandlers\ResponseHandler[] $handlers */
     private array $handlers;
 
     public function __construct(
@@ -20,7 +18,7 @@ class ResponseHandlerFinder
     {
     }
 
-    /** @return ResponseHandler[] */
+    /** @return ResponseHandlers\ResponseHandler[] */
     public function get(): array
     {
         return $this->cacheManager->get()->get([static::class, 'getHandlers'], fn() => $this->findHandlers());
@@ -35,7 +33,11 @@ class ResponseHandlerFinder
         }
 
         // Sort handlers with the highest priority to the front
-        usort($this->handlers, fn(ResponseHandler $a, ResponseHandler $b) => -($a->priority() <=> $b->priority()));
+        usort(
+            $this->handlers,
+            fn(ResponseHandlers\ResponseHandler $a, ResponseHandlers\ResponseHandler $b) =>
+                -($a->priority() <=> $b->priority())
+        );
 
         return $this->handlers;
     }
@@ -48,7 +50,7 @@ class ResponseHandlerFinder
             return;
         }
 
-        if (!$class->implementsInterface(ResponseHandler::class)) {
+        if (!$class->implementsInterface(ResponseHandlers\ResponseHandler::class)) {
             return;
         }
 
