@@ -18,7 +18,10 @@ readonly class ChromeFetchParser
 
     public function get(string $fetch): Request
     {
-        return $this->cacheManager->get()->get([static::class, $fetch], fn() => $this->parse($fetch));
+        return $this->cacheManager->get()->get(
+            [static::class, $fetch],
+            fn() => $this->parse($fetch)
+        );
     }
 
     private function parse($fetch): Request

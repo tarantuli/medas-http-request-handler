@@ -59,6 +59,7 @@ class HtmlHandler implements ResponseHandler
 
     protected function isHtmlRequest(Request $request): bool
     {
-        return $request->method === Method::Options || $request->serverData->acceptsMimeType('text/html');
+        return $request->method === Method::Options
+            || $request->serverData->acceptsMimeType('text/html');
     }
 }

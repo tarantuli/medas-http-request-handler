@@ -21,7 +21,10 @@ class ResponseHandlerFinder
     /** @return ResponseHandlers\ResponseHandler[] */
     public function get(): array
     {
-        return $this->cacheManager->get()->get([static::class, 'getHandlers'], fn() => $this->findHandlers());
+        return $this->cacheManager->get()->get(
+            [static::class, 'getHandlers'],
+            fn() => $this->findHandlers()
+        );
     }
 
     private function findHandlers(): array
