@@ -39,7 +39,8 @@ class ResponseHandlerFinder
         usort(
             $this->handlers,
             fn(ResponseHandlers\ResponseHandler $a, ResponseHandlers\ResponseHandler $b) =>
-                -($a->priority() <=> $b->priority())
+                -($a->priority() <=> $b->priority()
+            )
         );
 
         return $this->handlers;
