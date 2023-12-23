@@ -57,11 +57,6 @@ class ResponseHandlerManager
         }
     }
 
-    public function setHeader(string $name, string $value): void
-    {
-        $this->headers[$name] = $value;
-    }
-
     private function printOutput(): void
     {
         if (!headers_sent()) {
@@ -124,5 +119,10 @@ class ResponseHandlerManager
         if (isset($_SERVER['HTTP_HOST'])) {
             echo '</pre>';
         }
+    }
+
+    public function setHeader(string $name, string $value): void
+    {
+        $this->headers[$name] = $value;
     }
 }

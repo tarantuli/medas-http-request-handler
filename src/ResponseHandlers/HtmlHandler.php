@@ -36,6 +36,12 @@ class HtmlHandler implements ResponseHandler
         return true;
     }
 
+    protected function isHtmlRequest(Request $request): bool
+    {
+        return $request->method === Method::Options
+            || $request->serverData->acceptsMimeType('text/html');
+    }
+
     public function handleException(
         Request                      $request,
         \Exception|\TypeError|\Error $exception,
@@ -55,11 +61,5 @@ class HtmlHandler implements ResponseHandler
         );
 
         return true;
-    }
-
-    protected function isHtmlRequest(Request $request): bool
-    {
-        return $request->method === Method::Options
-            || $request->serverData->acceptsMimeType('text/html');
     }
 }
