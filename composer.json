@@ -1,6 +1,9 @@
 {
     "name": "morphp/medas-http-request-handler",
     "description": "Medas HTTP request handler",
+    "keywords": [
+        "http"
+    ],
     "authors": [
         {
             "name": "Patrick Morpey",
