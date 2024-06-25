@@ -37,7 +37,9 @@ class ResponseHandlerManager
 
     public function handleException(Request\Request $request, \Exception|\TypeError|\Error $exception): void
     {
-        http_response_code(500);
+        $responseCode = $exception instanceof Exceptions\BadRequest ? 400 : 500;
+
+        http_response_code($responseCode);
 
         try {
             ob_start();
