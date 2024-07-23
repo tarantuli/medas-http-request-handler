@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler\Exceptions;
 
-use Medas\Core\Exceptions\BaseException;
 use Medas\HttpRequestHandler\ResponseTypes\Response;
 
-class CannotHandleResponseType extends BaseException
+class CannotHandleResponseType extends BadRequest
 {
     public function __construct(Response $response)
     {

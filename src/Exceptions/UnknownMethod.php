@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler\Exceptions;
 
-use Medas\Core\Exceptions\BaseException;
-
-class UnknownMethod extends BaseException
+class UnknownMethod extends BadRequest
 {
     public function __construct(string $name)
     {

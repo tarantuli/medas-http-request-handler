@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler\Exceptions;
 
-use Medas\Core\Exceptions\BaseException;
-
-class MimeTypeIsNotAccepted extends BaseException
+class MimeTypeIsNotAccepted extends BadRequest
 {
     public function __construct(string $mimeType)
     {

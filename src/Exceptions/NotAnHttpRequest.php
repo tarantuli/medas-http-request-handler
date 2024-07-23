@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler\Exceptions;
 
-use Medas\Core\Exceptions\BaseException;
-
-class NotAnHttpRequest extends BaseException
+class NotAnHttpRequest extends BadRequest
 {
     public function pattern(): string
     {

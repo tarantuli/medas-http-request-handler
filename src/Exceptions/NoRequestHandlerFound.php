@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler\Exceptions;
 
-use Medas\Core\Exceptions\BaseException;
 use Medas\HttpRequestHandler\Request\{Method, Uri};
 
-class NoRequestHandlerFound extends BaseException
+class NoRequestHandlerFound extends BadRequest
 {
     public function __construct(Method $method, Uri $uri)
     {
