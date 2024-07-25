@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler;
 
-use Medas\Core\{Attributes\Service, Interfaces\RoutedRequestHandlerManager};
+use Medas\Core\{
+    Attributes\Service,
+    Interfaces\EventDispatcher,
+    Interfaces\RoutedRequestHandlerManager
+};
 
 #[Service]
 readonly class HttpRequestHandler
@@ -13,6 +17,7 @@ readonly class HttpRequestHandler
         private Request\RequestDataManager  $requestDataManager,
         private ResponseHandlerManager      $responseHandlerManager,
         private RoutedRequestHandlerManager $routedRequestHandlerManager,
+        private EventDispatcher             $eventDispatcher,
     )
     {
     }
@@ -29,6 +34,14 @@ readonly class HttpRequestHandler
 
             if ($requestHandler === null) {
                 throw new Exceptions\NoRequestHandlerFound($request->method, $request->uri);
+            }
+
+            $authVote = new Authorization\AuthVote($request, $requestHandler);
+
+            $this->eventDispatcher->dispatch($authVote);
+
+            if ($authVote->allowedAccess !== true) {
+                throw new Exceptions\RequestNotAuthorized($authVote->allowedAccess);
             }
 
             $response = $requestHandler->handle($request->method->value, $request->uri->endpoint);
