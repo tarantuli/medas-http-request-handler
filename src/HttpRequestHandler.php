@@ -7,17 +7,17 @@ namespace Medas\HttpRequestHandler;
 use Medas\Core\{
     Attributes\Service,
     Interfaces\EventDispatcher,
-    Interfaces\RoutedRequestHandlerManager
+    Interfaces\HttpRequestHandlerManager
 };
 
 #[Service]
 readonly class HttpRequestHandler
 {
     public function __construct(
-        private Request\RequestDataManager  $requestDataManager,
-        private ResponseHandlerManager      $responseHandlerManager,
-        private RoutedRequestHandlerManager $routedRequestHandlerManager,
-        private EventDispatcher             $eventDispatcher,
+        private EventDispatcher            $eventDispatcher,
+        private HttpRequestHandlerManager  $httpRequestHandlerManager,
+        private Request\RequestDataManager $requestDataManager,
+        private ResponseHandlerManager     $responseHandlerManager,
     )
     {
     }
@@ -27,7 +27,7 @@ readonly class HttpRequestHandler
         $request = $this->requestDataManager->get();
 
         try {
-            $requestHandler = $this->routedRequestHandlerManager->find(
+            $requestHandler = $this->httpRequestHandlerManager->find(
                 $request->method->value,
                 $request->uri->endpoint
             );

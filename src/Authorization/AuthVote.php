@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler\Authorization;
 
-use Medas\Core\Interfaces\RoutedRequestHandler;
+use Medas\Core\Interfaces\HttpRequestHandler;
 use Medas\HttpRequestHandler\Request\Request;
 use Psr\EventDispatcher\StoppableEventInterface;
 
@@ -14,8 +14,8 @@ class AuthVote implements StoppableEventInterface
     public bool $stopPropagation = false;
 
     public function __construct(
-        public readonly Request              $request,
-        public readonly RoutedRequestHandler $requestHandler,
+        public readonly Request            $request,
+        public readonly HttpRequestHandler $requestHandler,
     )
     {
     }
