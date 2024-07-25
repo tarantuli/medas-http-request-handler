@@ -18,6 +18,7 @@
         "ext-mbstring": "*"
     },
     "require-dev": {
+        "morphp/medas-events": "dev-dev",
         "morphp/medas-service-manager": "dev-dev",
         "phpunit/phpunit": "^9.5"
     },

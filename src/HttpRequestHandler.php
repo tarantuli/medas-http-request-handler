@@ -14,10 +14,10 @@ use Medas\Core\{
 readonly class HttpRequestHandler
 {
     public function __construct(
-        private EventDispatcher            $eventDispatcher,
-        private HttpRequestHandlerManager  $httpRequestHandlerManager,
-        private Request\RequestDataManager $requestDataManager,
-        private ResponseHandlerManager     $responseHandlerManager,
+        private EventDispatcher           $eventDispatcher,
+        private HttpRequestHandlerManager $httpRequestHandlerManager,
+        private RequestDataManager        $requestDataManager,
+        private ResponseHandlerManager    $responseHandlerManager,
     )
     {
     }
@@ -36,7 +36,7 @@ readonly class HttpRequestHandler
                 throw new Exceptions\NoRequestHandlerFound($request->method, $request->uri);
             }
 
-            $authVote = new Authorization\AuthVote($request, $requestHandler);
+            $authVote = new AccessManagement\AuthorizationVote($request, $requestHandler);
 
             $this->eventDispatcher->dispatch($authVote);
 

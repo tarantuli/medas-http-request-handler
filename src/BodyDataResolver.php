@@ -10,7 +10,7 @@ use Medas\Core\{Attributes\Service, Interfaces\ParameterResolver, ParameterResol
 readonly class BodyDataResolver implements ParameterResolver
 {
     public function __construct(
-        private Request\RequestDataManager $requestDataManager,
+        private RequestDataManager $requestDataManager,
     )
     {
     }

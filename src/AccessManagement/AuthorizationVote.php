@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Medas\HttpRequestHandler\Authorization;
+namespace Medas\HttpRequestHandler\AccessManagement;
 
 use Medas\Core\Interfaces\HttpRequestHandler;
 use Medas\HttpRequestHandler\Request\Request;
 use Psr\EventDispatcher\StoppableEventInterface;
 
-class AuthVote implements StoppableEventInterface
+class AuthorizationVote implements StoppableEventInterface
 {
     public bool|null $allowedAccess = null;
     public bool $stopPropagation = false;

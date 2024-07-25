@@ -2,15 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Medas\HttpRequestHandler\Request;
+namespace Medas\HttpRequestHandler;
 
 use Medas\Core\Attributes\Service;
-use Medas\HttpRequestHandler\Exceptions\{NotAnHttpRequest, UnknownMethod};
 
 #[Service]
 class RequestDataManager
 {
-    private Request $request;
+    private Request\Request $request;
+
+    public function __construct(
+        private readonly Request\AuthenticationFinder $authenticationFinder,
+    )
+    {
+    }
 
     public function __serialize(): array
     {
@@ -23,7 +28,7 @@ class RequestDataManager
         // Do nothing
     }
 
-    public function get(): Request
+    public function get(): Request\Request
     {
         if (!isset($this->request)) {
             $this->determine();
@@ -34,38 +39,40 @@ class RequestDataManager
 
     private function determine(): void
     {
-        $this->request = new Request(
+        $this->request = new Request\Request(
             $this->determineMethod(),
             $this->determineEndpoint(),
-            new ServerData($_SERVER),
-            new PostData($_POST),
+            new Request\ServerData($_SERVER),
+            new Request\PostData($_POST),
             $this->determineBody(),
-            new FileData($_FILES),
+            new Request\FileData($_FILES),
         );
+
+        $this->authenticationFinder->find($this->request);
     }
 
-    private function determineMethod(): Method
+    private function determineMethod(): Request\Method
     {
         if (empty($_SERVER['REMOTE_ADDR']) and !isset($_SERVER['HTTP_USER_AGENT']) and count($_SERVER['argv']) > 0) {
-            throw new NotAnHttpRequest();
+            throw new Exceptions\NotAnHttpRequest();
         }
 
         $name = $_REQUEST['::method'] ?? $_SERVER['REQUEST_METHOD'] ?? null;
 
         try {
-            return Method::from($name);
+            return Request\Method::from($name);
         }
         catch (\ValueError) {
-            throw new UnknownMethod($name);
+            throw new Exceptions\UnknownMethod($name);
         }
     }
 
-    private function determineEndpoint(): Uri
+    private function determineEndpoint(): Request\Uri
     {
-        return service(UriManager::class)->fromString($_SERVER['REQUEST_URI'] ?? '/');
+        return service(Request\UriManager::class)->fromString($_SERVER['REQUEST_URI'] ?? '/');
     }
 
-    private function determineBody(): BodyData
+    private function determineBody(): Request\BodyData
     {
         $raw = file_get_contents('php://input');
 
@@ -82,10 +89,10 @@ class RequestDataManager
             throw new \Exception('cannot determine body values from ' . $raw);
         }
 
-        return new BodyData($body);
+        return new Request\BodyData($body);
     }
 
-    public function set(Request $request): void
+    public function set(Request\Request $request): void
     {
         $this->request = $request;
     }

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Medas\Events\EventsPackage;
 use Medas\HttpRequestHandler\HttpRequestHandlerPackage;
 use Medas\ServiceManager\{ServiceConfig, ServiceManager};
 
@@ -11,6 +12,7 @@ new ServiceManager(function (): ServiceConfig {
     $config = new ServiceConfig();
 
     $config->addPackages([
+        EventsPackage::instance(),
         HttpRequestHandlerPackage::instance(),
     ]);
 

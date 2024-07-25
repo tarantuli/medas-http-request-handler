@@ -10,9 +10,9 @@ use Medas\Core\Attributes\Service;
 readonly class RequestFaker
 {
     public function __construct(
-        private HttpRequestHandler         $requestHandler,
-        private Request\RequestDataManager $dataManager,
-        private Request\UriManager         $uriManager,
+        private HttpRequestHandler $requestHandler,
+        private RequestDataManager $dataManager,
+        private Request\UriManager $uriManager,
     )
     {
     }

@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler\Request;
 
+use Medas\HttpRequestHandler\AccessManagement\Authentication;
+
 class Request
 {
+    public Authentication $authentication;
+
     public function __construct(
         public Method     $method,
         public Uri        $uri,
@@ -15,5 +19,6 @@ class Request
         public FileData   $fileData,
     )
     {
+        $this->authentication = new Authentication();
     }
 }

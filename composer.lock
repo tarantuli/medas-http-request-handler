@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a7f05e2cfc292cda1e14790169e4bad8",
+    "content-hash": "6093eaaa0761e4d0ac64d3ca4c1bb79a",
     "packages": [
         {
             "name": "morphp/medas-core",
@@ -226,6 +226,50 @@
                 "issues": "https://github.com/tarantuli/medas-console/issues"
             },
             "time": "2024-03-14T19:34:56+00:00"
+        },
+        {
+            "name": "morphp/medas-events",
+            "version": "dev-dev",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:tarantuli/medas-events.git",
+                "reference": "a04c1aef133b43add52c14f565cfa8669348842a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tarantuli/medas-events/zipball/a04c1aef133b43add52c14f565cfa8669348842a",
+                "reference": "a04c1aef133b43add52c14f565cfa8669348842a",
+                "shasum": ""
+            },
+            "require": {
+                "morphp/medas-core": "dev-dev"
+            },
+            "require-dev": {
+                "morphp/medas-service-manager": "dev-dev",
+                "phpunit/phpunit": "^9.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Medas\\Events\\": "src/",
+                    "Medas\\EventsTest\\": "tests/"
+                }
+            },
+            "authors": [
+                {
+                    "name": "Patrick Morpey",
+                    "email": "patrick@morphp.nl"
+                }
+            ],
+            "description": "Medas events",
+            "keywords": [
+                "events"
+            ],
+            "support": {
+                "source": "https://github.com/tarantuli/medas-events/tree/dev",
+                "issues": "https://github.com/tarantuli/medas-events/issues"
+            },
+            "time": "2024-03-14T19:38:25+00:00"
         },
         {
             "name": "morphp/medas-object-instantiator",
@@ -1997,6 +2041,7 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "morphp/medas-core": 20,
+        "morphp/medas-events": 20,
         "morphp/medas-service-manager": 20
     },
     "prefer-stable": true,
