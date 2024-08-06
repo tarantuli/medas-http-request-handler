@@ -42,9 +42,11 @@ class ResponseHandlerManager
 
     public function handleException(Request\Request $request, \Exception|\TypeError|\Error $exception): void
     {
-        $responseCode = $exception instanceof Exceptions\BadRequest ? 400 : 500;
+        if (!headers_sent()) {
+            $responseCode = $exception instanceof Exceptions\BadRequest ? 400 : 500;
 
-        http_response_code($responseCode);
+            http_response_code($responseCode);
+        }
 
         try {
             ob_start();
