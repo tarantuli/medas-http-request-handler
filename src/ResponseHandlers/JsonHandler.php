@@ -12,10 +12,17 @@ use Medas\HttpRequestHandler\{
     ResponseTypes\JsonResponse,
     ResponseTypes\Response
 };
+use Medas\Json\JsonEncoder;
 
 #[Service]
-class JsonHandler implements ResponseHandler
+readonly class JsonHandler implements ResponseHandler
 {
+    public function __construct(
+        private JsonEncoder $jsonEncoder,
+    )
+    {
+    }
+
     public function priority(): int
     {
         return -10;
@@ -24,15 +31,12 @@ class JsonHandler implements ResponseHandler
     public function handleResponse(Request $request, Response $response, ResponseHandlerManager $manager): bool
     {
         if ($request->uri->extension === 'json') {
-            /** @noinspection PhpConditionAlreadyCheckedInspection */
             if (!$response instanceof JsonResponse) {
                 throw new DoesNotImplementJsonResponse($response);
             }
 
             // Else, fall through to the echo command
         }
-
-        /** @noinspection PhpConditionAlreadyCheckedInspection */
         elseif (!$request->serverData->acceptsMimeType('application/json') || !$response instanceof JsonResponse) {
             return false;
         }
@@ -40,7 +44,7 @@ class JsonHandler implements ResponseHandler
         $manager->setHeader('Content-Type', 'application/json');
         $manager->setHeader('Access-Control-Allow-Origin', '*');
 
-        echo json_encode($response->getJsonResponse());
+        echo $this->jsonEncoder->encode($response->getJsonResponse());
 
         return true;
     }
@@ -60,7 +64,7 @@ class JsonHandler implements ResponseHandler
 
         $trace = $this->normalizeTrace($exception);
 
-        echo json_encode([
+        echo $this->jsonEncoder->encode([
             'message' => StringMaker::instance()->forceUtf8($exception->getMessage()),
             'code' => $exception->getCode(),
             'fileName' => $exception->getFile(),

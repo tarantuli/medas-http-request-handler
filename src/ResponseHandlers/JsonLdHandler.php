@@ -12,10 +12,17 @@ use Medas\HttpRequestHandler\{
     ResponseTypes\JsonLdResponse,
     ResponseTypes\Response
 };
+use Medas\Json\JsonEncoder;
 
 #[Service]
-class JsonLdHandler implements ResponseHandler
+readonly class JsonLdHandler implements ResponseHandler
 {
+    public function __construct(
+        private JsonEncoder $jsonEncoder,
+    )
+    {
+    }
+
     public function priority(): int
     {
         return -5;
@@ -40,7 +47,7 @@ class JsonLdHandler implements ResponseHandler
         $manager->setHeader('Content-Type', 'applicationld+json');
         $manager->setHeader('Access-Control-Allow-Origin', '*');
 
-        echo json_encode($response->getJsonLdResponse());
+        echo $this->jsonEncoder->encode($response->getJsonLdResponse());
 
         return true;
     }
@@ -59,7 +66,7 @@ class JsonLdHandler implements ResponseHandler
         $manager->setHeader('Content-Type', 'application/ld+json');
         $manager->setHeader('Access-Control-Allow-Origin', '*');
 
-        echo json_encode([
+        echo $this->jsonEncoder->encode([
             'message' => $exception->getMessage(),
             'code' => $exception->getCode(),
             'fileName' => $exception->getFile(),
