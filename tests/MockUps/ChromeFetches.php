@@ -105,6 +105,5 @@ fetch("https://images-api.morphp.nl/v1/images/49374/similarImages", {
   "credentials": "omit"
 });
 SOURCE;
-
     }
 }
