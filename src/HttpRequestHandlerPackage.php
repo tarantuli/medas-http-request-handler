@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Medas\HttpRequestHandler;
 
 use Medas\Core\AsSingleton;
+use Medas\Json\JsonPackage;
 use Medas\ServiceManager\{BasePackage, ServiceConfig};
 
 class HttpRequestHandlerPackage extends BasePackage
@@ -13,7 +14,9 @@ class HttpRequestHandlerPackage extends BasePackage
 
     public function dependencies(): array
     {
-        return [];
+        return [
+            JsonPackage::instance(),
+        ];
     }
 
     public function sourceDirectory(): string
