@@ -89,7 +89,7 @@ readonly class JsonHandler implements ResponseHandler
                     $arguments[] = $type;
                 }
                 else {
-                    $arguments[] = StringMaker::instance()->forceUtf8($arg);
+                    $arguments[] = StringMaker::instance()->forceUtf8((string) $arg);
                 }
             }
 
