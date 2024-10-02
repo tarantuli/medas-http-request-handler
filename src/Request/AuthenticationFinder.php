@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\HttpRequestHandler\Request;
 
 use Medas\Core\{Attributes\Service, Interfaces\EventDispatcher};
-use Medas\HttpRequestHandler\AccessManagement\AuthenticationVote;
+use Medas\HttpRequestHandler\Authentication\AuthenticationVote;
 
 #[Service]
 readonly class AuthenticationFinder

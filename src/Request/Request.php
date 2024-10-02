@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler\Request;
 
-use Medas\HttpRequestHandler\AccessManagement\Authentication;
+use Medas\HttpRequestHandler\Authentication\Authentication;
 
 class Request
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Medas\HttpRequestHandler\AccessManagement;
+namespace Medas\HttpRequestHandler\Authorization;
 
 use Medas\Core\Interfaces\HttpRequestHandler;
 use Medas\HttpRequestHandler\Request\Request;

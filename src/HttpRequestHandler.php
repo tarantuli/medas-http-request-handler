@@ -36,7 +36,7 @@ readonly class HttpRequestHandler
                 throw new Exceptions\NoRequestHandlerFound($request->method, $request->uri);
             }
 
-            $authVote = new AccessManagement\AuthorizationVote($request, $requestHandler);
+            $authVote = new Authorization\AuthorizationVote($request, $requestHandler);
 
             $this->eventDispatcher->dispatch($authVote);
 

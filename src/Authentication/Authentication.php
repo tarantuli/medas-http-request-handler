@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Medas\HttpRequestHandler\AccessManagement;
+namespace Medas\HttpRequestHandler\Authentication;
 
 class Authentication
 {
