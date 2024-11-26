@@ -26,12 +26,18 @@ readonly class BodyDataResolver implements ParameterResolver
             return new ParameterResolverResult(false);
         }
 
-        $bodyData = $this->requestDataManager->get()->bodyData;
+        $bodyData = $this->requestDataManager->get()->bodyData->data();
+        $parts = explode('.', $argument->name);
+        $array = &$bodyData;
 
-        if (!isset($bodyData[$argument->name])) {
-            throw new Exceptions\BodyArgumentIsMissing($argument->name);
+        foreach ($parts as $part) {
+            if (!isset($array[$part])) {
+                throw new Exceptions\BodyArgumentIsMissing($argument->name);
+            }
+
+            $array = &$array[$part];
         }
 
-        return new ParameterResolverResult(true, $bodyData[$argument->name]);
+        return new ParameterResolverResult(true, $array);
     }
 }
