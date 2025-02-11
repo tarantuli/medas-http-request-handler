@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler\ResponseTypes;
 
-use Medas\Core\Interfaces\FileEntity;
+use Medas\Core\File;
 
 interface FileResponse extends Response
 {
-    public function getFileResponse(): FileEntity;
+    public function getFileResponse(): File;
 
-    public function setFile(FileEntity $file): void;
+    public function setFile(File $file): void;
 }

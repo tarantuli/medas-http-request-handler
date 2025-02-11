@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Medas\HttpRequestHandler\ResponseHandlers;
 
 use Medas\Core\Attributes\Service;
+use Medas\Files\MimetypeManager;
 use Medas\HttpRequestHandler\{
     Exceptions\MimeTypeIsNotAccepted,
     Request\Request,
@@ -14,8 +15,14 @@ use Medas\HttpRequestHandler\{
 };
 
 #[Service]
-class FileHandler implements ResponseHandler
+readonly class FileHandler implements ResponseHandler
 {
+    public function __construct(
+        private MimetypeManager $mimetypeManager,
+    )
+    {
+    }
+
     public function priority(): int
     {
         return -30;
@@ -28,19 +35,19 @@ class FileHandler implements ResponseHandler
         }
 
         $file = $response->getFileResponse();
-        $mimetype = $file->mimetype();
+        $mimetype = $this->mimetypeManager->get($file);
 
         if (!$request->serverData->acceptsMimeType($mimetype)) {
             throw new MimeTypeIsNotAccepted($mimetype);
         }
 
-        $fileName = $file->name() ?: str_replace('/', '.', $mimetype);
+        $fileName = $file->name ?: str_replace('/', '.', $mimetype);
 
         $manager->setHeader('Access-Control-Allow-Origin', '*');
         $manager->setHeader('Content-Type', $mimetype);
         $manager->setHeader('Content-Disposition: inline; filename="%s"', $fileName);
 
-        echo $file->content();
+        echo $file->content;
 
         return true;
     }
