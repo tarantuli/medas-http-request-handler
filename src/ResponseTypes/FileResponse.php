@@ -6,9 +6,11 @@ namespace Medas\HttpRequestHandler\ResponseTypes;
 
 use Medas\Core\File;
 
-interface FileResponse extends Response
+readonly class FileResponse implements Response
 {
-    public function getFileResponse(): File;
-
-    public function setFile(File $file): void;
+    public function __construct(
+        public File $file,
+    )
+    {
+    }
 }

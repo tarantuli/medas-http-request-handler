@@ -34,20 +34,19 @@ readonly class FileHandler implements ResponseHandler
             return false;
         }
 
-        $file = $response->getFileResponse();
-        $mimetype = $this->mimetypeManager->get($file);
+        $mimetype = $this->mimetypeManager->get($response->file);
 
         if (!$request->serverData->acceptsMimeType($mimetype)) {
             throw new MimeTypeIsNotAccepted($mimetype);
         }
 
-        $fileName = $file->name ?: str_replace('/', '.', $mimetype);
+        $fileName = $response->file->name ?: str_replace('/', '.', $mimetype);
 
         $manager->setHeader('Access-Control-Allow-Origin', '*');
         $manager->setHeader('Content-Type', $mimetype);
         $manager->setHeader('Content-Disposition: inline; filename="%s"', $fileName);
 
-        echo $file->content;
+        echo $response->file->content;
 
         return true;
     }
