@@ -36,7 +36,7 @@ readonly class FileHandler implements ResponseHandler
 
         $mimetype = $this->mimetypeManager->get($response->file);
 
-        if (!$request->serverData->acceptsMimeType($mimetype)) {
+        if (!$request->serverData->acceptsMimeType($mimetype, ignoreDoubleWild: false)) {
             throw new MimeTypeIsNotAccepted($mimetype);
         }
 

@@ -82,7 +82,7 @@ readonly class JsonHandler implements ResponseHandler
         foreach ($exception->getTrace() as $trace) {
             $arguments = [];
 
-            foreach ($trace['args'] as $arg) {
+            foreach ($trace['args'] ?? [] as $arg) {
                 $type = get_debug_type($arg);
 
                 if (class_exists($type) || !is_scalar($arg)) {

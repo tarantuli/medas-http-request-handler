@@ -12,7 +12,7 @@ class RequestDataManager
     private Request\Request $request;
 
     public function __construct(
-        private readonly Request\AuthenticationFinder $authenticationFinder,
+        private Request\AuthenticationFinder $authenticationFinder,
     )
     {
     }
@@ -47,6 +47,10 @@ class RequestDataManager
             $this->determineBody(),
             new Request\FileData($_FILES),
         );
+
+        if (!isset($this->authenticationFinder)) {
+            $this->authenticationFinder = \service(Request\AuthenticationFinder::class);
+        }
 
         $this->authenticationFinder->find($this->request);
     }
