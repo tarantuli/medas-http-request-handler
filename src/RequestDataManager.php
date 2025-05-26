@@ -4,42 +4,29 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler;
 
-use Medas\Core\Attributes\Service;
+use Medas\Core\{Attributes\Service, Interfaces\CacheManager};
 
 #[Service]
-class RequestDataManager
+readonly class RequestDataManager
 {
-    private Request\Request $request;
-
     public function __construct(
+        private CacheManager                 $cacheManager,
         private Request\AuthenticationFinder $authenticationFinder,
     )
     {
     }
 
-    public function __serialize(): array
-    {
-        // This is needed to make sure $request isn't serialized
-        return [];
-    }
-
-    public function __unserialize(array $data): void
-    {
-        // Do nothing
-    }
-
     public function get(): Request\Request
     {
-        if (!isset($this->request)) {
-            $this->determine();
-        }
-
-        return $this->request;
+        return $this->cacheManager->get('memory')->get(
+            self::class,
+            fn() => $this->determine(),
+        );
     }
 
-    private function determine(): void
+    private function determine(): Request\Request
     {
-        $this->request = new Request\Request(
+        $request = new Request\Request(
             $this->determineMethod(),
             $this->determineEndpoint(),
             new Request\ServerData($_SERVER),
@@ -48,11 +35,9 @@ class RequestDataManager
             new Request\FileData($_FILES),
         );
 
-        if (!isset($this->authenticationFinder)) {
-            $this->authenticationFinder = \service(Request\AuthenticationFinder::class);
-        }
+        $this->authenticationFinder->find($request);
 
-        $this->authenticationFinder->find($this->request);
+        return $request;
     }
 
     private function determineMethod(): Request\Method
@@ -98,6 +83,6 @@ class RequestDataManager
 
     public function set(Request\Request $request): void
     {
-        $this->request = $request;
+        $this->cacheManager->get('memory')->set(self::class, $request);
     }
 }
