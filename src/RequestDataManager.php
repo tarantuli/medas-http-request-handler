@@ -18,10 +18,8 @@ readonly class RequestDataManager
 
     public function get(): Request\Request
     {
-        return $this->cacheManager->get('memory')->get(
-            self::class,
-            fn() => $this->determine(),
-        );
+        return $this->cacheManager->get('memory')
+            ->get(self::class, fn() => $this->determine());
     }
 
     private function determine(): Request\Request
@@ -83,6 +81,7 @@ readonly class RequestDataManager
 
     public function set(Request\Request $request): void
     {
-        $this->cacheManager->get('memory')->set(self::class, $request);
+        $this->cacheManager->get('memory')
+            ->set(self::class, $request);
     }
 }
