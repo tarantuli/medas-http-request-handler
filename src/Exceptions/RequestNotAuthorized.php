@@ -8,7 +8,7 @@ class RequestNotAuthorized extends BadRequest
 {
     public function __construct(public bool|null $voteResult)
     {
-        parent::__construct($this->voteResult === false ? 'not allowed' : 'not authorized');
+        parent::__construct($this->voteResult === false ? 'disallowed' : 'unauthorized');
     }
 
     public function pattern(): string
