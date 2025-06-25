@@ -4,24 +4,20 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler\Request;
 
-use Medas\Core\{Attributes\Service, Interfaces\CacheManager};
+use Medas\Core\Attributes\Service;
 
 #[Service]
 readonly class ChromeFetchParser
 {
     public function __construct(
-        private CacheManager $cacheManager,
-        private UriManager   $uriManager,
+        private UriManager $uriManager,
     )
     {
     }
 
     public function get(string $fetch): Request
     {
-        return $this->cacheManager->get()->get(
-            [static::class, $fetch],
-            fn() => $this->parse($fetch)
-        );
+        return cache([static::class, $fetch], fn() => $this->parse($fetch));
     }
 
     private function parse($fetch): Request

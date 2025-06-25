@@ -4,49 +4,37 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler;
 
-use Medas\Core\{Attributes\Service, Interfaces\CacheManager};
+use Medas\Core\Attributes\Service;
 
 #[Service]
-class ResponseHandlerFinder
+readonly class ResponseHandlerFinder
 {
-    /** @var ResponseHandlers\ResponseHandler[] $handlers */
-    private array $handlers;
-
-    public function __construct(
-        private readonly CacheManager $cacheManager,
-    )
-    {
-    }
-
     /** @return ResponseHandlers\ResponseHandler[] */
     public function get(): array
     {
-        return $this->cacheManager->get()->get(
-            [static::class, 'getHandlers'],
-            fn() => $this->findHandlers()
-        );
+        return cache(__CLASS__, fn() => $this->findHandlers());
     }
 
     private function findHandlers(): array
     {
-        $this->handlers = [];
+        $handlers = [];
 
         foreach (sm()->getServiceClassNames() as $className) {
-            $this->processClass($className);
+            $this->processClass($className, $handlers);
         }
 
         // Sort handlers with the highest priority to the front
         usort(
-            $this->handlers,
+            $handlers,
             fn(ResponseHandlers\ResponseHandler $a, ResponseHandlers\ResponseHandler $b) =>
                 -($a->priority() <=> $b->priority()
             )
         );
 
-        return $this->handlers;
+        return $handlers;
     }
 
-    private function processClass(string $className): void
+    private function processClass(string $className, array &$handlers): void
     {
         $class = new \ReflectionClass($className);
 
@@ -58,6 +46,6 @@ class ResponseHandlerFinder
             return;
         }
 
-        $this->handlers[] = sm()->resolve($className);
+        $handlers[] = sm()->resolve($className);
     }
 }

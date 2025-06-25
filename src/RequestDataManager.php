@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler;
 
-use Medas\Core\{Attributes\Service, Interfaces\CacheManager};
+use Medas\Core\Attributes\Service;
 
 #[Service]
 readonly class RequestDataManager
 {
     public function __construct(
-        private CacheManager                 $cacheManager,
         private Request\AuthenticationFinder $authenticationFinder,
     )
     {
@@ -18,8 +17,7 @@ readonly class RequestDataManager
 
     public function get(): Request\Request
     {
-        return $this->cacheManager->get('memory')
-            ->get(self::class, fn() => $this->determine());
+        return cache(self::class, fn() => $this->determine(), 'memory');
     }
 
     private function determine(): Request\Request
@@ -81,7 +79,6 @@ readonly class RequestDataManager
 
     public function set(Request\Request $request): void
     {
-        $this->cacheManager->get('memory')
-            ->set(self::class, $request);
+        cacheSet(self::class, $request, 'memory');
     }
 }
