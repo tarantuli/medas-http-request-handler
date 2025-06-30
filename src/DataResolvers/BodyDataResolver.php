@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Medas\HttpRequestHandler;
+namespace Medas\HttpRequestHandler\DataResolvers;
 
 use Medas\Core\{Attributes\Service, Interfaces\ParameterResolver, ParameterResolverResult};
+use Medas\HttpRequestHandler\{Attributes\BodyArgument, Exceptions, RequestDataManager};
 
 #[Service]
 readonly class BodyDataResolver implements ParameterResolver
@@ -22,7 +23,7 @@ readonly class BodyDataResolver implements ParameterResolver
 
     public function handle(\ReflectionParameter|\ReflectionProperty $parameter): ParameterResolverResult
     {
-        if (!$argument = attribute(Attributes\BodyArgument::class, $parameter)) {
+        if (!$argument = attribute(BodyArgument::class, $parameter)) {
             return new ParameterResolverResult(false);
         }
 
