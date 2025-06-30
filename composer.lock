@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-core.git",
-                "reference": "cfde80501b16d3f4cde15e2067171823a661ef81"
+                "reference": "67b9397766d70a4f4dc85172da42fe0638e2df40"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/cfde80501b16d3f4cde15e2067171823a661ef81",
-                "reference": "cfde80501b16d3f4cde15e2067171823a661ef81",
+                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/67b9397766d70a4f4dc85172da42fe0638e2df40",
+                "reference": "67b9397766d70a4f4dc85172da42fe0638e2df40",
                 "shasum": ""
             },
             "require": {
@@ -55,7 +55,7 @@
                 "source": "https://github.com/tarantuli/medas-core/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-core/issues"
             },
-            "time": "2025-06-25T07:36:58+00:00"
+            "time": "2025-06-30T07:26:04+00:00"
         },
         {
             "name": "morphp/medas-file-system",
@@ -458,12 +458,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-service-manager.git",
-                "reference": "0fd275109be9e13954f1816dc80715cd79267ad0"
+                "reference": "715f51c4fe660013df020bfe2b220f3e192a95e6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-service-manager/zipball/0fd275109be9e13954f1816dc80715cd79267ad0",
-                "reference": "0fd275109be9e13954f1816dc80715cd79267ad0",
+                "url": "https://api.github.com/repos/tarantuli/medas-service-manager/zipball/715f51c4fe660013df020bfe2b220f3e192a95e6",
+                "reference": "715f51c4fe660013df020bfe2b220f3e192a95e6",
                 "shasum": ""
             },
             "require": {
@@ -500,7 +500,7 @@
                 "source": "https://github.com/tarantuli/medas-service-manager/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-service-manager/issues"
             },
-            "time": "2025-06-05T09:34:45+00:00"
+            "time": "2025-06-25T07:49:38+00:00"
         },
         {
             "name": "myclabs/deep-copy",
