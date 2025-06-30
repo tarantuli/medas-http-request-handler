@@ -31,7 +31,7 @@ readonly class RequestDataObjectResolver implements ParameterResolver
             return new ParameterResolverResult(false);
         }
 
-        $className = normalizeType($parameter->getType())[0];
+        $className = normalizeType($parameter->getType())[0]->getName();
 
         if (!class_exists($className)) {
             throw new ParameterTypeIsNotAClass($parameter, $className);

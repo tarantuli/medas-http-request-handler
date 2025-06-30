@@ -20,6 +20,6 @@ class ParameterTypeIsNotAClass extends BaseException
 
     public function pattern(): string
     {
-        return 'parameter %s of %s->%s() must be a type of class, it\'s %s instead';
+        return 'parameter $%s of %s->%s() must have a class as type, it\'s "%s" instead';
     }
 }
