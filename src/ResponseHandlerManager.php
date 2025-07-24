@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler;
 
-use Medas\Core\Attributes\Service;
+use Medas\Core\{Attributes\Service, Events\DebugInformation};
 use Medas\ServiceManager\ErrorHandling\ExceptionHandler;
 
 #[Service]
@@ -30,6 +30,8 @@ class ResponseHandlerManager implements ExceptionHandler
 
         foreach ($this->handlerFinder->get() as $responseHandler) {
             if ($responseHandler->handleResponse($request, $response, $this)) {
+                dispatch(new DebugInformation('[response-handler-manager] found handler: %s', $responseHandler::class));
+
                 $this->printOutput();
 
                 return;
