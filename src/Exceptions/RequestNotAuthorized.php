@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler\Exceptions;
 
-class RequestNotAuthorized extends BadRequest
+class RequestNotAuthorized extends UnauthorizedRequest
 {
     public function __construct(public bool|null $voteResult)
     {

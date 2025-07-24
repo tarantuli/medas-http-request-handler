@@ -52,8 +52,14 @@ class ResponseHandlerManager implements ExceptionHandler
             if ($exception instanceof Exceptions\DeclaresResponseCode) {
                 $responseCode = $exception->responseCode();
             }
+            elseif ($exception instanceof Exceptions\BadRequest) {
+                $responseCode = 400;
+            }
+            elseif ($exception instanceof Exceptions\UnauthorizedRequest) {
+                $responseCode = 403;
+            }
             else {
-                $responseCode = $exception instanceof Exceptions\BadRequest ? 400 : 500;
+                $responseCode = 500;
             }
 
             http_response_code($responseCode);
