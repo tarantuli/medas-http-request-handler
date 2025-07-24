@@ -21,30 +21,25 @@ readonly class HttpRequestHandler
     {
         $request = $this->requestDataManager->get();
 
-        try {
-            $requestHandler = $this->httpRequestHandlerManager->find(
-                $request->method->value,
-                $request->uri->endpoint
-            );
+        $requestHandler = $this->httpRequestHandlerManager->find(
+            $request->method->value,
+            $request->uri->endpoint
+        );
 
-            if ($requestHandler === null) {
-                throw new Exceptions\NoRequestHandlerFound($request->method, $request->uri);
-            }
-
-            $authVote = new Authorization\AuthorizationVote($request, $requestHandler);
-
-            dispatch($authVote);
-
-            if ($authVote->allowedAccess !== true) {
-                throw new Exceptions\RequestNotAuthorized($authVote->allowedAccess);
-            }
-
-            $response = $requestHandler->handle($request->method->value, $request->uri->endpoint);
-
-            $this->responseHandlerManager->handleResponse($request, $response);
+        if ($requestHandler === null) {
+            throw new Exceptions\NoRequestHandlerFound($request->method, $request->uri);
         }
-        catch (\Exception|\TypeError|\Error $exception) {
-            $this->responseHandlerManager->handleException($request, $exception);
+
+        $authVote = new Authorization\AuthorizationVote($request, $requestHandler);
+
+        dispatch($authVote);
+
+        if ($authVote->allowedAccess !== true) {
+            throw new Exceptions\RequestNotAuthorized($authVote->allowedAccess);
         }
+
+        $response = $requestHandler->handle($request->method->value, $request->uri->endpoint);
+
+        $this->responseHandlerManager->handleResponse($request, $response);
     }
 }

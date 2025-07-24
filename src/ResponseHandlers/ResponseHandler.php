@@ -12,9 +12,5 @@ interface ResponseHandler
 
     public function handleResponse(Request $request, Response $response, ResponseHandlerManager $manager): bool;
 
-    public function handleException(
-        Request                      $request,
-        \Exception|\TypeError|\Error $exception,
-        ResponseHandlerManager       $manager
-    ): bool;
+    public function handleException(Request $request, \Throwable $exception, ResponseHandlerManager $manager): bool;
 }

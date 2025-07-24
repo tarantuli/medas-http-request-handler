@@ -49,11 +49,7 @@ readonly class JsonHandler implements ResponseHandler
         return true;
     }
 
-    public function handleException(
-        Request                      $request,
-        \Exception|\TypeError|\Error $exception,
-        ResponseHandlerManager       $manager
-    ): bool
+    public function handleException(Request $request, \Throwable $exception, ResponseHandlerManager $manager): bool
     {
         if (!$request->serverData->acceptsMimeType('application/json')) {
             return false;
@@ -75,7 +71,7 @@ readonly class JsonHandler implements ResponseHandler
         return true;
     }
 
-    private function normalizeTrace(\Exception|\TypeError|\Error $exception): array
+    private function normalizeTrace(\Throwable $exception): array
     {
         $paths = [];
 

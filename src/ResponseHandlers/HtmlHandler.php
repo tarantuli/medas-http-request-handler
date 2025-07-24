@@ -42,11 +42,7 @@ class HtmlHandler implements ResponseHandler
             || $request->serverData->acceptsMimeType('text/html');
     }
 
-    public function handleException(
-        Request                      $request,
-        \Exception|\TypeError|\Error $exception,
-        ResponseHandlerManager       $manager
-    ): bool
+    public function handleException(Request $request, \Throwable $exception, ResponseHandlerManager $manager): bool
     {
         if (!$request->serverData->acceptsMimeType('text/html')) {
             return false;

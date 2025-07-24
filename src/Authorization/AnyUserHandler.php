@@ -11,7 +11,7 @@ use Medas\Core\{
 };
 
 /**
- * This authorization vote handlers checks if the route handler method or its declaring class are tagged with AnyUser.
+ * This authorization vote handler checks if the route handler method or its declaring class are tagged with AnyUser.
  * If so, then access is allowed if any user is authenticated. If not, access is disallowed.
  */
 #[Service]

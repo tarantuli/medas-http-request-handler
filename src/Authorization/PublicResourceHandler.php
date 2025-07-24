@@ -11,7 +11,7 @@ use Medas\Core\{
 };
 
 /**
- * This authorization vote handlers checks if the route handler method or its declaring class are tagged with PublicResource.
+ * This authorization vote handler checks if the route handler method or its declaring class are tagged with PublicResource.
  * If so, then access is allowed. In all other cases, it expresses no opinion.
  */
 #[Service]

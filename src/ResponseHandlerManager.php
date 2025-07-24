@@ -5,13 +5,15 @@ declare(strict_types=1);
 namespace Medas\HttpRequestHandler;
 
 use Medas\Core\Attributes\Service;
+use Medas\ServiceManager\ErrorHandling\ExceptionHandler;
 
 #[Service]
-class ResponseHandlerManager
+class ResponseHandlerManager implements ExceptionHandler
 {
     private array $headers = [];
 
     public function __construct(
+        private readonly RequestDataManager    $requestDataManager,
         private readonly ResponseHandlerFinder $handlerFinder,
     )
     {
@@ -40,8 +42,10 @@ class ResponseHandlerManager
         throw new Exceptions\CannotHandleResponseType($response);
     }
 
-    public function handleException(Request\Request $request, \Exception|\TypeError|\Error $exception): void
+    public function handleException(\Throwable $exception): void
     {
+        $request = $this->requestDataManager->get();
+
         if (!headers_sent()) {
             if ($exception instanceof Exceptions\DeclaresResponseCode) {
                 $responseCode = $exception->responseCode();
@@ -66,7 +70,7 @@ class ResponseHandlerManager
 
             $this->lastEffortExceptionPrinting($exception);
         }
-        catch (\Exception|\TypeError|\Error) {
+        catch (\Throwable) {
             $this->lastEffortExceptionPrinting($exception);
         }
     }
@@ -82,7 +86,7 @@ class ResponseHandlerManager
         ob_end_flush();
     }
 
-    private function lastEffortExceptionPrinting(\Exception|\TypeError|\Error $exception): void
+    private function lastEffortExceptionPrinting(\Throwable $exception): void
     {
         // Dump the open output buffer before outputting a default exception message
         ob_end_clean();

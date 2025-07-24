@@ -51,11 +51,7 @@ readonly class FileHandler implements ResponseHandler
         return true;
     }
 
-    public function handleException(
-        Request                      $request,
-        \Exception|\TypeError|\Error $exception,
-        ResponseHandlerManager       $manager
-    ): bool
+    public function handleException(Request $request, \Throwable $exception, ResponseHandlerManager $manager): bool
     {
         return false;
     }

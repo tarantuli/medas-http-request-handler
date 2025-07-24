@@ -52,11 +52,7 @@ readonly class JsonLdHandler implements ResponseHandler
         return true;
     }
 
-    public function handleException(
-        Request                      $request,
-        \Exception|\TypeError|\Error $exception,
-        ResponseHandlerManager       $manager
-    ): bool
+    public function handleException(Request $request, \Throwable $exception, ResponseHandlerManager $manager): bool
     {
         if (!$request->serverData->acceptsMimeType('application/ld+json')) {
             return false;
