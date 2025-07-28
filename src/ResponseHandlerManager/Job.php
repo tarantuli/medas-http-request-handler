@@ -9,9 +9,10 @@ use Medas\HttpRequestHandler\{Request\Request, ResponseTypes\Response};
 class Job extends OutputData
 {
     public function __construct(
-        public Request  $request,
+        Request         $request,
         public Response $response,
     )
     {
+        parent::__construct($request);
     }
 }

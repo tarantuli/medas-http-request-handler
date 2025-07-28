@@ -9,9 +9,10 @@ use Medas\HttpRequestHandler\Request\Request;
 class ExceptionJob extends OutputData
 {
     public function __construct(
-        public Request    $request,
+        Request           $request,
         public \Throwable $exception,
     )
     {
+        parent::__construct($request);
     }
 }

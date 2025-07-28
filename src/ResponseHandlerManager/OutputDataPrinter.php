@@ -12,7 +12,7 @@ readonly class OutputDataPrinter
     public function print(OutputData $outputData): void
     {
         $eTag = sha1($outputData->output);
-        $requestHeader = $request->serverData['HTTP_IF_NONE_MATCH'] ?? null;
+        $requestHeader = $outputData->request->serverData['HTTP_IF_NONE_MATCH'] ?? null;
 
         if ($requestHeader && $requestHeader === $eTag) {
             $outputData->responseCode = 304;
