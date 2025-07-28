@@ -8,142 +8,35 @@ use Medas\Core\{Attributes\Service, Events\DebugInformation};
 use Medas\ServiceManager\ErrorHandling\ExceptionHandler;
 
 #[Service]
-class ResponseHandlerManager implements ExceptionHandler
+readonly class ResponseHandlerManager implements ExceptionHandler
 {
-    private array $headers = [];
-
     public function __construct(
-        private readonly RequestDataManager    $requestDataManager,
-        private readonly ResponseHandlerFinder $handlerFinder,
+        private ExceptionHandlerManager                  $exceptionHandlerManager,
+        private ResponseHandlerManager\OutputDataPrinter $outputDataPrinter,
+        private ResponseHandlerFinder                    $handlerFinder,
     )
     {
     }
 
-    public function setHeader(string $name, string $value): void
-    {
-        $this->headers[$name] = $value;
-    }
-
     public function handleResponse(Request\Request $request, ResponseTypes\Response $response): void
     {
-        ob_start();
+        $job = new ResponseHandlerManager\Job($request, $response);
 
         foreach ($this->handlerFinder->get() as $responseHandler) {
-            if ($responseHandler->handleResponse($request, $response, $this)) {
+            if ($responseHandler->handleResponse($job)) {
                 dispatch(new DebugInformation('[response-handler-manager] found handler: %s', $responseHandler::class));
 
-                $this->printOutput();
+                $this->outputDataPrinter->print($job);
 
                 return;
             }
         }
-
-        // Dump the open output buffer before throwing the exception
-        ob_end_clean();
 
         throw new Exceptions\CannotHandleResponseType($response);
     }
 
     public function handleException(\Throwable $exception): void
     {
-        $request = $this->requestDataManager->get();
-
-        if (!headers_sent()) {
-            if ($exception instanceof Exceptions\DeclaresResponseCode) {
-                $responseCode = $exception->responseCode();
-            }
-            elseif ($exception instanceof Exceptions\BadRequest) {
-                $responseCode = 400;
-            }
-            elseif ($exception instanceof Exceptions\UnauthorizedRequest) {
-                $responseCode = 403;
-            }
-            else {
-                $responseCode = 500;
-            }
-
-            http_response_code($responseCode);
-        }
-
-        try {
-            ob_start();
-
-            foreach ($this->handlerFinder->get() as $responseHandler) {
-                if ($responseHandler->handleException($request, $exception, $this)) {
-                    $this->printOutput();
-
-                    return;
-                }
-            }
-
-            $this->lastEffortExceptionPrinting($exception);
-        }
-        catch (\Throwable) {
-            $this->lastEffortExceptionPrinting($exception);
-        }
-    }
-
-    private function printOutput(): void
-    {
-        if (!headers_sent()) {
-            foreach ($this->headers as $name => $value) {
-                header(sprintf('%s: %s', $name, $value));
-            }
-        }
-
-        ob_end_flush();
-    }
-
-    private function lastEffortExceptionPrinting(\Throwable $exception): void
-    {
-        // Dump the open output buffer before outputting a default exception message
-        ob_end_clean();
-
-        if (isset($_SERVER['HTTP_HOST'])) {
-            echo '<pre>';
-        }
-
-        foreach (array_reverse($exception->getTrace()) as $trace) {
-            if (isset($trace['file'])) {
-                printf(
-                    "%s:%u\n   %s::%s()\n",
-                    $trace['file'],
-                    $trace['line'],
-                    $trace['class'] ?? '[main]',
-                    $trace['function']
-                );
-            }
-            else {
-                printf("[main]\n   %s::%s()\n", $trace['class'] ?? '[main]', $trace['function']);
-            }
-
-            foreach ($trace['args'] ?? [] as $index => $argument) {
-                if (is_string($argument) && mb_detect_encoding($argument, 'UTF-8')) {
-                    printf("    %u: %s\n", $index, mb_substr($argument, 0, 78));
-                }
-                else {
-                    printf(
-                        "    %u: %s(%u)\n",
-                        $index,
-                        get_debug_type($argument),
-                        is_string($argument) ? strlen($argument) : 0
-                    );
-                }
-            }
-
-            printf("\n");
-        }
-
-        printf(
-            "\n%s:%u [%u]\n%s\n\n",
-            $exception->getFile(),
-            $exception->getLine(),
-            $exception->getCode(),
-            $exception->getMessage()
-        );
-
-        if (isset($_SERVER['HTTP_HOST'])) {
-            echo '</pre>';
-        }
+        $this->exceptionHandlerManager->handle($exception);
     }
 }

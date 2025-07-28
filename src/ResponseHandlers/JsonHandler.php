@@ -7,10 +7,9 @@ namespace Medas\HttpRequestHandler\ResponseHandlers;
 use Medas\Core\{Attributes\Service, StringMaker};
 use Medas\HttpRequestHandler\{
     Exceptions\DoesNotImplementJsonResponse,
-    Request\Request,
-    ResponseHandlerManager,
-    ResponseTypes\JsonResponse,
-    ResponseTypes\Response
+    ResponseHandlerManager\ExceptionJob,
+    ResponseHandlerManager\Job,
+    ResponseTypes\JsonResponse
 };
 use Medas\Json\JsonEncoder;
 
@@ -28,43 +27,44 @@ readonly class JsonHandler implements ResponseHandler
         return -10;
     }
 
-    public function handleResponse(Request $request, Response $response, ResponseHandlerManager $manager): bool
+    public function handleResponse(Job $job): bool
     {
-        if ($request->uri->extension === 'json') {
-            if (!$response instanceof JsonResponse) {
-                throw new DoesNotImplementJsonResponse($response);
+        if ($job->request->uri->extension === 'json') {
+            if (!$job->response instanceof JsonResponse) {
+                throw new DoesNotImplementJsonResponse($job->response);
             }
 
             // Else, fall through to the echo command
         }
-        elseif (!$request->serverData->acceptsMimeType('application/json') || !$response instanceof JsonResponse) {
+        elseif (
+            !$job->request->serverData->acceptsMimeType('application/json')
+            || !$job->response instanceof JsonResponse
+        ) {
             return false;
         }
 
-        $manager->setHeader('Content-Type', 'application/json');
-        $manager->setHeader('Access-Control-Allow-Origin', '*');
-
-        echo $this->jsonEncoder->encode($response->getJsonResponse());
+        $job->headers['Access-Control-Allow-Origin'] = '*';
+        $job->headers['Content-Type'] = 'application/json';
+        $job->output = $this->jsonEncoder->encode($job->response->getJsonResponse());
 
         return true;
     }
 
-    public function handleException(Request $request, \Throwable $exception, ResponseHandlerManager $manager): bool
+    public function handleException(ExceptionJob $job): bool
     {
-        if (!$request->serverData->acceptsMimeType('application/json')) {
+        if (!$job->request->serverData->acceptsMimeType('application/json')) {
             return false;
         }
 
-        $manager->setHeader('Content-Type', 'application/json');
-        $manager->setHeader('Access-Control-Allow-Origin', '*');
-
-        $trace = $this->normalizeTrace($exception);
+        $job->headers['Content-Type'] = 'application/json';
+        $job->headers['Access-Control-Allow-Origin'] = '*';
+        $trace = $this->normalizeTrace($job->exception);
 
         echo $this->jsonEncoder->encode([
-            'message' => StringMaker::instance()->forceUtf8($exception->getMessage()),
-            'code' => $exception->getCode(),
-            'fileName' => $exception->getFile(),
-            'lineNumber' => $exception->getLine(),
+            'message' => StringMaker::instance()->forceUtf8($job->exception->getMessage()),
+            'code' => $job->exception->getCode(),
+            'fileName' => $job->exception->getFile(),
+            'lineNumber' => $job->exception->getLine(),
             'trace' => $trace,
         ]);
 

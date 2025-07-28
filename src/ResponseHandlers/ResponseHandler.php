@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler\ResponseHandlers;
 
-use Medas\HttpRequestHandler\{Request\Request, ResponseHandlerManager, ResponseTypes\Response};
+use Medas\HttpRequestHandler\ResponseHandlerManager\{ExceptionJob, Job};
 
 interface ResponseHandler
 {
     public function priority(): int;
 
-    public function handleResponse(Request $request, Response $response, ResponseHandlerManager $manager): bool;
+    public function handleResponse(Job $job): bool;
 
-    public function handleException(Request $request, \Throwable $exception, ResponseHandlerManager $manager): bool;
+    public function handleException(ExceptionJob $job): bool;
 }

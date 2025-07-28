@@ -8,9 +8,9 @@ use Medas\Core\Attributes\Service;
 use Medas\HttpRequestHandler\{
     Request\Method,
     Request\Request,
-    ResponseHandlerManager,
-    ResponseTypes\HtmlResponse,
-    ResponseTypes\Response
+    ResponseHandlerManager\ExceptionJob,
+    ResponseHandlerManager\Job,
+    ResponseTypes\HtmlResponse
 };
 
 #[Service]
@@ -21,17 +21,17 @@ class HtmlHandler implements ResponseHandler
         return -20;
     }
 
-    public function handleResponse(Request $request, Response $response, ResponseHandlerManager $manager): bool
+    public function handleResponse(Job $job): bool
     {
-        if (!$response instanceof HtmlResponse) {
+        if (!$job->response instanceof HtmlResponse) {
             return false;
         }
 
-        if (!$this->isHtmlRequest($request)) {
+        if (!$this->isHtmlRequest($job->request)) {
             return false;
         }
 
-        $response->outputHtmlResponse();
+        $job->response->outputHtmlResponse();
 
         return true;
     }
@@ -42,18 +42,18 @@ class HtmlHandler implements ResponseHandler
             || $request->serverData->acceptsMimeType('text/html');
     }
 
-    public function handleException(Request $request, \Throwable $exception, ResponseHandlerManager $manager): bool
+    public function handleException(ExceptionJob $job): bool
     {
-        if (!$request->serverData->acceptsMimeType('text/html')) {
+        if (!$job->request->serverData->acceptsMimeType('text/html')) {
             return false;
         }
 
         printf(
             '<p>%s:%u [%u] %s</p>',
-            $exception->getFile(),
-            $exception->getLine(),
-            $exception->getCode(),
-            $exception->getMessage()
+            $job->exception->getFile(),
+            $job->exception->getLine(),
+            $job->exception->getCode(),
+            $job->exception->getMessage()
         );
 
         return true;

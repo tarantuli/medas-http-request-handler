@@ -8,10 +8,9 @@ use Medas\Core\Attributes\Service;
 use Medas\Files\MimetypeManager;
 use Medas\HttpRequestHandler\{
     Exceptions\MimeTypeIsNotAccepted,
-    Request\Request,
-    ResponseHandlerManager,
-    ResponseTypes\FileResponse,
-    ResponseTypes\Response
+    ResponseHandlerManager\ExceptionJob,
+    ResponseHandlerManager\Job,
+    ResponseTypes\FileResponse
 };
 
 #[Service]
@@ -28,30 +27,29 @@ readonly class FileHandler implements ResponseHandler
         return -30;
     }
 
-    public function handleResponse(Request $request, Response $response, ResponseHandlerManager $manager): bool
+    public function handleResponse(Job $job): bool
     {
-        if (!$response instanceof FileResponse) {
+        if (!$job->response instanceof FileResponse) {
             return false;
         }
 
-        $mimetype = $this->mimetypeManager->get($response->file);
+        $mimetype = $this->mimetypeManager->get($job->response->file);
 
-        if (!$request->serverData->acceptsMimeType($mimetype, ignoreDoubleWild: false)) {
+        if (!$job->request->serverData->acceptsMimeType($mimetype, ignoreDoubleWild: false)) {
             throw new MimeTypeIsNotAccepted($mimetype);
         }
 
-        $fileName = $response->file->name ?: str_replace('/', '.', $mimetype);
+        $fileName = $job->response->file->name ?: str_replace('/', '.', $mimetype);
+        $job->headers['Access-Control-Allow-Origin'] = '*';
+        $job->headers['Content-Type'] = $mimetype;
+        $job->headers['Content-Disposition: inline; filename="%s"'] = $fileName;
 
-        $manager->setHeader('Access-Control-Allow-Origin', '*');
-        $manager->setHeader('Content-Type', $mimetype);
-        $manager->setHeader('Content-Disposition: inline; filename="%s"', $fileName);
-
-        echo $response->file->content;
+        echo $job->response->file->content;
 
         return true;
     }
 
-    public function handleException(Request $request, \Throwable $exception, ResponseHandlerManager $manager): bool
+    public function handleException(ExceptionJob $job): bool
     {
         return false;
     }

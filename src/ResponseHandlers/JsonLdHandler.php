@@ -7,10 +7,9 @@ namespace Medas\HttpRequestHandler\ResponseHandlers;
 use Medas\Core\Attributes\Service;
 use Medas\HttpRequestHandler\{
     Exceptions\DoesNotImplementJsonLdResponse,
-    Request\Request,
-    ResponseHandlerManager,
-    ResponseTypes\JsonLdResponse,
-    ResponseTypes\Response
+    ResponseHandlerManager\ExceptionJob,
+    ResponseHandlerManager\Job,
+    ResponseTypes\JsonLdResponse
 };
 use Medas\Json\JsonEncoder;
 
@@ -28,45 +27,45 @@ readonly class JsonLdHandler implements ResponseHandler
         return -5;
     }
 
-    public function handleResponse(Request $request, Response $response, ResponseHandlerManager $manager): bool
+    public function handleResponse(Job $job): bool
     {
-        if ($request->uri->extension === 'jsonld') {
-            if (!$response instanceof JsonLdResponse) {
-                throw new DoesNotImplementJsonLdResponse($response);
+        if ($job->request->uri->extension === 'jsonld') {
+            if (!$job->response instanceof JsonLdResponse) {
+                throw new DoesNotImplementJsonLdResponse($job->response);
             }
 
             // Else, fall through to the echo command
         }
         elseif (
-            !$request->serverData->acceptsMimeType('application/ld+json')
-            || !$response instanceof JsonLdResponse
+            !$job->request->serverData->acceptsMimeType('application/ld+json')
+            || !$job->response instanceof JsonLdResponse
         ) {
             return false;
         }
 
-        $manager->setHeader('Content-Type', 'applicationld+json');
-        $manager->setHeader('Access-Control-Allow-Origin', '*');
+        $job->headers['Content-Type'] = 'applicationld+json';
+        $job->headers['Access-Control-Allow-Origin'] = '*';
 
-        echo $this->jsonEncoder->encode($response->getJsonLdResponse());
+        echo $this->jsonEncoder->encode($job->response->getJsonLdResponse());
 
         return true;
     }
 
-    public function handleException(Request $request, \Throwable $exception, ResponseHandlerManager $manager): bool
+    public function handleException(ExceptionJob $job): bool
     {
-        if (!$request->serverData->acceptsMimeType('application/ld+json')) {
+        if (!$job->request->serverData->acceptsMimeType('application/ld+json')) {
             return false;
         }
 
         // todo: craft a real jsonld error response
-        $manager->setHeader('Content-Type', 'application/ld+json');
-        $manager->setHeader('Access-Control-Allow-Origin', '*');
+        $job->headers['Content-Type'] = 'application/ld+json';
+        $job->headers['Access-Control-Allow-Origin'] = '*';
 
         echo $this->jsonEncoder->encode([
-            'message' => $exception->getMessage(),
-            'code' => $exception->getCode(),
-            'fileName' => $exception->getFile(),
-            'lineNumber' => $exception->getLine(),
+            'message' => $job->exception->getMessage(),
+            'code' => $job->exception->getCode(),
+            'fileName' => $job->exception->getFile(),
+            'lineNumber' => $job->exception->getLine(),
         ]);
 
         return true;
