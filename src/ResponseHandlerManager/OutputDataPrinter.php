@@ -18,6 +18,9 @@ readonly class OutputDataPrinter
             $outputData->responseCode = 304;
             $outputData->output = '';
         }
+        else {
+            $outputData->headers['ETag'] = $eTag;
+        }
 
         if (!headers_sent()) {
             http_response_code($outputData->responseCode);
