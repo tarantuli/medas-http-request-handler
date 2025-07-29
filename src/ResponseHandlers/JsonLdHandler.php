@@ -45,8 +45,7 @@ readonly class JsonLdHandler implements ResponseHandler
 
         $job->headers['Content-Type'] = 'applicationld+json';
         $job->headers['Access-Control-Allow-Origin'] = '*';
-
-        echo $this->jsonEncoder->encode($job->response->getJsonLdResponse());
+        $job->output = $this->jsonEncoder->encode($job->response->getJsonLdResponse());
 
         return true;
     }
@@ -61,7 +60,7 @@ readonly class JsonLdHandler implements ResponseHandler
         $job->headers['Content-Type'] = 'application/ld+json';
         $job->headers['Access-Control-Allow-Origin'] = '*';
 
-        echo $this->jsonEncoder->encode([
+        $job->output = $this->jsonEncoder->encode([
             'message' => $job->exception->getMessage(),
             'code' => $job->exception->getCode(),
             'fileName' => $job->exception->getFile(),

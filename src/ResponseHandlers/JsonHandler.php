@@ -60,7 +60,7 @@ readonly class JsonHandler implements ResponseHandler
         $job->headers['Access-Control-Allow-Origin'] = '*';
         $trace = $this->normalizeTrace($job->exception);
 
-        echo $this->jsonEncoder->encode([
+        $job->output = $this->jsonEncoder->encode([
             'message' => StringMaker::instance()->forceUtf8($job->exception->getMessage()),
             'code' => $job->exception->getCode(),
             'fileName' => $job->exception->getFile(),

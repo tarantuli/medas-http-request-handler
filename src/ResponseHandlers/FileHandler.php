@@ -43,8 +43,7 @@ readonly class FileHandler implements ResponseHandler
         $job->headers['Access-Control-Allow-Origin'] = '*';
         $job->headers['Content-Type'] = $mimetype;
         $job->headers['Content-Disposition: inline; filename="%s"'] = $fileName;
-
-        echo $job->response->file->content;
+        $job->output = $job->response->file->content;
 
         return true;
     }
