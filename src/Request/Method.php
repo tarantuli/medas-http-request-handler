@@ -12,4 +12,5 @@ enum Method: string
     case Delete = 'DELETE';
     case Options = 'OPTIONS';
     case Patch = 'PATCH';
+    case Unknown = 'UNKNOWN';
 }

@@ -11,6 +11,7 @@ readonly class RequestDataManager
 {
     public function __construct(
         private Request\AuthenticationFinder $authenticationFinder,
+        private Request\UriManager           $uriManager,
     )
     {
     }
@@ -36,6 +37,39 @@ readonly class RequestDataManager
         return $request;
     }
 
+    public function getWithoutExceptions(): Request\Request
+    {
+        try {
+            $method = $this->determineMethod();
+        }
+        catch (\Throwable) {
+            $method = Request\Method::Unknown;
+        }
+
+        try {
+            $uri = $this->determineEndpoint();
+        }
+        catch (\Throwable) {
+            $uri = $this->uriManager->fromString('/unknown');
+        }
+
+        try {
+            $body = $this->determineBody();
+        }
+        catch (\Throwable) {
+            $body = new Request\BodyData([]);
+        }
+
+        return new Request\Request(
+            $method,
+            $uri,
+            new Request\ServerData($_SERVER),
+            new Request\PostData($_POST),
+            $body,
+            new Request\FileData($_FILES),
+        );
+    }
+
     private function determineMethod(): Request\Method
     {
         if (empty($_SERVER['REMOTE_ADDR']) and !isset($_SERVER['HTTP_USER_AGENT']) and count($_SERVER['argv']) > 0) {
@@ -54,7 +88,7 @@ readonly class RequestDataManager
 
     private function determineEndpoint(): Request\Uri
     {
-        return service(Request\UriManager::class)->fromString($_SERVER['REQUEST_URI'] ?? '/');
+        return $this->uriManager->fromString($_SERVER['REQUEST_URI'] ?? '/');
     }
 
     private function determineBody(): Request\BodyData
