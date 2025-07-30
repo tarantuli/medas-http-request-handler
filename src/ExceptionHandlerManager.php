@@ -21,7 +21,7 @@ readonly class ExceptionHandlerManager
     public function handle(\Throwable $exception): void
     {
         $job = new ResponseHandlerManager\ExceptionJob(
-            $this->requestDataManager->get(),
+            $this->requestDataManager->getWithoutExceptions(),
             $exception
         );
 
