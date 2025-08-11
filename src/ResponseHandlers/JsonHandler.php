@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler\ResponseHandlers;
 
-use Medas\Core\{Attributes\Service, StringMaker};
+use Medas\Core\Attributes\Service;
 use Medas\HttpRequestHandler\{
     Exceptions\DoesNotImplementJsonResponse,
     ResponseHandlerManager\ExceptionJob,
@@ -12,12 +12,14 @@ use Medas\HttpRequestHandler\{
     ResponseTypes\JsonResponse
 };
 use Medas\Json\JsonEncoder;
+use Medas\ServiceManager\ErrorHandling\ThrowableNormalizer;
 
 #[Service]
 readonly class JsonHandler implements ResponseHandler
 {
     public function __construct(
-        private JsonEncoder $jsonEncoder,
+        private JsonEncoder         $jsonEncoder,
+        private ThrowableNormalizer $throwableNormalizer,
     )
     {
     }
@@ -58,45 +60,8 @@ readonly class JsonHandler implements ResponseHandler
 
         $job->headers['Content-Type'] = 'application/json';
         $job->headers['Access-Control-Allow-Origin'] = '*';
-        $trace = $this->normalizeTrace($job->exception);
-
-        $job->output = $this->jsonEncoder->encode([
-            'message' => StringMaker::instance()->forceUtf8($job->exception->getMessage()),
-            'code' => $job->exception->getCode(),
-            'fileName' => $job->exception->getFile(),
-            'lineNumber' => $job->exception->getLine(),
-            'trace' => $trace,
-        ]);
+        $job->output = $this->jsonEncoder->encode($this->throwableNormalizer->normalize($job->exception));
 
         return true;
-    }
-
-    private function normalizeTrace(\Throwable $exception): array
-    {
-        $paths = [];
-
-        foreach ($exception->getTrace() as $trace) {
-            $arguments = [];
-
-            foreach ($trace['args'] ?? [] as $arg) {
-                $type = get_debug_type($arg);
-
-                if (class_exists($type) || !is_scalar($arg)) {
-                    $arguments[] = $type;
-                }
-                else {
-                    $arguments[] = StringMaker::instance()->forceUtf8((string) $arg);
-                }
-            }
-
-            $paths[] = [
-                'file' => $trace['file'],
-                'line' => $trace['line'],
-                'function' => $trace['function'],
-                'arguments' => $arguments,
-            ];
-        }
-
-        return $paths;
     }
 }
