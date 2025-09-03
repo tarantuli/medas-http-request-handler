@@ -17,29 +17,45 @@ readonly class LastEffortExceptionPrinter
 
         foreach (array_reverse($exception->getTrace()) as $trace) {
             if (isset($trace['file'])) {
-                printf(
-                    "%s:%u\n   %s::%s()\n",
-                    $trace['file'],
-                    $trace['line'],
-                    $trace['class'] ?? '[main]',
-                    $trace['function']
-                );
+                printf("%s:%u\n", $trace['file'], $trace['line']);
             }
             else {
-                printf("[main]\n   %s::%s()\n", $trace['class'] ?? '[main]', $trace['function']);
+                echo "[main]\n";
+            }
+
+            if (isset($trace['class'])) {
+                printf("  %s::%s()\n", $trace['class'], $trace['function']);
+
+                try {
+                    $reflector = (new \ReflectionMethod($trace['class'], $trace['function']))->getParameters();
+                }
+                catch (\ReflectionException) {
+                    $reflector = null;
+                }
+            }
+            else {
+                printf("  %s()\n", $trace['function']);
+
+                $reflector = null;
             }
 
             foreach ($trace['args'] ?? [] as $index => $argument) {
+                printf("    %s: ", $reflector ? $reflector[$index]->name : $index);
+
+                if (is_array($argument)) {
+                    try {
+                        $argument = json_encode($argument);
+                    }
+                    catch (\Exception) {
+                        $argument = "array (... cannot be serialized ...)";
+                    }
+                }
+
                 if (is_string($argument) && mb_detect_encoding($argument, 'UTF-8')) {
-                    printf("    %u: %s\n", $index, mb_substr($argument, 0, 78));
+                    printf("%s\n", mb_substr($argument, 0, 156));
                 }
                 else {
-                    printf(
-                        "    %u: %s(%u)\n",
-                        $index,
-                        get_debug_type($argument),
-                        is_string($argument) ? strlen($argument) : 0
-                    );
+                    printf("%s\n", get_debug_type($argument));
                 }
             }
 

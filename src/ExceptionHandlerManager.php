@@ -20,6 +20,10 @@ readonly class ExceptionHandlerManager
 
     public function handle(\Throwable $exception): void
     {
+        if (PHP_SAPI === 'cli') {
+            return;
+        }
+
         $job = new ResponseHandlerManager\ExceptionJob(
             $this->requestDataManager->getWithoutExceptions(),
             $exception
