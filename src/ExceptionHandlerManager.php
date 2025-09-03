@@ -5,15 +5,16 @@ declare(strict_types=1);
 namespace Medas\HttpRequestHandler;
 
 use Medas\Core\Attributes\Service;
+use Medas\ServiceManager\ErrorHandling\CliExceptionHandler;
 
 #[Service]
 readonly class ExceptionHandlerManager
 {
     public function __construct(
-        private ResponseHandlerManager\LastEffortExceptionPrinter $lastEffortExceptionPrinter,
-        private ResponseHandlerManager\OutputDataPrinter          $outputDataPrinter,
-        private RequestDataManager                                $requestDataManager,
-        private ResponseHandlerFinder                             $handlerFinder,
+        private CliExceptionHandler                      $cliExceptionHandler,
+        private ResponseHandlerManager\OutputDataPrinter $outputDataPrinter,
+        private RequestDataManager                       $requestDataManager,
+        private ResponseHandlerFinder                    $handlerFinder,
     )
     {
     }
@@ -40,10 +41,10 @@ readonly class ExceptionHandlerManager
                 }
             }
 
-            $this->lastEffortExceptionPrinter->print($job->exception);
+            $this->cliExceptionHandler->printThrowable($job->exception);
         }
         catch (\Throwable) {
-            $this->lastEffortExceptionPrinter->print($job->exception);
+            $this->cliExceptionHandler->printThrowable($job->exception);
         }
     }
 
