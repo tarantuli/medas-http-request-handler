@@ -11,7 +11,7 @@ use Medas\HttpRequestHandler\{
     ResponseHandlerManager\Job,
     ResponseTypes\JsonResponse
 };
-use Medas\Json\JsonEncoder;
+use Medas\Json\{JsonEncoder, Settings};
 use Medas\ServiceManager\ErrorHandling\ThrowableNormalizer;
 
 #[Service]
@@ -47,7 +47,11 @@ readonly class JsonHandler implements ResponseHandler
 
         $job->headers['Access-Control-Allow-Origin'] = '*';
         $job->headers['Content-Type'] = 'application/json';
-        $job->output = $this->jsonEncoder->encode($job->response->getJsonResponse());
+
+        $job->output = $this->jsonEncoder->encode(
+            $job->response->getJsonResponse(),
+            new Settings(urlSafe: true)
+        );
 
         return true;
     }
@@ -60,7 +64,11 @@ readonly class JsonHandler implements ResponseHandler
 
         $job->headers['Content-Type'] = 'application/json';
         $job->headers['Access-Control-Allow-Origin'] = '*';
-        $job->output = $this->jsonEncoder->encode($this->throwableNormalizer->normalize($job->exception));
+
+        $job->output = $this->jsonEncoder->encode(
+            $this->throwableNormalizer->normalize($job->exception),
+            new Settings(urlSafe: true)
+        );
 
         return true;
     }
