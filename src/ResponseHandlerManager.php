@@ -26,7 +26,7 @@ readonly class ResponseHandlerManager implements ExceptionHandler
             $job->responseCode = $response->responseCode();
 
             dispatch(new DebugInformation(
-                '[response-handler-manager] response code set to %d from response data',
+                '[response-handler-manager] response code set to %s from response data',
                 $job->responseCode
             ));
         }
