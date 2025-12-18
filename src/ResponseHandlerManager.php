@@ -12,8 +12,8 @@ readonly class ResponseHandlerManager implements ExceptionHandler
 {
     public function __construct(
         private ExceptionHandlerManager                  $exceptionHandlerManager,
-        private ResponseHandlerManager\OutputDataPrinter $outputDataPrinter,
         private ResponseHandlerFinder                    $handlerFinder,
+        private ResponseHandlerManager\OutputDataPrinter $outputDataPrinter,
     )
     {
     }

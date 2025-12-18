@@ -12,9 +12,9 @@ readonly class ExceptionHandlerManager
 {
     public function __construct(
         private CliExceptionHandler                      $cliExceptionHandler,
-        private ResponseHandlerManager\OutputDataPrinter $outputDataPrinter,
         private RequestDataManager                       $requestDataManager,
         private ResponseHandlerFinder                    $handlerFinder,
+        private ResponseHandlerManager\OutputDataPrinter $outputDataPrinter,
     )
     {
     }
