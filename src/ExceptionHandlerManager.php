@@ -53,11 +53,11 @@ readonly class ExceptionHandlerManager
         if ($job->exception instanceof Exceptions\DeclaresResponseCode) {
             $job->responseCode = $job->exception->responseCode();
         }
-        elseif ($job->exception instanceof Exceptions\BadRequest) {
-            $job->responseCode = 400;
-        }
         elseif ($job->exception instanceof Exceptions\UnauthorizedRequest) {
             $job->responseCode = 403;
+        }
+        elseif ($job->exception instanceof Exceptions\BadRequest) {
+            $job->responseCode = 400;
         }
         else {
             $job->responseCode = 500;
