@@ -16,7 +16,8 @@
     "morphp/medas-core": "^2",
     "morphp/medas-files": "^2",
     "morphp/medas-json": "^2",
-    "ext-mbstring": "*"
+    "ext-mbstring": "*",
+    "php": "^8.4"
   },
   "require-dev": {
     "morphp/medas-events": "^2",
