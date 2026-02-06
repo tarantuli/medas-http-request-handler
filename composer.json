@@ -1,7 +1,7 @@
 {
   "name": "morphp/medas-http-request-handler",
   "description": "Medas HTTP request handler",
-  "version": "2.0.0",
+  "version": "1.0.0",
   "keywords": [
     "http"
   ],
@@ -13,15 +13,15 @@
   ],
   "type": "library",
   "require": {
-    "morphp/medas-core": "^2",
-    "morphp/medas-files": "^2",
-    "morphp/medas-json": "^2",
+    "morphp/medas-core": "^1",
+    "morphp/medas-files": "^1",
+    "morphp/medas-json": "^1",
     "ext-mbstring": "*",
-    "php": "^8.4"
+    "php": "^8.2"
   },
   "require-dev": {
-    "morphp/medas-events": "^2",
-    "morphp/medas-service-manager": "^2",
+    "morphp/medas-events": "^1",
+    "morphp/medas-service-manager": "^1",
     "phpunit/phpunit": "^9.5"
   },
   "autoload": {
