@@ -8,8 +8,8 @@ use Medas\Core\Attributes\Service;
 use Medas\HttpRequestHandler\{
     Request\Method,
     Request\Request,
-    ResponseHandlerManager\ExceptionJob,
-    ResponseHandlerManager\Job,
+    ResponseDispatcher\ExceptionJob,
+    ResponseDispatcher\Job,
     ResponseTypes\HtmlResponse
 };
 

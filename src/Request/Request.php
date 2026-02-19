@@ -6,7 +6,7 @@ namespace Medas\HttpRequestHandler\Request;
 
 use Medas\HttpRequestHandler\Authentication\Authentication;
 
-class Request
+readonly class Request
 {
     public Authentication $authentication;
 

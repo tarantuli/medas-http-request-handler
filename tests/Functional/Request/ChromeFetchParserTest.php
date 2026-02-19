@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandlerTest\Functional\Request;
 
-use Medas\HttpRequestHandler\Request\ChromeFetchParser;
-use Medas\HttpRequestHandler\Request\Method;
+use Medas\HttpRequestHandler\Request\{ChromeFetchParser, Method};
 use Medas\HttpRequestHandlerTest\MockUps\ChromeFetches;
 use PHPUnit\Framework\TestCase;
 

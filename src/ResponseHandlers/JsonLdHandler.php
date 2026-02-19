@@ -7,8 +7,8 @@ namespace Medas\HttpRequestHandler\ResponseHandlers;
 use Medas\Core\Attributes\Service;
 use Medas\HttpRequestHandler\{
     Exceptions\DoesNotImplementJsonLdResponse,
-    ResponseHandlerManager\ExceptionJob,
-    ResponseHandlerManager\Job,
+    ResponseDispatcher\ExceptionJob,
+    ResponseDispatcher\Job,
     ResponseTypes\JsonLdResponse
 };
 use Medas\Json\JsonEncoder;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Medas\HttpRequestHandler\ResponseHandlerManager;
+namespace Medas\HttpRequestHandler\ResponseDispatcher;
 
 use Medas\Core\Attributes\Service;
 

@@ -7,7 +7,7 @@ namespace Medas\HttpRequestHandler;
 use Medas\Core\Attributes\Service;
 
 #[Service]
-readonly class ResponseHandlerFinder
+readonly class ResponseHandlerRegistry
 {
     /** @return ResponseHandlers\ResponseHandler[] */
     public function get(): array

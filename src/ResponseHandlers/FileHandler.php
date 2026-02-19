@@ -8,8 +8,8 @@ use Medas\Core\Attributes\Service;
 use Medas\Files\MimetypeManager;
 use Medas\HttpRequestHandler\{
     Exceptions\MimeTypeIsNotAccepted,
-    ResponseHandlerManager\ExceptionJob,
-    ResponseHandlerManager\Job,
+    ResponseDispatcher\ExceptionJob,
+    ResponseDispatcher\Job,
     ResponseTypes\FileResponse
 };
 

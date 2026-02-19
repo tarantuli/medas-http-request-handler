@@ -8,19 +8,19 @@ use Medas\Core\{Attributes\Service, Events\DebugInformation};
 use Medas\ServiceManager\ErrorHandling\ExceptionHandler;
 
 #[Service]
-readonly class ResponseHandlerManager implements ExceptionHandler
+readonly class ResponseDispatcher implements ExceptionHandler
 {
     public function __construct(
-        private ExceptionHandlerManager                  $exceptionHandlerManager,
-        private ResponseHandlerFinder                    $handlerFinder,
-        private ResponseHandlerManager\OutputDataPrinter $outputDataPrinter,
+        private ExceptionHandler                     $exceptionHandler,
+        private ResponseDispatcher\OutputDataPrinter $outputDataPrinter,
+        private ResponseHandlerRegistry              $responseHandlerRegistry,
     )
     {
     }
 
     public function handleResponse(Request\Request $request, ResponseTypes\Response $response): void
     {
-        $job = new ResponseHandlerManager\Job($request, $response);
+        $job = new ResponseDispatcher\Job($request, $response);
 
         if ($response instanceof ResponseTypes\SetsResponseCode) {
             $job->responseCode = $response->responseCode();
@@ -31,7 +31,7 @@ readonly class ResponseHandlerManager implements ExceptionHandler
             ));
         }
 
-        foreach ($this->handlerFinder->get() as $responseHandler) {
+        foreach ($this->responseHandlerRegistry->get() as $responseHandler) {
             if ($responseHandler->handleResponse($job)) {
                 dispatch(new DebugInformation('[response-handler-manager] found handler: %s', $responseHandler::class));
 
@@ -46,6 +46,6 @@ readonly class ResponseHandlerManager implements ExceptionHandler
 
     public function handleException(\Throwable $exception): void
     {
-        $this->exceptionHandlerManager->handle($exception);
+        $this->exceptionHandler->handleException($exception);
     }
 }

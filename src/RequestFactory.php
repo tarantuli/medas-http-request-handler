@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler;
 
-use Medas\Core\Attributes\Service;
+use Medas\Core\Attributes\{ConfigValue, Service};
 
 #[Service]
-readonly class RequestDataManager
+readonly class RequestFactory
 {
     public function __construct(
         private Request\AuthenticationFinder $authenticationFinder,
         private Request\UriManager           $uriManager,
+
+        #[ConfigValue(ConfigOptions\MaxPayloadSize::class)]
+        private int                          $maxPayloadSize
     )
     {
     }
@@ -39,12 +42,7 @@ readonly class RequestDataManager
 
     public function getWithoutExceptions(): Request\Request
     {
-        try {
-            $method = $this->determineMethod();
-        }
-        catch (\Throwable) {
-            $method = Request\Method::Unknown;
-        }
+        $method = $this->determineMethod();
 
         try {
             $uri = $this->determineEndpoint();
@@ -93,7 +91,15 @@ readonly class RequestDataManager
 
     private function determineBody(): Request\BodyData
     {
-        $raw = file_get_contents('php://input');
+        // Define max body size (e.g., 10MB)
+        $contentLength = (int) ($_SERVER['CONTENT_LENGTH'] ?? 0);
+
+        if ($contentLength > $this->maxPayloadSize) {
+            throw new Exceptions\PayloadTooLarge($contentLength, $this->maxPayloadSize);
+        }
+
+        // Read with limit
+        $raw = stream_get_contents(fopen('php://input', 'r'), $this->maxPayloadSize);
 
         if ($raw === '') {
             $body = [];
@@ -111,8 +117,15 @@ readonly class RequestDataManager
         return new Request\BodyData($body);
     }
 
+    /**
+     * This method should only be called by test scripts to set and test specific requests
+     */
     public function set(Request\Request $request): void
     {
+        if (PHP_SAPI !== 'cli') {
+            throw new Exceptions\RequestDataMutationOutsideOfCli();
+        }
+
         cacheSet(self::class, $request, 'memory');
     }
 }

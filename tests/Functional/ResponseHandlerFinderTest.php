@@ -4,15 +4,20 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandlerTest\Functional;
 
-use Medas\HttpRequestHandler\ResponseHandlerFinder;
-use Medas\HttpRequestHandler\ResponseHandlers\{FileHandler, HtmlHandler, JsonHandler, JsonLdHandler};
+use Medas\HttpRequestHandler\{
+    ResponseHandlerRegistry,
+    ResponseHandlers\FileHandler,
+    ResponseHandlers\HtmlHandler,
+    ResponseHandlers\JsonHandler,
+    ResponseHandlers\JsonLdHandler
+};
 use PHPUnit\Framework\TestCase;
 
 class ResponseHandlerFinderTest extends TestCase
 {
     public function testGetHandlers(): void
     {
-        $handlers = service(ResponseHandlerFinder::class)->get();
+        $handlers = service(ResponseHandlerRegistry::class)->get();
 
         self::assertInstanceOf(JsonLdHandler::class, $handlers[0]);
         self::assertInstanceOf(JsonHandler::class, $handlers[1]);

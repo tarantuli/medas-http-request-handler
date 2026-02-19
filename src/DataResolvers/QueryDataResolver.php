@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Medas\HttpRequestHandler\DataResolvers;
 
 use Medas\Core\{Attributes\Service, Interfaces\ParameterResolver, ParameterResolverResult};
-use Medas\HttpRequestHandler\{Attributes\QueryArgument, Exceptions, RequestDataManager};
+use Medas\HttpRequestHandler\{Attributes\QueryArgument, Exceptions, RequestFactory};
 
 #[Service]
 readonly class QueryDataResolver implements ParameterResolver
 {
     public function __construct(
-        private RequestDataManager $requestDataManager,
+        private RequestFactory $requestFactory,
     )
     {
     }
@@ -27,7 +27,7 @@ readonly class QueryDataResolver implements ParameterResolver
             return new ParameterResolverResult(false);
         }
 
-        $queryData = $this->requestDataManager->get()->uri->query;
+        $queryData = $this->requestFactory->get()->uri->query;
 
         if (!isset($queryData[$argument->name])) {
             throw new Exceptions\QueryArgumentIsMissing($argument->name);

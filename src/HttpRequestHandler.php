@@ -11,16 +11,22 @@ readonly class HttpRequestHandler
 {
     public function __construct(
         private HttpRequestHandlerManager $httpRequestHandlerManager,
-        private RequestDataManager        $requestDataManager,
-        private ResponseHandlerManager    $responseHandlerManager,
+        private RequestFactory            $requestFactory,
+        private ResponseDispatcher        $responseDispatcher,
     )
     {
     }
 
     public function handle(): void
     {
-        $request = $this->requestDataManager->get();
+        $request = $this->requestFactory->get();
+        $response = $this->processRequest($request);
 
+        $this->responseDispatcher->handleResponse($request, $response);
+    }
+
+    public function processRequest(Request\Request $request): ResponseTypes\Response
+    {
         dispatch(new DebugInformation(
             '[http-request-handler] handling request: %s %s',
             $request->method->value,
@@ -59,8 +65,6 @@ readonly class HttpRequestHandler
             throw new Exceptions\RequestNotAuthorized($authVote->allowedAccess);
         }
 
-        $response = $requestHandler->handle($request->method->value, $request->uri->endpoint);
-
-        $this->responseHandlerManager->handleResponse($request, $response);
+        return $requestHandler->handle($request->method->value, $request->uri->endpoint);
     }
 }

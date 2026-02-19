@@ -8,13 +8,13 @@ use Medas\Core\Attributes\Service;
 use Medas\ServiceManager\ErrorHandling\CliExceptionHandler;
 
 #[Service]
-readonly class ExceptionHandlerManager
+readonly class ExceptionDispatcher
 {
     public function __construct(
-        private CliExceptionHandler                      $cliExceptionHandler,
-        private RequestDataManager                       $requestDataManager,
-        private ResponseHandlerFinder                    $handlerFinder,
-        private ResponseHandlerManager\OutputDataPrinter $outputDataPrinter,
+        private CliExceptionHandler                  $cliExceptionHandler,
+        private RequestFactory                       $requestFactory,
+        private ResponseDispatcher\OutputDataPrinter $outputDataPrinter,
+        private ResponseHandlerRegistry              $responseHandlerRegistry,
     )
     {
     }
@@ -25,15 +25,15 @@ readonly class ExceptionHandlerManager
             return;
         }
 
-        $job = new ResponseHandlerManager\ExceptionJob(
-            $this->requestDataManager->getWithoutExceptions(),
+        $job = new ResponseDispatcher\ExceptionJob(
+            $this->requestFactory->getWithoutExceptions(),
             $exception
         );
 
         $this->determineResponseCode($job);
 
         try {
-            foreach ($this->handlerFinder->get() as $responseHandler) {
+            foreach ($this->responseHandlerRegistry->get() as $responseHandler) {
                 if ($responseHandler->handleException($job)) {
                     $this->outputDataPrinter->print($job);
 
@@ -48,7 +48,7 @@ readonly class ExceptionHandlerManager
         }
     }
 
-    private function determineResponseCode(ResponseHandlerManager\ExceptionJob $job): void
+    private function determineResponseCode(ResponseDispatcher\ExceptionJob $job): void
     {
         if ($job->exception instanceof Exceptions\DeclaresResponseCode) {
             $job->responseCode = $job->exception->responseCode();

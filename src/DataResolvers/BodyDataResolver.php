@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Medas\HttpRequestHandler\DataResolvers;
 
 use Medas\Core\{Attributes\Service, Interfaces\ParameterResolver, ParameterResolverResult};
-use Medas\HttpRequestHandler\{Attributes\BodyArgument, Exceptions, RequestDataManager};
+use Medas\HttpRequestHandler\{Attributes\BodyArgument, Exceptions, RequestFactory};
 
 #[Service]
 readonly class BodyDataResolver implements ParameterResolver
 {
     public function __construct(
-        private RequestDataManager $requestDataManager,
+        private RequestFactory $requestFactory,
     )
     {
     }
@@ -27,7 +27,7 @@ readonly class BodyDataResolver implements ParameterResolver
             return new ParameterResolverResult(false);
         }
 
-        $bodyData = $this->requestDataManager->get()->bodyData->data();
+        $bodyData = $this->requestFactory->get()->bodyData->data();
         $parts = explode('.', $argument->name);
         $array = &$bodyData;
 

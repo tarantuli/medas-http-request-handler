@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler\ResponseHandlers;
 
-use Medas\HttpRequestHandler\ResponseHandlerManager\{ExceptionJob, Job};
+use Medas\HttpRequestHandler\ResponseDispatcher\{ExceptionJob, Job};
 
 interface ResponseHandler
 {

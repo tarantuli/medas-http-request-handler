@@ -8,14 +8,15 @@ use Medas\Core\{Attributes\Service, Interfaces\ParameterResolver, ParameterResol
 use Medas\HttpRequestHandler\{
     Attributes\RequestDataObject,
     Exceptions\ParameterTypeIsNotAClass,
-    RequestDataManager
+    RequestFactory
 };
 
 #[Service]
 readonly class RequestDataObjectResolver implements ParameterResolver
 {
     public function __construct(
-        private RequestDataManager $requestDataManager,
+        private DataSetter     $dataSetter,
+        private RequestFactory $requestFactory,
     )
     {
     }
@@ -40,26 +41,17 @@ readonly class RequestDataObjectResolver implements ParameterResolver
         $object = new ($className);
 
         if ($argument->fromBody) {
-            $bodyData = $this->requestDataManager->get()->bodyData->data();
+            $bodyData = $this->requestFactory->get()->bodyData->data();
 
-            $this->setData($object, $bodyData);
+            $this->dataSetter->set($object, $bodyData);
         }
 
         if ($argument->fromQuery) {
-            $queryData = $this->requestDataManager->get()->uri->query;
+            $queryData = $this->requestFactory->get()->uri->query;
 
-            $this->setData($object, $queryData);
+            $this->dataSetter->set($object, $queryData);
         }
 
         return new ParameterResolverResult(true, $object);
-    }
-
-    private function setData(object $object, array $data): void
-    {
-        foreach ($data as $name => $value) {
-            if (property_exists($object, $name)) {
-                $object->$name = $value;
-            }
-        }
     }
 }

@@ -11,7 +11,7 @@ readonly class RequestFaker
 {
     public function __construct(
         private HttpRequestHandler $requestHandler,
-        private RequestDataManager $dataManager,
+        private RequestFactory     $dataManager,
         private Request\UriManager $uriManager,
     )
     {
