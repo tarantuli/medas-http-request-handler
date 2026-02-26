@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace Medas\HttpRequestHandler;
 
 use Medas\Core\Attributes\{ConfigValue, Service};
+use Medas\Json\JsonEncoder;
 
 #[Service]
 readonly class RequestFactory
 {
     public function __construct(
+        private JsonEncoder                  $jsonEncoder,
         private Request\AuthenticationFinder $authenticationFinder,
         private Request\UriManager           $uriManager,
 
@@ -42,7 +44,12 @@ readonly class RequestFactory
 
     public function getWithoutExceptions(): Request\Request
     {
-        $method = $this->determineMethod();
+        try {
+            $method = $this->determineMethod();
+        }
+        catch (\Throwable) {
+            $method = Request\Method::Get;
+        }
 
         try {
             $uri = $this->determineEndpoint();
@@ -68,9 +75,13 @@ readonly class RequestFactory
         );
     }
 
+    /**
+     * If $_REQUEST contains an entry named '::method', it will be used as the request method.
+     * Otherwise, $_SERVER['REQUEST_METHOD'] will be used.
+     */
     private function determineMethod(): Request\Method
     {
-        if (empty($_SERVER['REMOTE_ADDR']) and !isset($_SERVER['HTTP_USER_AGENT']) and count($_SERVER['argv']) > 0) {
+        if (empty($_SERVER['REMOTE_ADDR']) && !isset($_SERVER['HTTP_USER_AGENT']) && count($_SERVER['argv']) > 0) {
             throw new Exceptions\NotAnHttpRequest();
         }
 
@@ -99,19 +110,36 @@ readonly class RequestFactory
         }
 
         // Read with limit
-        $raw = stream_get_contents(fopen('php://input', 'r'), $this->maxPayloadSize);
+        $resource = fopen('php://input', 'r');
+        $raw = stream_get_contents($resource, $this->maxPayloadSize);
+
+        fclose($resource);
+
+        if ($raw === false) {
+            throw new Exceptions\FailedReadRequestBody();
+        }
+
+        $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
 
         if ($raw === '') {
             $body = [];
         }
-        elseif (str_contains($_SERVER['CONTENT_TYPE'] ?? '', 'application/json')) {
-            $body = json_decode($raw, true);
+        elseif (str_contains($contentType, 'application/json')) {
+            try {
+                $body = $this->jsonEncoder->decode($raw);
+            }
+            catch (\JsonException) {
+                throw new Exceptions\InvalidJsonBody($raw);
+            }
         }
-        elseif (str_contains($_SERVER['CONTENT_TYPE'] ?? '', 'application/x-www-form-urlencoded')) {
+        elseif (str_contains($contentType, 'application/x-www-form-urlencoded')) {
             parse_str($raw, $body);
         }
+        elseif (str_contains($contentType, 'multipart/form-data')) {
+            $body = $_POST;
+        }
         else {
-            throw new \Exception('cannot determine body values from ' . $raw);
+            throw new Exceptions\UnsupportedContentType($contentType);
         }
 
         return new Request\BodyData($body);

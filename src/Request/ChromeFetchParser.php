@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Medas\HttpRequestHandler\Request;
 
 use Medas\Core\Attributes\Service;
+use Medas\Json\JsonEncoder;
 
 #[Service]
 readonly class ChromeFetchParser
 {
     public function __construct(
-        private UriManager $uriManager,
+        private JsonEncoder $jsonEncoder,
+        private UriManager  $uriManager,
     )
     {
     }
@@ -34,7 +36,7 @@ readonly class ChromeFetchParser
 
         return new Request(
             Method::from($params['method']),
-            $this->uriManager->fromString($host['uri']),
+            $this->uriManager->fromString($host['uri'] ?? '/'),
             new ServerData($this->determineServerData($host['scheme'], $host['serverName'], $params)),
             new PostData($this->determinePostData($params)),
             new BodyData([]),
@@ -61,6 +63,12 @@ readonly class ChromeFetchParser
 
     private function determinePostData(mixed $params): array
     {
-        return $params['body'] ?? [];
+        $body = $params['body'] ?? [];
+
+        if (is_string($body)) {
+            $body = $this->jsonEncoder->decode($body);
+        }
+
+        return $body;
     }
 }

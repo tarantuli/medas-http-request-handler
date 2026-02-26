@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler\Request;
 
-class Uri
+readonly class Uri
 {
-    public string|null $extension = null;
-    public string $endpoint;
-    public array $query = [];
-
     public function __construct(
-        public string $uri,
+        public string      $uri,
+        public string|null $extension,
+        public string      $endpoint,
+        public array       $query,
     )
     {
-        $this->endpoint = $this->uri;
     }
 }

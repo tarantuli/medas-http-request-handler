@@ -17,7 +17,8 @@ use Medas\HttpRequestHandler\{
 readonly class FileHandler implements ResponseHandler
 {
     public function __construct(
-        private MimetypeManager $mimetypeManager,
+        private CorsHeaderWriter $corsHandler,
+        private MimetypeManager  $mimetypeManager,
     )
     {
     }
@@ -40,9 +41,11 @@ readonly class FileHandler implements ResponseHandler
         }
 
         $fileName = $job->response->file->name ?: str_replace('/', '.', $mimetype);
-        $job->headers['Access-Control-Allow-Origin'] = '*';
+
+        $this->corsHandler->handle($job);
+
         $job->headers['Content-Type'] = $mimetype;
-        $job->headers['Content-Disposition: inline; filename="%s"'] = $fileName;
+        $job->headers['Content-Disposition'] = sprintf('inline; filename="%s"', $fileName);
         $job->output = $job->response->file->content;
 
         return true;

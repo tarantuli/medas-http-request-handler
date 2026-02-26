@@ -8,17 +8,15 @@ use Medas\HttpRequestHandler\Authentication\Authentication;
 
 readonly class Request
 {
-    public Authentication $authentication;
-
     public function __construct(
-        public Method     $method,
-        public Uri        $uri,
-        public ServerData $serverData,
-        public PostData   $postData,
-        public BodyData   $bodyData,
-        public FileData   $fileData,
+        public Method         $method,
+        public Uri            $uri,
+        public ServerData     $serverData,
+        public PostData       $postData,
+        public BodyData       $bodyData,
+        public FileData       $fileData,
+        public Authentication $authentication = new Authentication(),
     )
     {
-        $this->authentication = new Authentication();
     }
 }

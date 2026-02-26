@@ -7,27 +7,29 @@ namespace Medas\HttpRequestHandler\Request;
 use Medas\Core\Attributes\Service;
 
 #[Service]
-class UriManager
+readonly class UriManager
 {
     public function fromString(string $string): Uri
     {
-        $uri = new Uri($string);
+        $endpoint = $string;
+        $extension = null;
+        $query = [];
 
-        if (false !== $pos = strpos($uri->endpoint, '?')) {
-            parse_str(substr($uri->endpoint, $pos + 1), $uri->query);
+        if (false !== $pos = strpos($endpoint, '?')) {
+            parse_str(substr($endpoint, $pos + 1), $query);
 
-            $uri->endpoint = substr($uri->endpoint, 0, $pos);
+            $endpoint = substr($endpoint, 0, $pos);
         }
 
-        if (preg_match('/^(.+)\.(\w+)$/', $uri->endpoint, $parts)) {
-            $uri->endpoint = $parts[1];
-            $uri->extension = mb_strtolower($parts[2]);
+        if (preg_match('/^(.+)\.(\w+)$/', $endpoint, $parts)) {
+            $endpoint = $parts[1];
+            $extension = mb_strtolower($parts[2]);
         }
 
-        if (strlen($uri->endpoint) > 1) {
-            $uri->endpoint = rtrim($uri->endpoint, '/');
+        if (strlen($endpoint) > 1) {
+            $endpoint = rtrim($endpoint, '/');
         }
 
-        return $uri;
+        return new Uri($string, $extension, $endpoint, $query);
     }
 }

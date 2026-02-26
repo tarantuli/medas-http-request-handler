@@ -37,7 +37,7 @@ readonly class CorsAllowedOrigins implements ConfigOption
 
     public function default(): string
     {
-        // Default to wildcard for development; should be overridden in production
-        return '*';
+        // Default to empty (deny all) for production, can be wildcard "*" in development
+        return '';
     }
 }

@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler\Exceptions;
 
-use Medas\Core\Exceptions\BaseException;
-
-class PayloadTooLarge extends BaseException
+class PayloadTooLarge extends BadRequest implements DeclaresResponseCode
 {
     public function __construct(int $size, int $maxSize)
     {
@@ -16,5 +14,10 @@ class PayloadTooLarge extends BaseException
     public function pattern(): string
     {
         return 'The body is too large, %s bytes, %s bytes are allowed';
+    }
+
+    public function responseCode(): int
+    {
+        return 413;
     }
 }

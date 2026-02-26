@@ -37,7 +37,9 @@ readonly class DataSetter
             if ($type && !$this->isValidType($value, $type)) {
                 throw new InvalidPropertyType(
                     propertyName: $name,
-                    expectedType: $type->getName(),
+                    expectedType: $type instanceof \ReflectionNamedType
+                        ? $type->getName()
+                        : (string) $type,
                     actualType: get_debug_type($value),
                     className: $object::class
                 );
@@ -49,6 +51,10 @@ readonly class DataSetter
 
     private function isValidType(mixed $value, \ReflectionType $type): bool
     {
+        if ($type->allowsNull() && $value === null) {
+            return true;
+        }
+
         if ($type instanceof \ReflectionNamedType) {
             $typeName = $type->getName();
 

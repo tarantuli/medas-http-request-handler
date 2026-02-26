@@ -6,7 +6,6 @@ namespace Medas\HttpRequestHandler\ResponseHandlers;
 
 use Medas\Core\Attributes\Service;
 use Medas\HttpRequestHandler\{
-    Request\Method,
     Request\Request,
     ResponseDispatcher\ExceptionJob,
     ResponseDispatcher\Job,
@@ -14,7 +13,7 @@ use Medas\HttpRequestHandler\{
 };
 
 #[Service]
-class HtmlHandler implements ResponseHandler
+readonly class HtmlHandler implements ResponseHandler
 {
     public function priority(): int
     {
@@ -31,15 +30,15 @@ class HtmlHandler implements ResponseHandler
             return false;
         }
 
-        $job->response->outputHtmlResponse();
+        $job->headers['Content-Type'] = 'text/html; charset=utf-8';
+        $job->output = $job->response->getHtmlResponse();
 
         return true;
     }
 
     protected function isHtmlRequest(Request $request): bool
     {
-        return $request->method === Method::Options
-            || $request->serverData->acceptsMimeType('text/html');
+        return $request->serverData->acceptsMimeType('text/html');
     }
 
     public function handleException(ExceptionJob $job): bool
@@ -48,12 +47,14 @@ class HtmlHandler implements ResponseHandler
             return false;
         }
 
-        printf(
+        $job->headers['Content-Type'] = 'text/html; charset=utf-8';
+
+        $job->output = sprintf(
             '<p>%s:%u [%u] %s</p>',
-            $job->exception->getFile(),
+            htmlspecialchars($job->exception->getFile()),
             $job->exception->getLine(),
             $job->exception->getCode(),
-            $job->exception->getMessage()
+            htmlspecialchars($job->exception->getMessage())
         );
 
         return true;

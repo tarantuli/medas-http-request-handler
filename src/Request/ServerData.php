@@ -25,7 +25,9 @@ class ServerData extends GenericCollection
                 continue;
             }
 
-            $pattern = '/^' . str_replace('\\*', '\\w+', preg_quote($acceptType, '/')) . '$/';
+            $pattern = '/^'
+                . str_replace('\\*', '[a-zA-Z0-9\-\+\.]+', preg_quote($acceptType, '/'))
+                . '$/';
 
             if (preg_match($pattern, $mimeType)) {
                 return true;
@@ -45,7 +47,7 @@ class ServerData extends GenericCollection
             foreach ($headerParts as $headerPart) {
                 $quality = 1;
 
-                if (strpos($headerPart, ';q=')) {
+                if (str_contains($headerPart, ';q=')) {
                     [$headerPart, $quality] = explode(';q=', $headerPart);
                 }
 

@@ -29,7 +29,7 @@ readonly class QueryDataResolver implements ParameterResolver
 
         $queryData = $this->requestFactory->get()->uri->query;
 
-        if (!isset($queryData[$argument->name])) {
+        if (!array_key_exists($argument->name, $queryData)) {
             throw new Exceptions\QueryArgumentIsMissing($argument->name);
         }
 

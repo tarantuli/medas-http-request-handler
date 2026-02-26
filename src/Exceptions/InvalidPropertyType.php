@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler\Exceptions;
 
-use Medas\Core\Exceptions\BaseException;
-
-class InvalidPropertyType extends BaseException
+class InvalidPropertyType extends BadRequest
 {
     public function __construct(string $propertyName, string $expectedType, string $actualType, string $className)
     {

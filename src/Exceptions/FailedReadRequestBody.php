@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler\Exceptions;
 
-class RequestDataMutationOutsideOfCli extends BadRequest
+class FailedReadRequestBody extends BadRequest
 {
     public function pattern(): string
     {
-        return 'request data mutation from outside of cli';
+        return 'Failed to read request body';
     }
 }

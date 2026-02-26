@@ -32,7 +32,7 @@ readonly class BodyDataResolver implements ParameterResolver
         $array = &$bodyData;
 
         foreach ($parts as $part) {
-            if (!isset($array[$part])) {
+            if (!array_key_exists($part, $array)) {
                 throw new Exceptions\BodyArgumentIsMissing($argument->name);
             }
 
