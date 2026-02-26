@@ -7,6 +7,7 @@ namespace Medas\HttpRequestHandler\Authorization;
 use Medas\Core\{
     Attributes\EventListener,
     Attributes\Service,
+    Events\AllowedAccess,
     Interfaces\HttpRequestHandlerDefersToMethod
 };
 
@@ -28,7 +29,7 @@ readonly class PublicResourceHandler
 
         if (attribute(PublicResource::class, $methodReflector)
                 || attribute(PublicResource::class, $methodReflector->getDeclaringClass())) {
-            $vote->allowedAccess = true;
+            $vote->allowedAccess = AllowedAccess::Allowed;
         }
     }
 }

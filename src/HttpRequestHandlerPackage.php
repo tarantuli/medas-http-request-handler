@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler;
 
-use Medas\Core\AsSingleton;
+use Medas\Core\{AsSingleton, BasePackage, Interfaces\ServiceConfig};
 use Medas\Files\FilesPackage;
 use Medas\Json\JsonPackage;
-use Medas\ServiceManager\{BasePackage, ServiceConfig};
 
 class HttpRequestHandlerPackage extends BasePackage
 {

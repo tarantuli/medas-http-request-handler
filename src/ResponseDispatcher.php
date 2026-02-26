@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler;
 
-use Medas\Core\{Attributes\Service, Events\DebugInformation};
-use Medas\ServiceManager\ErrorHandling\ExceptionHandler;
+use Medas\Core\{Attributes\Service, Events\DebugInformation, Interfaces\ExceptionHandler};
 
 #[Service]
 readonly class ResponseDispatcher implements ExceptionHandler

@@ -4,7 +4,12 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler;
 
-use Medas\Core\{Attributes\Service, Events\DebugInformation, Interfaces\HttpRequestHandlerManager};
+use Medas\Core\{
+    Attributes\Service,
+    Events\AllowedAccess,
+    Events\DebugInformation,
+    Interfaces\HttpRequestHandlerManager
+};
 
 #[Service]
 readonly class HttpRequestHandler
@@ -61,7 +66,7 @@ readonly class HttpRequestHandler
             $authVote->allowedAccess
         ));
 
-        if ($authVote->allowedAccess !== true) {
+        if ($authVote->allowedAccess !== AllowedAccess::Allowed) {
             throw new Exceptions\RequestNotAuthorized($authVote->allowedAccess);
         }
 

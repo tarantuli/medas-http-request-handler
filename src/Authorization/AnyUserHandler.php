@@ -7,6 +7,7 @@ namespace Medas\HttpRequestHandler\Authorization;
 use Medas\Core\{
     Attributes\EventListener,
     Attributes\Service,
+    Events\AllowedAccess,
     Interfaces\HttpRequestHandlerDefersToMethod
 };
 
@@ -28,7 +29,9 @@ readonly class AnyUserHandler
 
         if (attribute(AnyUser::class, $methodReflector)
                 || attribute(AnyUser::class, $methodReflector->getDeclaringClass())) {
-            $vote->allowedAccess = $vote->request->authentication->user !== null;
+            $vote->allowedAccess = $vote->request->authentication->user !== null
+                ? AllowedAccess::Allowed
+                : AllowedAccess::Denied;
         }
     }
 }
