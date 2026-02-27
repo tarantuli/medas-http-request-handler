@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler;
 
-use Medas\Core\{Attributes\Service, Events\DebugInformation, Interfaces\ExceptionHandler};
+use Medas\Core\{Attributes\Service, Events\DebugInformation};
 
 #[Service]
-readonly class ResponseDispatcher implements ExceptionHandler
+readonly class ResponseDispatcher
 {
     public function __construct(
-        private ExceptionHandler                     $exceptionHandler,
         private ResponseDispatcher\OutputDataPrinter $outputDataPrinter,
         private ResponseHandlerRegistry              $responseHandlerRegistry,
     )
@@ -41,10 +40,5 @@ readonly class ResponseDispatcher implements ExceptionHandler
         }
 
         throw new Exceptions\CannotHandleResponseType($response);
-    }
-
-    public function handleException(\Throwable $exception): void
-    {
-        $this->exceptionHandler->handleException($exception);
     }
 }

@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6514f7bb16ca96e8302f23a4c3fcee26",
+    "content-hash": "16b8f397cc3f849c7000c3dc1fe5ec11",
     "packages": [
         {
             "name": "morphp/medas-core",
-            "version": "v3.0.11",
+            "version": "v3.0.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tarantuli/medas-core.git",
-                "reference": "4e74ad1542c44a8c136a135acd17cf6ca5411d9f"
+                "reference": "fae885573b091952f7f99d7d9e6c689ec37f936f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/4e74ad1542c44a8c136a135acd17cf6ca5411d9f",
-                "reference": "4e74ad1542c44a8c136a135acd17cf6ca5411d9f",
+                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/fae885573b091952f7f99d7d9e6c689ec37f936f",
+                "reference": "fae885573b091952f7f99d7d9e6c689ec37f936f",
                 "shasum": ""
             },
             "require": {
@@ -51,23 +51,23 @@
                 "medas"
             ],
             "support": {
-                "source": "https://github.com/tarantuli/medas-core/tree/v3.0.11",
+                "source": "https://github.com/tarantuli/medas-core/tree/v3.0.13",
                 "issues": "https://github.com/tarantuli/medas-core/issues"
             },
-            "time": "2026-02-26T16:10:17+00:00"
+            "time": "2026-02-27T10:01:49+00:00"
         },
         {
             "name": "morphp/medas-file-system",
-            "version": "v3.0.0",
+            "version": "v3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tarantuli/medas-file-system.git",
-                "reference": "f5b0af1ae6bb157f1eb0616ec19fc6b086766865"
+                "reference": "4146b53abee95f5c8b67938c995deb747288c3f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-file-system/zipball/f5b0af1ae6bb157f1eb0616ec19fc6b086766865",
-                "reference": "f5b0af1ae6bb157f1eb0616ec19fc6b086766865",
+                "url": "https://api.github.com/repos/tarantuli/medas-file-system/zipball/4146b53abee95f5c8b67938c995deb747288c3f2",
+                "reference": "4146b53abee95f5c8b67938c995deb747288c3f2",
                 "shasum": ""
             },
             "require": {
@@ -81,7 +81,11 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Medas\\FileSystem\\": "src/",
+                    "Medas\\FileSystem\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
                     "Medas\\FileSystemTest\\": "tests/"
                 }
             },
@@ -97,10 +101,10 @@
                 "storage"
             ],
             "support": {
-                "source": "https://github.com/tarantuli/medas-file-system/tree/v3.0.0",
+                "source": "https://github.com/tarantuli/medas-file-system/tree/v3.0.1",
                 "issues": "https://github.com/tarantuli/medas-file-system/issues"
             },
-            "time": "2026-02-20T09:26:50+00:00"
+            "time": "2026-02-27T12:29:02+00:00"
         },
         {
             "name": "morphp/medas-files",
@@ -257,16 +261,16 @@
     "packages-dev": [
         {
             "name": "morphp/medas-console",
-            "version": "3.0.1",
+            "version": "v3.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tarantuli/medas-console.git",
-                "reference": "5d048056a7a57d7b314346e524c2403f8f48221b"
+                "reference": "4600b379419815f4033002e8724395b687a1dd01"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-console/zipball/5d048056a7a57d7b314346e524c2403f8f48221b",
-                "reference": "5d048056a7a57d7b314346e524c2403f8f48221b",
+                "url": "https://api.github.com/repos/tarantuli/medas-console/zipball/4600b379419815f4033002e8724395b687a1dd01",
+                "reference": "4600b379419815f4033002e8724395b687a1dd01",
                 "shasum": ""
             },
             "require": {
@@ -280,7 +284,11 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Medas\\Console\\": "src/",
+                    "Medas\\Console\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
                     "Medas\\ConsoleTest\\": "tests/"
                 }
             },
@@ -295,23 +303,23 @@
                 "console"
             ],
             "support": {
-                "source": "https://github.com/tarantuli/medas-console/tree/v3.0.1",
+                "source": "https://github.com/tarantuli/medas-console/tree/v3.0.2",
                 "issues": "https://github.com/tarantuli/medas-console/issues"
             },
-            "time": "2026-02-17T14:24:58+00:00"
+            "time": "2026-02-27T12:02:51+00:00"
         },
         {
             "name": "morphp/medas-events",
-            "version": "v3.0.0",
+            "version": "v3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tarantuli/medas-events.git",
-                "reference": "223280c8926d0250d2b0a0b0119e458f9765e236"
+                "reference": "e0475559d3ed204a91171c2baef055bd41a3bb48"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-events/zipball/223280c8926d0250d2b0a0b0119e458f9765e236",
-                "reference": "223280c8926d0250d2b0a0b0119e458f9765e236",
+                "url": "https://api.github.com/repos/tarantuli/medas-events/zipball/e0475559d3ed204a91171c2baef055bd41a3bb48",
+                "reference": "e0475559d3ed204a91171c2baef055bd41a3bb48",
                 "shasum": ""
             },
             "require": {
@@ -325,7 +333,11 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Medas\\Events\\": "src/",
+                    "Medas\\Events\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
                     "Medas\\EventsTest\\": "tests/"
                 }
             },
@@ -340,23 +352,23 @@
                 "events"
             ],
             "support": {
-                "source": "https://github.com/tarantuli/medas-events/tree/v3.0.0",
+                "source": "https://github.com/tarantuli/medas-events/tree/v3.0.1",
                 "issues": "https://github.com/tarantuli/medas-events/issues"
             },
-            "time": "2026-02-20T14:59:13+00:00"
+            "time": "2026-02-27T12:10:51+00:00"
         },
         {
             "name": "morphp/medas-service-manager",
-            "version": "v3.0.11",
+            "version": "v3.0.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tarantuli/medas-service-manager.git",
-                "reference": "9ac3f4f96152dac0447993fbebaa199c829ab86c"
+                "reference": "9b87eafc909397a58e3b6357761eb311f09d4ff6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-service-manager/zipball/9ac3f4f96152dac0447993fbebaa199c829ab86c",
-                "reference": "9ac3f4f96152dac0447993fbebaa199c829ab86c",
+                "url": "https://api.github.com/repos/tarantuli/medas-service-manager/zipball/9b87eafc909397a58e3b6357761eb311f09d4ff6",
+                "reference": "9b87eafc909397a58e3b6357761eb311f09d4ff6",
                 "shasum": ""
             },
             "require": {
@@ -366,6 +378,7 @@
                 "php": "^8.4"
             },
             "require-dev": {
+                "morphp/medas-object-instantiator": "^3",
                 "phpunit/phpunit": "^10"
             },
             "type": "library",
@@ -390,10 +403,10 @@
                 "services"
             ],
             "support": {
-                "source": "https://github.com/tarantuli/medas-service-manager/tree/v3.0.11",
+                "source": "https://github.com/tarantuli/medas-service-manager/tree/v3.0.12",
                 "issues": "https://github.com/tarantuli/medas-service-manager/issues"
             },
-            "time": "2026-02-26T16:07:03+00:00"
+            "time": "2026-02-27T11:26:19+00:00"
         },
         {
             "name": "myclabs/deep-copy",

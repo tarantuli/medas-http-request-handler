@@ -41,10 +41,10 @@ readonly class ExceptionDispatcher
                 }
             }
 
-            $this->cliExceptionHandler->printThrowable($job->exception);
+            $this->cliExceptionHandler->handleException($job->exception);
         }
         catch (\Throwable) {
-            $this->cliExceptionHandler->printThrowable($job->exception);
+            $this->cliExceptionHandler->handleException($job->exception);
         }
     }
 
