@@ -12,6 +12,7 @@ readonly class ResponseDispatcher
     public function __construct(
         private ResponseDispatcher\OutputDataPrinter $outputDataPrinter,
         private ResponseHandlerRegistry              $responseHandlerRegistry,
+        private ResponseHandlers\CorsHeaderWriter    $corsHeaderWriter,
     )
     {
     }
@@ -19,6 +20,8 @@ readonly class ResponseDispatcher
     public function handleResponse(Request\Request $request, ResponseTypes\Response $response): void
     {
         $job = new ResponseDispatcher\Job($request, $response);
+
+        $this->corsHeaderWriter->handle($job);
 
         if ($response instanceof ResponseTypes\SetsResponseCode) {
             $job->responseCode = $response->responseCode();

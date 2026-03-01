@@ -27,14 +27,16 @@ readonly class CorsHeaderWriter
             return;
         }
 
+        $requestOrigin = $job->request->serverData['HTTP_ORIGIN'] ?? '';
+
         if ($this->corsAllowedOrigins === '*') {
-            $job->headers['Access-Control-Allow-Origin'] = '*';
+            $job->headers['Access-Control-Allow-Origin'] = $requestOrigin;
+            $job->headers['Access-Control-Allow-Credentials'] = 'true';
 
             return;
         }
 
         $allowedOrigins = array_map('trim', explode(',', $this->corsAllowedOrigins));
-        $requestOrigin = $job->request->serverData['HTTP_ORIGIN'] ?? '';
 
         if (in_array($requestOrigin, $allowedOrigins, true)) {
             $job->headers['Access-Control-Allow-Origin'] = $requestOrigin;

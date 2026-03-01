@@ -14,12 +14,6 @@ use Medas\HttpRequestHandler\{
 #[Service]
 readonly class OptionsHandler implements ResponseHandler
 {
-    public function __construct(
-        private CorsHeaderWriter $corsHeaderWriter,
-    )
-    {
-    }
-
     public function priority(): int
     {
         return 0;
@@ -30,8 +24,6 @@ readonly class OptionsHandler implements ResponseHandler
         if ($job->request->method !== Method::Options) {
             return false;
         }
-
-        $this->corsHeaderWriter->handle($job);
 
         $job->headers['Access-Control-Allow-Methods'] = implode(
             ', ',
