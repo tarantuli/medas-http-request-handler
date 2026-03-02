@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler;
 
-use Medas\Core\Attributes\Service;
+use Medas\Core\{Attributes\Service, Interfaces\ExceptionHandler};
 use Medas\ServiceManager\ErrorHandling\CliExceptionHandler;
 
 #[Service]
-readonly class ExceptionDispatcher
+readonly class ExceptionDispatcher implements ExceptionHandler
 {
     public function __construct(
         private CliExceptionHandler                  $cliExceptionHandler,
@@ -20,7 +20,7 @@ readonly class ExceptionDispatcher
     {
     }
 
-    public function handle(\Throwable $exception): void
+    public function handleException(\Throwable $exception): void
     {
         if (PHP_SAPI === 'cli') {
             return;
