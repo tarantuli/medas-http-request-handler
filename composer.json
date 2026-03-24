@@ -16,7 +16,10 @@
     "morphp/medas-core": "^3",
     "morphp/medas-files": "^3",
     "morphp/medas-json": "^3",
-    "php": "^8.4"
+    "php": "^8.4",
+    "psr/http-message": "^2.0",
+    "psr/http-server-handler": "^1.0",
+    "psr/http-server-middleware": "^1.0"
   },
   "require-dev": {
     "morphp/medas-events": "^3",
