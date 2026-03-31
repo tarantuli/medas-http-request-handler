@@ -55,6 +55,8 @@ readonly class ExceptionDispatcher implements ExceptionHandler
         if ($job->exception instanceof Exceptions\DeclaresResponseCode) {
             $job->responseCode = $job->exception->responseCode();
         }
+
+        /** @noinspection PhpConditionAlreadyCheckedInspection */
         elseif ($job->exception instanceof Exceptions\UnauthorizedRequest) {
             $job->responseCode = 403;
         }

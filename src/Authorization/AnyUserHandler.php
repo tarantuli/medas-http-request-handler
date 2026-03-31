@@ -31,7 +31,7 @@ readonly class AnyUserHandler
                 || attribute(AnyUser::class, $methodReflector->getDeclaringClass())) {
             $vote->allowedAccess = $vote->request->authentication->user !== null
                 ? AllowedAccess::Allowed
-                : AllowedAccess::Denied;
+                : AllowedAccess::Unauthenticated;
         }
     }
 }
