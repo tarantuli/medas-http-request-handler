@@ -17,7 +17,13 @@ readonly class ResponseDispatcher
     {
     }
 
-    public function handleResponse(Request\Request $request, ResponseTypes\Response $response): void
+    /**
+     * Builds a fully populated Job (CORS headers applied, response handler run, output set)
+     * without sending any HTTP output. Safe to call in test contexts.
+     *
+     * @throws Exceptions\CannotHandleResponseType
+     */
+    public function prepareJob(Request\Request $request, ResponseTypes\Response $response): ResponseDispatcher\Job
     {
         $job = new ResponseDispatcher\Job($request, $response);
 
@@ -36,12 +42,17 @@ readonly class ResponseDispatcher
             if ($responseHandler->handleResponse($job)) {
                 dispatch(new DebugInformation('[response-handler-manager] found handler: %s', $responseHandler::class));
 
-                $this->outputDataPrinter->print($job);
-
-                return;
+                return $job;
             }
         }
 
         throw new Exceptions\CannotHandleResponseType($response);
+    }
+
+    public function handleResponse(Request\Request $request, ResponseTypes\Response $response): void
+    {
+        $job = $this->prepareJob($request, $response);
+
+        $this->outputDataPrinter->print($job);
     }
 }

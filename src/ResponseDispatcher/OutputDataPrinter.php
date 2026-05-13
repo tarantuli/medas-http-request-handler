@@ -9,7 +9,11 @@ use Medas\Core\Attributes\Service;
 #[Service]
 readonly class OutputDataPrinter
 {
-    public function print(OutputData $outputData): void
+    /**
+     * Applies ETag negotiation and mutates responseCode / headers / output accordingly.
+     * Does not send any HTTP headers or echo output — safe to call in test contexts.
+     */
+    public function prepare(OutputData $outputData): void
     {
         $eTag = sha1($outputData->output);
         $requestHeader = $outputData->request->serverData['HTTP_IF_NONE_MATCH'] ?? null;
@@ -21,6 +25,11 @@ readonly class OutputDataPrinter
         else {
             $outputData->headers['ETag'] = $eTag;
         }
+    }
+
+    public function print(OutputData $outputData): void
+    {
+        $this->prepare($outputData);
 
         if (!headers_sent()) {
             http_response_code($outputData->responseCode);
