@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\HttpRequestHandler\DataResolvers;
 
 use Medas\Core\{Attributes\Service, Interfaces\ParameterResolver, ParameterResolverResult};
-use Medas\HttpRequestHandler\{Attributes\BodyArgument, Exceptions, RequestFactory};
+use Medas\HttpRequestHandler\{Attributes\BodyArgument, RequestFactory};
 
 #[Service]
 readonly class BodyDataResolver implements ParameterResolver
@@ -33,7 +33,7 @@ readonly class BodyDataResolver implements ParameterResolver
 
         foreach ($parts as $part) {
             if (!array_key_exists($part, $array)) {
-                throw new Exceptions\BodyArgumentIsMissing($argument->name);
+                return new ParameterResolverResult(false);
             }
 
             $array = &$array[$part];
