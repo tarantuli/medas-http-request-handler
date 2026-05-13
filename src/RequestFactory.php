@@ -81,11 +81,11 @@ readonly class RequestFactory
      */
     private function determineMethod(): Request\Method
     {
-        if (PHP_SAPI === 'cli') {
+        if (!isset($_SERVER['REQUEST_METHOD'])) {
             throw new Exceptions\NotAnHttpRequest();
         }
 
-        $name = $_REQUEST['::method'] ?? $_SERVER['REQUEST_METHOD'] ?? null;
+        $name = $_REQUEST['::method'] ?? $_SERVER['REQUEST_METHOD'];
 
         try {
             return Request\Method::from($name);
