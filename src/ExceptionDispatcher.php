@@ -4,7 +4,12 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler;
 
-use Medas\Core\{Attributes\Service, Interfaces\ExceptionHandler};
+use Medas\Core\{
+    Attributes\Service,
+    Exceptions\StorageExceptionType,
+    Interfaces\ExceptionHandler,
+    Interfaces\StorageException
+};
 use Medas\ServiceManager\ErrorHandling\CliExceptionHandler;
 
 #[Service]
@@ -55,13 +60,19 @@ readonly class ExceptionDispatcher implements ExceptionHandler
         if ($job->exception instanceof Exceptions\DeclaresResponseCode) {
             $job->responseCode = $job->exception->responseCode();
         }
-
-        /** @noinspection PhpConditionAlreadyCheckedInspection */
-        elseif ($job->exception instanceof Exceptions\UnauthorizedRequest) {
-            $job->responseCode = 403;
-        }
         elseif ($job->exception instanceof Exceptions\BadRequest) {
             $job->responseCode = 400;
+        }
+        elseif ($job->exception instanceof StorageException) {
+            /** @noinspection PhpDuplicateMatchArmBodyInspection */
+            $job->responseCode = match ($job->exception->exceptionType) {
+                StorageExceptionType::DuplicateKey => 409,
+                StorageExceptionType::ForeignKeyViolation => 409,
+                StorageExceptionType::DeadlockDetected => 503,
+                StorageExceptionType::LockWaitTimeout => 503,
+                StorageExceptionType::ConnectionLost => 503,
+                StorageExceptionType::Unknown => 500,
+            };
         }
         else {
             $job->responseCode = 500;
