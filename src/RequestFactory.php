@@ -81,7 +81,7 @@ readonly class RequestFactory
      */
     private function determineMethod(): Request\Method
     {
-        if (empty($_SERVER['REMOTE_ADDR']) && !isset($_SERVER['HTTP_USER_AGENT']) && count($_SERVER['argv']) > 0) {
+        if (PHP_SAPI === 'cli') {
             throw new Exceptions\NotAnHttpRequest();
         }
 
