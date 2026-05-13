@@ -60,7 +60,11 @@ readonly class JsonHandler implements ResponseHandler
 
     public function handleException(ExceptionJob $job): bool
     {
-        if (!$job->request->serverData->acceptsMimeType('application/json')) {
+        if (!$job->request->serverData->acceptsMimeType('application/json')
+                && !$job->request->serverData->acceptsMimeType(
+                    'application/json',
+                    ignoreDoubleWild: false
+                )) {
             return false;
         }
 
