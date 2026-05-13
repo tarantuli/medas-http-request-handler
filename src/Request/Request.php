@@ -12,7 +12,6 @@ readonly class Request
         public Method         $method,
         public Uri            $uri,
         public ServerData     $serverData,
-        public PostData       $postData,
         public BodyData       $bodyData,
         public FileData       $fileData,
         public Authentication $authentication = new Authentication(),

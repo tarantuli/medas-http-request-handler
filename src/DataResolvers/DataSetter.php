@@ -70,13 +70,10 @@ readonly class DataSetter
         }
 
         if ($type instanceof \ReflectionUnionType) {
-            foreach ($type->getTypes() as $unionType) {
-                if ($this->isValidType($value, $unionType)) {
-                    return true;
-                }
-            }
-
-            return false;
+            return array_any(
+                $type->getTypes(),
+                fn($unionType) => $this->isValidType($value, $unionType)
+            );
         }
 
         return false;

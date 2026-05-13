@@ -38,10 +38,6 @@ readonly class HttpRequestHandler
             $request->uri
         ));
 
-        if ($request->postData->count()) {
-            dispatch(new DebugInformation('[http-request-handler] POST data: %s', $request->postData));
-        }
-
         if ($request->bodyData->data()) {
             dispatch(new DebugInformation('[http-request-handler] body data: %s', $request->bodyData->data()));
         }

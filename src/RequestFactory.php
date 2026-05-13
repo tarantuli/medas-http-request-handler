@@ -32,7 +32,6 @@ readonly class RequestFactory
             $this->determineMethod(),
             $this->determineEndpoint(),
             new Request\ServerData($_SERVER),
-            new Request\PostData($_POST),
             $this->determineBody(),
             new Request\FileData($_FILES),
         );
@@ -69,7 +68,6 @@ readonly class RequestFactory
             $method,
             $uri,
             new Request\ServerData($_SERVER),
-            new Request\PostData($_POST),
             $body,
             new Request\FileData($_FILES),
         );
