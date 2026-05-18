@@ -34,6 +34,7 @@ readonly class RequestFactory
             new Request\ServerData($_SERVER),
             $this->determineBody(),
             new Request\FileData($_FILES),
+            new Request\CookieData($_COOKIE),
         );
 
         $this->authenticationFinder->find($request);
@@ -70,6 +71,7 @@ readonly class RequestFactory
             new Request\ServerData($_SERVER),
             $body,
             new Request\FileData($_FILES),
+            new Request\CookieData($_COOKIE),
         );
     }
 

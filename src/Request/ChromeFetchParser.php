@@ -38,6 +38,7 @@ readonly class ChromeFetchParser
             new ServerData($this->determineServerData($host['scheme'], $host['serverName'], $params)),
             new BodyData([]),
             new FileData([]),
+            new CookieData([]),
         );
     }
 

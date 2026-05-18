@@ -14,6 +14,7 @@ readonly class Request
         public ServerData     $serverData,
         public BodyData       $bodyData,
         public FileData       $fileData,
+        public CookieData     $cookieData,
         public Authentication $authentication = new Authentication(),
     )
     {
