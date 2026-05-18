@@ -36,7 +36,8 @@ readonly class OutputDataPrinter
 
             foreach ($outputData->headers() as $name => $values) {
                 foreach ($values as $value) {
-                    header(sprintf('%s: %s', $name, $value));
+                    // false = do not replace; required for multi-value headers like Set-Cookie
+                    header(sprintf('%s: %s', $name, $value), false);
                 }
             }
         }
