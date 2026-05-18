@@ -30,7 +30,8 @@ readonly class HtmlHandler implements ResponseHandler
             return false;
         }
 
-        $job->headers['Content-Type'] = 'text/html; charset=utf-8';
+        $job->setHeader('Content-Type', 'text/html; charset=utf-8');
+
         $job->output = $job->response->getHtmlResponse();
 
         return true;
@@ -47,7 +48,7 @@ readonly class HtmlHandler implements ResponseHandler
             return false;
         }
 
-        $job->headers['Content-Type'] = 'text/html; charset=utf-8';
+        $job->setHeader('Content-Type', 'text/html; charset=utf-8');
 
         $job->output = sprintf(
             '<p>%s:%u [%u] %s</p>',

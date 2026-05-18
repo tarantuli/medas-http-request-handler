@@ -46,7 +46,8 @@ readonly class JsonLdHandler implements ResponseHandler
 
         $this->corsHandler->handle($job);
 
-        $job->headers['Content-Type'] = 'application/ld+json';
+        $job->setHeader('Content-Type', 'application/ld+json');
+
         $job->output = $this->jsonEncoder->encode($job->response->getJsonLdResponse());
 
         return true;
@@ -61,7 +62,7 @@ readonly class JsonLdHandler implements ResponseHandler
         // todo: craft a real jsonld error response
         $this->corsHandler->handle($job);
 
-        $job->headers['Content-Type'] = 'application/ld+json';
+        $job->setHeader('Content-Type', 'application/ld+json');
 
         $job->output = $this->jsonEncoder->encode([
             'message' => $job->exception->getMessage(),

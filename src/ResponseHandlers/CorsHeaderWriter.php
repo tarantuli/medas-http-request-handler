@@ -48,11 +48,11 @@ readonly class CorsHeaderWriter
 
     private function addHeaders(mixed $requestOrigin, Job|ExceptionJob $job): void
     {
-        $job->headers['Access-Control-Allow-Origin'] = $requestOrigin;
-        $job->headers['Access-Control-Allow-Credentials'] = 'true';
+        $job->setHeader('Access-Control-Allow-Origin', $requestOrigin);
+        $job->setHeader('Access-Control-Allow-Credentials', 'true');
 
         if ($this->maxAge > 0) {
-            $job->headers['Access-Control-Max-Age'] = (string) $this->maxAge;
+            $job->setHeader('Access-Control-Max-Age', (string) $this->maxAge);
         }
     }
 }

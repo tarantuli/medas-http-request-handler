@@ -44,8 +44,9 @@ readonly class FileHandler implements ResponseHandler
 
         $this->corsHandler->handle($job);
 
-        $job->headers['Content-Type'] = $mimetype;
-        $job->headers['Content-Disposition'] = sprintf('inline; filename="%s"', $fileName);
+        $job->setHeader('Content-Type', $mimetype);
+        $job->setHeader('Content-Disposition', sprintf('inline; filename="%s"', $fileName));
+
         $job->output = $job->response->file->content;
 
         return true;

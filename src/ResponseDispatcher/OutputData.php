@@ -9,7 +9,7 @@ use Medas\HttpRequestHandler\Request\Request;
 class OutputData
 {
     /** @var array<string, string|array<string>> */
-    public array $headers = [];
+    private array $headers = [];
 
     public int $responseCode = 200;
     public string $output = '';
@@ -18,5 +18,20 @@ class OutputData
         public Request $request,
     )
     {
+    }
+
+    public function addHeader(string $name, string $value): void
+    {
+        $this->headers[$name][] = $value;
+    }
+
+    public function setHeader(string $name, string $value): void
+    {
+        $this->headers[$name] = [$value];
+    }
+
+    public function headers(): array
+    {
+        return $this->headers;
     }
 }

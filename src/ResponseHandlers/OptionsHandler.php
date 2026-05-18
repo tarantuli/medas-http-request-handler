@@ -25,15 +25,15 @@ readonly class OptionsHandler implements ResponseHandler
             return false;
         }
 
-        $job->headers['Access-Control-Allow-Methods'] = implode(
-            ', ',
-            array_column(Method::cases(), 'value')
+        $job->setHeader(
+            'Access-Control-Allow-Methods',
+            implode(', ', array_column(Method::cases(), 'value'))
         );
 
         $requestedHeaders = $job->request->serverData['HTTP_ACCESS_CONTROL_REQUEST_HEADERS'] ?? '';
 
         if ($requestedHeaders !== '') {
-            $job->headers['Access-Control-Allow-Headers'] = $requestedHeaders;
+            $job->setHeader('Access-Control-Allow-Headers', $requestedHeaders);
         }
 
         $job->responseCode = 204;

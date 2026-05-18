@@ -48,7 +48,7 @@ readonly class JsonHandler implements ResponseHandler
 
         $this->corsHandler->handle($job);
 
-        $job->headers['Content-Type'] = 'application/json';
+        $job->setHeader('Content-Type', 'application/json');
 
         $job->output = $this->jsonEncoder->encode(
             $job->response->getJsonResponse(),
@@ -70,7 +70,7 @@ readonly class JsonHandler implements ResponseHandler
 
         $this->corsHandler->handle($job);
 
-        $job->headers['Content-Type'] = 'application/json';
+        $job->setHeader('Content-Type', 'application/json');
 
         $job->output = $this->jsonEncoder->encode(
             $this->throwableNormalizer->normalize($job->exception),
