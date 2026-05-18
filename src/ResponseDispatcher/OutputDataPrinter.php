@@ -35,7 +35,9 @@ readonly class OutputDataPrinter
             http_response_code($outputData->responseCode);
 
             foreach ($outputData->headers as $name => $value) {
-                header(sprintf('%s: %s', $name, $value));
+                foreach (is_array($value) ? $value : [$value] as $subValue) {
+                    header(sprintf('%s: %s', $name, $subValue));
+                }
             }
         }
 

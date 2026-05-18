@@ -8,7 +8,9 @@ use Medas\HttpRequestHandler\Request\Request;
 
 class OutputData
 {
+    /** @var array<string, string|array<string>> */
     public array $headers = [];
+
     public int $responseCode = 200;
     public string $output = '';
 
