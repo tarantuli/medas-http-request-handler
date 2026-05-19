@@ -9,11 +9,12 @@ use Medas\HttpRequestHandler\{
     ConfigOptions\CorsAllowedOrigins,
     ConfigOptions\CorsMaxAge,
     ResponseDispatcher\ExceptionJob,
-    ResponseDispatcher\Job
+    ResponseDispatcher\Job,
+    ResponseModifiers\ResponseModifier
 };
 
 #[Service]
-readonly class CorsHeaderWriter
+readonly class CorsHeaderWriter implements ResponseModifier
 {
     public function __construct(
         #[ConfigValue(CorsAllowedOrigins::class)]
@@ -23,6 +24,11 @@ readonly class CorsHeaderWriter
         private int    $maxAge,
     )
     {
+    }
+
+    public function priority(): int
+    {
+        return 0;
     }
 
     public function handle(Job|ExceptionJob $job): void

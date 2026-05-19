@@ -12,7 +12,7 @@ readonly class ResponseDispatcher
     public function __construct(
         private ResponseDispatcher\OutputDataPrinter $outputDataPrinter,
         private ResponseHandlerRegistry              $responseHandlerRegistry,
-        private ResponseHandlers\CorsHeaderWriter    $corsHeaderWriter,
+        private ResponseModifiers\ModifierRepository $modifierRepository,
     )
     {
     }
@@ -27,8 +27,6 @@ readonly class ResponseDispatcher
     {
         $job = new ResponseDispatcher\Job($request, $response);
 
-        $this->corsHeaderWriter->handle($job);
-
         if ($response instanceof ResponseTypes\SetsResponseCode) {
             $job->responseCode = $response->responseCode();
 
@@ -36,6 +34,10 @@ readonly class ResponseDispatcher
                 '[response-handler-manager] response code set to %s from response data',
                 $job->responseCode
             ));
+        }
+
+        foreach ($this->modifierRepository->get() as $modifier) {
+            $modifier->handle($job);
         }
 
         foreach ($this->responseHandlerRegistry->get() as $responseHandler) {

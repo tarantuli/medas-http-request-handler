@@ -20,7 +20,7 @@ readonly class ExceptionDispatcher implements ExceptionHandler
         private RequestFactory                       $requestFactory,
         private ResponseDispatcher\OutputDataPrinter $outputDataPrinter,
         private ResponseHandlerRegistry              $responseHandlerRegistry,
-        private ResponseHandlers\CorsHeaderWriter    $corsHeaderWriter,
+        private ResponseModifiers\ModifierRepository $modifierRepository,
     )
     {
     }
@@ -37,7 +37,10 @@ readonly class ExceptionDispatcher implements ExceptionHandler
         );
 
         $this->determineResponseCode($job);
-        $this->corsHeaderWriter->handle($job);
+
+        foreach ($this->modifierRepository->get() as $modifier) {
+            $modifier->handle($job);
+        }
 
         try {
             foreach ($this->responseHandlerRegistry->get() as $responseHandler) {
