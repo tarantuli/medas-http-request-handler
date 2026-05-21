@@ -10,13 +10,13 @@ use Medas\Core\{
     Interfaces\ExceptionHandler,
     Interfaces\StorageException
 };
-use Medas\ServiceManager\ErrorHandling\CliExceptionHandler;
+use Medas\Logging\Printing\CliExceptionPrinter;
 
 #[Service]
 readonly class ExceptionDispatcher implements ExceptionHandler
 {
     public function __construct(
-        private CliExceptionHandler                  $cliExceptionHandler,
+        private CliExceptionPrinter                  $cliExceptionPrinter,
         private RequestFactory                       $requestFactory,
         private ResponseDispatcher\OutputDataPrinter $outputDataPrinter,
         private ResponseHandlerRegistry              $responseHandlerRegistry,
@@ -25,10 +25,10 @@ readonly class ExceptionDispatcher implements ExceptionHandler
     {
     }
 
-    public function handleException(\Throwable $exception): void
+    public function handleException(\Throwable $exception): bool
     {
         if (PHP_SAPI === 'cli') {
-            return;
+            return false;
         }
 
         $job = new ResponseDispatcher\ExceptionJob(
@@ -47,15 +47,17 @@ readonly class ExceptionDispatcher implements ExceptionHandler
                 if ($responseHandler->handleException($job)) {
                     $this->outputDataPrinter->print($job);
 
-                    return;
+                    return true;
                 }
             }
 
-            $this->cliExceptionHandler->handleException($job->exception);
+            $this->cliExceptionPrinter->handleException($job->exception);
         }
         catch (\Throwable) {
-            $this->cliExceptionHandler->handleException($job->exception);
+            $this->cliExceptionPrinter->handleException($job->exception);
         }
+
+        return false;
     }
 
     private function determineResponseCode(ResponseDispatcher\ExceptionJob $job): void

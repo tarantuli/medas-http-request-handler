@@ -12,7 +12,7 @@ use Medas\HttpRequestHandler\{
     ResponseTypes\JsonResponse
 };
 use Medas\Json\{JsonEncoder, Settings};
-use Medas\ServiceManager\ErrorHandling\ThrowableNormalizer;
+use Medas\Logging\Normalizing\ThrowableNormalizer;
 
 #[Service]
 readonly class JsonHandler implements ResponseHandler
