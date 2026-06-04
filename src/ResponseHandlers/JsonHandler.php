@@ -18,7 +18,6 @@ use Medas\Logging\Normalizing\ThrowableNormalizer;
 readonly class JsonHandler implements ResponseHandler
 {
     public function __construct(
-        private CorsHeaderWriter    $corsHandler,
         private JsonEncoder         $jsonEncoder,
         private ThrowableNormalizer $throwableNormalizer,
     )
@@ -46,8 +45,6 @@ readonly class JsonHandler implements ResponseHandler
             return false;
         }
 
-        $this->corsHandler->handle($job);
-
         $job->setHeader('Content-Type', 'application/json');
 
         $job->output = $this->jsonEncoder->encode(
@@ -67,8 +64,6 @@ readonly class JsonHandler implements ResponseHandler
                 )) {
             return false;
         }
-
-        $this->corsHandler->handle($job);
 
         $job->setHeader('Content-Type', 'application/json');
 

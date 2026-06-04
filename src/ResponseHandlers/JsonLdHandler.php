@@ -17,8 +17,7 @@ use Medas\Json\JsonEncoder;
 readonly class JsonLdHandler implements ResponseHandler
 {
     public function __construct(
-        private CorsHeaderWriter $corsHandler,
-        private JsonEncoder      $jsonEncoder,
+        private JsonEncoder $jsonEncoder,
     )
     {
     }
@@ -44,8 +43,6 @@ readonly class JsonLdHandler implements ResponseHandler
             return false;
         }
 
-        $this->corsHandler->handle($job);
-
         $job->setHeader('Content-Type', 'application/ld+json');
 
         $job->output = $this->jsonEncoder->encode($job->response->getJsonLdResponse());
@@ -59,11 +56,9 @@ readonly class JsonLdHandler implements ResponseHandler
             return false;
         }
 
-        // todo: craft a real jsonld error response
-        $this->corsHandler->handle($job);
-
         $job->setHeader('Content-Type', 'application/ld+json');
 
+        // TODO: craft a real jsonld error response
         $job->output = $this->jsonEncoder->encode([
             'message' => $job->exception->getMessage(),
             'code' => $job->exception->getCode(),
