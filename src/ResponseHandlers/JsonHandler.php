@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Medas\HttpRequestHandler\ResponseHandlers;
 
 use Medas\Core\Attributes\Service;
+use Medas\ErrorReporting\Normalizing\ThrowableNormalizer;
 use Medas\HttpRequestHandler\{
     Exceptions\DoesNotImplementJsonResponse,
     ResponseDispatcher\ExceptionJob,
@@ -12,7 +13,6 @@ use Medas\HttpRequestHandler\{
     ResponseTypes\JsonResponse
 };
 use Medas\Json\{JsonEncoder, Settings};
-use Medas\Logging\Normalizing\ThrowableNormalizer;
 
 #[Service]
 readonly class JsonHandler implements ResponseHandler

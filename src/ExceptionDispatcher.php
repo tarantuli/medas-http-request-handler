@@ -10,7 +10,7 @@ use Medas\Core\{
     Interfaces\ExceptionHandler,
     Interfaces\StorageException
 };
-use Medas\Logging\Printing\CliExceptionPrinter;
+use Medas\ErrorReporting\Printing\CliExceptionPrinter;
 
 #[Service]
 readonly class ExceptionDispatcher implements ExceptionHandler

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Medas\HttpRequestHandler;
 
 use Medas\Core\{AsSingleton, BasePackage, Interfaces\ServiceConfig};
+use Medas\ErrorReporting\ErrorReportingPackage;
 use Medas\Files\FilesPackage;
 use Medas\Json\JsonPackage;
 
@@ -15,6 +16,7 @@ class HttpRequestHandlerPackage extends BasePackage
     public function dependencies(): array
     {
         return [
+            ErrorReportingPackage::instance(),
             FilesPackage::instance(),
             JsonPackage::instance(),
         ];
