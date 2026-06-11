@@ -19,16 +19,18 @@ readonly class ModifierRepository
     /** @return ResponseModifier[] */
     public function get(): array
     {
-        return $this->cacheManager->get()->get(__CLASS__, fn() => $this->gatherInstances());
+        $classNames = $this->cacheManager->get()->get(__CLASS__, fn() => $this->gatherInstances());
+
+        return namesToServices($classNames);
     }
 
-    /** @return ResponseModifier[] */
+    /** @return string[] */
     private function gatherInstances(): array
     {
         $implementors = $this->implementorFinder->find(ResponseModifier::class);
 
         usort($implementors, fn($a, $b) => -($a->priority() <=> $b->priority()));
 
-        return $implementors;
+        return servicesToNames($implementors);
     }
 }
