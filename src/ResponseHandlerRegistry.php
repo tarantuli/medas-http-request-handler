@@ -4,22 +4,34 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler;
 
-use Medas\Core\Attributes\Service;
+use Medas\Core\{Attributes\Service, Interfaces\CacheManager};
+use Medas\ServiceManager\ServiceManager;
 
 #[Service]
 readonly class ResponseHandlerRegistry
 {
+    public function __construct(
+        private CacheManager   $cacheManager,
+        private ServiceManager $serviceManager,
+    )
+    {
+    }
+
     /** @return ResponseHandlers\ResponseHandler[] */
     public function get(): array
     {
-        return cache(__CLASS__, fn() => $this->findHandlers());
+        $classNames = $this->cacheManager->get()->get(__CLASS__, fn() => $this->gatherClassNames());
+
+        return namesToServices($classNames);
     }
 
-    private function findHandlers(): array
+    /** @return string[] */
+    private function gatherClassNames(): array
     {
+        /** @var ResponseHandlers\ResponseHandler[] $handlers */
         $handlers = [];
 
-        foreach (sm()->getServiceClassNames() as $className) {
+        foreach ($this->serviceManager->getServiceClassNames() as $className) {
             $this->processClass($className, $handlers);
         }
 
@@ -31,9 +43,10 @@ readonly class ResponseHandlerRegistry
             )
         );
 
-        return $handlers;
+        return servicesToNames($handlers);
     }
 
+    /** @param ResponseHandlers\ResponseHandler[] $handlers */
     private function processClass(string $className, array &$handlers): void
     {
         $class = new \ReflectionClass($className);
@@ -46,6 +59,6 @@ readonly class ResponseHandlerRegistry
             return;
         }
 
-        $handlers[] = sm()->resolve($className);
+        $handlers[] = $this->serviceManager->resolve($className);
     }
 }
