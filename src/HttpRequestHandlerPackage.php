@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler;
 
-use Medas\Core\{AsSingleton, BasePackage, Interfaces\ServiceConfig};
+use Medas\Core\{AsSingleton, BasePackage, Interfaces\ServiceConfigBuilder};
 use Medas\ErrorReporting\ErrorReportingPackage;
 use Medas\Files\FilesPackage;
 use Medas\Json\JsonPackage;
@@ -27,12 +27,12 @@ class HttpRequestHandlerPackage extends BasePackage
         return __DIR__;
     }
 
-    public function initialize(ServiceConfig $config): void
+    public function initialize(ServiceConfigBuilder $config): void
     {
         parent::initialize($config);
 
-        $config->addParameterResolver(service(DataResolvers\BodyDataResolver::class))
-            ->addParameterResolver(service(DataResolvers\QueryDataResolver::class))
-            ->addParameterResolver(service(DataResolvers\RequestDataObjectResolver::class));
+        $config->addParameterResolver(DataResolvers\BodyDataResolver::class)
+            ->addParameterResolver(DataResolvers\QueryDataResolver::class)
+            ->addParameterResolver(DataResolvers\RequestDataObjectResolver::class);
     }
 }
