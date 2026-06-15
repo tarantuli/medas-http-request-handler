@@ -27,10 +27,11 @@ readonly class ModifierRepository
     /** @return string[] */
     private function gatherClassNames(): array
     {
-        $implementors = $this->implementorFinder->find(ResponseModifier::class);
+        $names = $this->implementorFinder->find(ResponseModifier::class);
+        $classes = namesToServices($names);
 
-        usort($implementors, fn($a, $b) => -($a->priority() <=> $b->priority()));
+        usort($classes, fn($a, $b) => -($a->priority() <=> $b->priority()));
 
-        return servicesToNames($implementors);
+        return servicesToNames($classes);
     }
 }
