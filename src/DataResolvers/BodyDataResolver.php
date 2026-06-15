@@ -4,18 +4,11 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler\DataResolvers;
 
-use Medas\Core\{Attributes\Service, Interfaces\ParameterResolver, ParameterResolverResult};
+use Medas\Core\{Interfaces\ParameterResolver, ParameterResolverResult};
 use Medas\HttpRequestHandler\{Attributes\BodyArgument, RequestFactory};
 
-#[Service]
 readonly class BodyDataResolver implements ParameterResolver
 {
-    public function __construct(
-        private RequestFactory $requestFactory,
-    )
-    {
-    }
-
     public function priority(): int
     {
         return -50;
@@ -27,7 +20,7 @@ readonly class BodyDataResolver implements ParameterResolver
             return new ParameterResolverResult(false);
         }
 
-        $bodyData = $this->requestFactory->get()->bodyData->data();
+        $bodyData = service(RequestFactory::class)->get()->bodyData->data();
         $parts = explode('.', $argument->name);
         $array = &$bodyData;
 
