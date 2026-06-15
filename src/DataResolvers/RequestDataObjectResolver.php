@@ -4,23 +4,15 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler\DataResolvers;
 
-use Medas\Core\{Attributes\Service, Interfaces\ParameterResolver, ParameterResolverResult};
+use Medas\Core\{Interfaces\ParameterResolver, ParameterResolverResult};
 use Medas\HttpRequestHandler\{
     Attributes\RequestDataObject,
     Exceptions\ParameterTypeIsNotAClass,
     RequestFactory
 };
 
-#[Service]
 readonly class RequestDataObjectResolver implements ParameterResolver
 {
-    public function __construct(
-        private DataSetter     $dataSetter,
-        private RequestFactory $requestFactory,
-    )
-    {
-    }
-
     public function priority(): int
     {
         return -30;
@@ -38,18 +30,20 @@ readonly class RequestDataObjectResolver implements ParameterResolver
             throw new ParameterTypeIsNotAClass($parameter, $className);
         }
 
+        $requestFactory = service(RequestFactory::class);
+        $dataSetter = service(DataSetter::class);
         $object = new ($className);
 
         if ($argument->fromBody) {
-            $bodyData = $this->requestFactory->get()->bodyData->data();
+            $bodyData = $requestFactory->get()->bodyData->data();
 
-            $this->dataSetter->set($object, $bodyData);
+            $dataSetter->set($object, $bodyData);
         }
 
         if ($argument->fromQuery) {
-            $queryData = $this->requestFactory->get()->uri->query;
+            $queryData = $requestFactory->get()->uri->query;
 
-            $this->dataSetter->set($object, $queryData);
+            $dataSetter->set($object, $queryData);
         }
 
         return new ParameterResolverResult(true, $object);
