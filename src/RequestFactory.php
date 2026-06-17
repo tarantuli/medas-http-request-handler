@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler;
 
-use Medas\Core\Attributes\{ConfigValue, Service};
+use Medas\Core\Attributes\{ConfigValue, EventListener, Service};
 use Medas\Json\JsonEncoder;
 
 #[Service]
@@ -40,6 +40,12 @@ readonly class RequestFactory
         $this->authenticationFinder->find($request);
 
         return $request;
+    }
+
+    #[EventListener]
+    public function provideCurrentRequest(Events\CurrentRequestQuery $currentRequestQuery): void
+    {
+        $currentRequestQuery->request = $this->get();
     }
 
     public function getWithoutExceptions(): Request\Request
