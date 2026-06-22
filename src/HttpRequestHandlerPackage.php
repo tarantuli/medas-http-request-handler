@@ -33,6 +33,7 @@ class HttpRequestHandlerPackage extends BasePackage
 
         $config->addParameterResolver(DataResolvers\BodyDataResolver::class)
             ->addParameterResolver(DataResolvers\QueryDataResolver::class)
-            ->addParameterResolver(DataResolvers\RequestDataObjectResolver::class);
+            ->addParameterResolver(DataResolvers\RequestDataObjectResolver::class)
+            ->addParameterResolver(DataResolvers\HeaderValueResolver::class);
     }
 }
