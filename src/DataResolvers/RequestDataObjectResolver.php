@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler\DataResolvers;
 
-use Medas\Core\{Interfaces\ParameterResolver, ParameterResolverResult};
+use Medas\Core\{
+    Interfaces\ArrayToObjectCaster,
+    Interfaces\ParameterResolver,
+    ParameterResolverResult
+};
 use Medas\HttpRequestHandler\{
     Attributes\RequestDataObject,
     Exceptions\ParameterTypeIsNotAClass,
@@ -30,21 +34,18 @@ readonly class RequestDataObjectResolver implements ParameterResolver
             throw new ParameterTypeIsNotAClass($parameter, $className);
         }
 
-        $requestFactory = service(RequestFactory::class);
-        $dataSetter = service(DataSetter::class);
-        $object = new ($className);
+        $requestData = service(RequestFactory::class)->get();
+        $values = [];
 
         if ($argument->fromBody) {
-            $bodyData = $requestFactory->get()->bodyData->data();
-
-            $dataSetter->set($object, $bodyData);
+            $values = array_merge($values, $requestData->bodyData->data());
         }
 
         if ($argument->fromQuery) {
-            $queryData = $requestFactory->get()->uri->query;
-
-            $dataSetter->set($object, $queryData);
+            $values = array_merge($values, $requestData->uri->query);
         }
+
+        $object = service(ArrayToObjectCaster::class)->cast($values, $className);
 
         return new ParameterResolverResult(true, $object);
     }
