@@ -4,19 +4,11 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler\DataResolvers;
 
-use Medas\Core\{Attributes\Service, Interfaces\ParameterResolver, ParameterResolverResult};
+use Medas\Core\{Interfaces\ParameterResolver, ParameterResolverResult};
 use Medas\HttpRequestHandler\{Attributes\HeaderValue, Request\HeaderFinder, RequestFactory};
 
-#[Service]
 readonly class HeaderValueResolver implements ParameterResolver
 {
-    public function __construct(
-        private HeaderFinder   $headerFinder,
-        private RequestFactory $requestFactory,
-    )
-    {
-    }
-
     public function priority(): int
     {
         return -55;
@@ -28,8 +20,10 @@ readonly class HeaderValueResolver implements ParameterResolver
             return new ParameterResolverResult(false);
         }
 
-        $serverData = $this->requestFactory->get()->serverData;
-        $value = $this->headerFinder->find($serverData, $argument->name);
+        // Cannot inject via constructor — this resolver is instantiated directly by ArgumentResolver,
+        // which is part of the DI bootstrap chain
+        $serverData = service(RequestFactory::class)->get()->serverData;
+        $value = service(HeaderFinder::class)->find($serverData, $argument->name);
 
         return new ParameterResolverResult($value !== null, $value);
     }

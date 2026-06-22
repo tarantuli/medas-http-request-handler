@@ -9,12 +9,6 @@ use Medas\HttpRequestHandler\{Attributes\BodyArgument, RequestFactory};
 
 readonly class BodyDataResolver implements ParameterResolver
 {
-    public function __construct(
-        private RequestFactory $requestFactory,
-    )
-    {
-    }
-
     public function priority(): int
     {
         return -50;
@@ -26,7 +20,9 @@ readonly class BodyDataResolver implements ParameterResolver
             return new ParameterResolverResult(false);
         }
 
-        $bodyData = $this->requestFactory->get()->bodyData->data();
+        // Cannot inject via constructor — this resolver is instantiated directly by ArgumentResolver,
+        // which is part of the DI bootstrap chain
+        $bodyData = service(RequestFactory::class)->get()->bodyData->data();
         $parts = explode('.', $argument->name);
         $array = &$bodyData;
 
