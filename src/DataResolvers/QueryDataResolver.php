@@ -9,6 +9,12 @@ use Medas\HttpRequestHandler\{Attributes\QueryArgument, Exceptions, RequestFacto
 
 readonly class QueryDataResolver implements ParameterResolver
 {
+    public function __construct(
+        private RequestFactory $requestFactory,
+    )
+    {
+    }
+
     public function priority(): int
     {
         return -40;
@@ -20,7 +26,7 @@ readonly class QueryDataResolver implements ParameterResolver
             return new ParameterResolverResult(false);
         }
 
-        $queryData = service(RequestFactory::class)->get()->uri->query;
+        $queryData = $this->requestFactory->get()->uri->query;
 
         if (!array_key_exists($argument->name, $queryData)) {
             throw new Exceptions\QueryArgumentIsMissing($argument->name);

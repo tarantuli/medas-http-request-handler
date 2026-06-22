@@ -17,6 +17,13 @@ use Medas\HttpRequestHandler\{
 
 readonly class RequestDataObjectResolver implements ParameterResolver
 {
+    public function __construct(
+        private RequestFactory      $requestFactory,
+        private ArrayToObjectCaster $caster,
+    )
+    {
+    }
+
     public function priority(): int
     {
         return -30;
@@ -34,7 +41,7 @@ readonly class RequestDataObjectResolver implements ParameterResolver
             throw new ParameterTypeIsNotAClass($parameter, $className);
         }
 
-        $requestData = service(RequestFactory::class)->get();
+        $requestData = $this->requestFactory->get();
         $values = [];
 
         if ($argument->fromBody) {
@@ -45,7 +52,7 @@ readonly class RequestDataObjectResolver implements ParameterResolver
             $values = array_merge($values, $requestData->uri->query);
         }
 
-        $object = service(ArrayToObjectCaster::class)->cast($values, $className);
+        $object = $this->caster->cast($values, $className);
 
         return new ParameterResolverResult(true, $object);
     }

@@ -9,6 +9,12 @@ use Medas\HttpRequestHandler\{Attributes\BodyArgument, RequestFactory};
 
 readonly class BodyDataResolver implements ParameterResolver
 {
+    public function __construct(
+        private RequestFactory $requestFactory,
+    )
+    {
+    }
+
     public function priority(): int
     {
         return -50;
@@ -20,7 +26,7 @@ readonly class BodyDataResolver implements ParameterResolver
             return new ParameterResolverResult(false);
         }
 
-        $bodyData = service(RequestFactory::class)->get()->bodyData->data();
+        $bodyData = $this->requestFactory->get()->bodyData->data();
         $parts = explode('.', $argument->name);
         $array = &$bodyData;
 
