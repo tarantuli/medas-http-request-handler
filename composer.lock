@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "morphp/medas-core",
-            "version": "v4.1.3",
+            "version": "v4.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tarantuli/medas-core.git",
-                "reference": "e4b3ad694db7b1db55aa156766fa2e0558fc5c50"
+                "reference": "9b1a7125952beb6c24690033e9bc4c51beb1ae4a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/e4b3ad694db7b1db55aa156766fa2e0558fc5c50",
-                "reference": "e4b3ad694db7b1db55aa156766fa2e0558fc5c50",
+                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/9b1a7125952beb6c24690033e9bc4c51beb1ae4a",
+                "reference": "9b1a7125952beb6c24690033e9bc4c51beb1ae4a",
                 "shasum": ""
             },
             "require": {
@@ -50,10 +50,10 @@
                 "medas"
             ],
             "support": {
-                "source": "https://github.com/tarantuli/medas-core/tree/v4.1.3",
+                "source": "https://github.com/tarantuli/medas-core/tree/v4.1.4",
                 "issues": "https://github.com/tarantuli/medas-core/issues"
             },
-            "time": "2026-06-22T09:59:25+00:00"
+            "time": "2026-06-23T10:00:30+00:00"
         },
         {
             "name": "morphp/medas-error-reporting",

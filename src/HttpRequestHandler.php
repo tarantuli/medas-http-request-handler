@@ -7,6 +7,7 @@ namespace Medas\HttpRequestHandler;
 use Medas\Core\{
     Attributes\Service,
     Events\AllowedAccess,
+    Events\BeforeResponse,
     Events\DebugInformation,
     Interfaces\HttpRequestHandlerManager
 };
@@ -26,6 +27,8 @@ readonly class HttpRequestHandler
     {
         $request = $this->requestFactory->get();
         $response = $this->processRequest($request);
+
+        dispatch(new BeforeResponse());
 
         $this->responseDispatcher->handleResponse($request, $response);
     }
