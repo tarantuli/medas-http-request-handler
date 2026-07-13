@@ -54,6 +54,14 @@ readonly class CorsHeaderWriter implements ResponseModifier
 
     private function addHeaders(mixed $requestOrigin, Job|ExceptionJob $job): void
     {
+        // Strips control characters before reflecting the origin back into a
+        // response header - relevant in wildcard mode specifically, where
+        // any origin is accepted verbatim rather than checked against a
+        // pre-configured, already-trusted allowlist. Prevents a crafted
+        // Origin value (e.g., containing \r\n) from splitting the response
+        // into extra headers.
+        $requestOrigin = str_replace(["\r", "\n", "\0"], '', $requestOrigin);
+
         $job->setHeader('Access-Control-Allow-Origin', $requestOrigin);
         $job->setHeader('Access-Control-Allow-Credentials', 'true');
 

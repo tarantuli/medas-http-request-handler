@@ -33,6 +33,12 @@ readonly class OptionsHandler implements ResponseHandler
         $requestedHeaders = $job->request->serverData['HTTP_ACCESS_CONTROL_REQUEST_HEADERS'] ?? '';
 
         if ($requestedHeaders !== '') {
+            // Prevents a crafted Access-Control-Request-Headers value from
+            // splitting the response into extra headers - browsers
+            // themselves constrain this value, but nothing stops a
+            // non-browser client from sending an arbitrary one directly.
+            $requestedHeaders = str_replace(["\r", "\n", "\0"], '', $requestedHeaders);
+
             $job->setHeader('Access-Control-Allow-Headers', $requestedHeaders);
         }
 
