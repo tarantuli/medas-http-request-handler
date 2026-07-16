@@ -38,8 +38,8 @@ readonly class ResponseHandlerRegistry
         // Sort handlers with the highest priority to the front
         usort(
             $handlers,
-            fn(ResponseHandlers\ResponseHandler $a, ResponseHandlers\ResponseHandler $b) =>
-                -($a->priority() <=> $b->priority()
+            fn(ResponseHandlers\ResponseHandler $a, ResponseHandlers\ResponseHandler $b)
+                => -($a->priority() <=> $b->priority()
             )
         );
 

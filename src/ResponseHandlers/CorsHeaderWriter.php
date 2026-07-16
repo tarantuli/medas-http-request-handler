@@ -64,6 +64,7 @@ readonly class CorsHeaderWriter implements ResponseModifier
 
         $job->setHeader('Access-Control-Allow-Origin', $requestOrigin);
         $job->setHeader('Access-Control-Allow-Credentials', 'true');
+        $job->setHeader('Access-Control-Expose-Headers', 'X-Total-Count');
 
         if ($this->maxAge > 0) {
             $job->setHeader('Access-Control-Max-Age', (string) $this->maxAge);
