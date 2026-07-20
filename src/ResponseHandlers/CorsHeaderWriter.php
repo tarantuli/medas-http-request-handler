@@ -16,14 +16,22 @@ use Medas\HttpRequestHandler\{
 #[Service]
 readonly class CorsHeaderWriter implements ResponseModifier
 {
+    private array $allowedOrigins;
+
     public function __construct(
         #[ConfigValue(CorsAllowedOrigins::class)]
-        private string $allowedOrigins,
+        string|array $allowedOrigins,
 
         #[ConfigValue(CorsMaxAge::class)]
-        private int    $maxAge,
+        private int  $maxAge,
     )
     {
+        if (is_string($allowedOrigins)) {
+            $this->allowedOrigins = array_map('trim', explode(',', $allowedOrigins));
+        }
+        else {
+            $this->allowedOrigins = $allowedOrigins;
+        }
     }
 
     public function priority(): int
@@ -33,21 +41,19 @@ readonly class CorsHeaderWriter implements ResponseModifier
 
     public function handle(Job|ExceptionJob $job): void
     {
-        if ($this->allowedOrigins === '') {
+        if ($this->allowedOrigins === []) {
             return;
         }
 
         $requestOrigin = $job->request->serverData['HTTP_ORIGIN'] ?? '';
 
-        if ($this->allowedOrigins === '*') {
+        if (in_array('*', $this->allowedOrigins, true)) {
             $this->addHeaders($requestOrigin, $job);
 
             return;
         }
 
-        $allowedOrigins = array_map('trim', explode(',', $this->allowedOrigins));
-
-        if (in_array($requestOrigin, $allowedOrigins, true)) {
+        if (in_array($requestOrigin, $this->allowedOrigins, true)) {
             $this->addHeaders($requestOrigin, $job);
         }
     }

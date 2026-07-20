@@ -27,7 +27,7 @@ readonly class CorsAllowedOrigins implements ConfigOption
 
     public function description(): string
     {
-        return 'Comma-separated list of allowed CORS origins. Use * for any origin (not recommended for production)';
+        return 'Array or comma-separated list of allowed CORS origins. Use * for any origin (not recommended for production)';
     }
 
     public function hasDefault(): bool
