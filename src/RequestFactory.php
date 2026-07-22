@@ -127,7 +127,14 @@ readonly class RequestFactory
 
         $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
 
-        if ($raw === '') {
+        // PHP parses multipart bodies into $_POST/$_FILES itself, consuming
+        // php://input in the process - $raw is always empty here regardless
+        // of whether the request actually had form fields, so this must be
+        // checked before the generic "$raw === ''" case below, not after.
+        if (str_contains($contentType, 'multipart/form-data')) {
+            $body = $_POST;
+        }
+        elseif ($raw === '') {
             $body = [];
         }
         elseif (str_contains($contentType, 'application/json')) {
@@ -140,9 +147,6 @@ readonly class RequestFactory
         }
         elseif (str_contains($contentType, 'application/x-www-form-urlencoded')) {
             parse_str($raw, $body);
-        }
-        elseif (str_contains($contentType, 'multipart/form-data')) {
-            $body = $_POST;
         }
         else {
             throw new Exceptions\UnsupportedContentType($contentType);
