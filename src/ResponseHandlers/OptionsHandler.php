@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler\ResponseHandlers;
 
-use Medas\Core\Attributes\Service;
+use Medas\Core\{Attributes\Service, Cors\CorsHeaders};
 use Medas\HttpRequestHandler\{
     Request\Method,
     ResponseDispatcher\ExceptionJob,
@@ -14,6 +14,12 @@ use Medas\HttpRequestHandler\{
 #[Service]
 readonly class OptionsHandler implements ResponseHandler
 {
+    public function __construct(
+        private CorsHeaders $corsHeaders,
+    )
+    {
+    }
+
     public function priority(): int
     {
         return 0;
@@ -25,21 +31,15 @@ readonly class OptionsHandler implements ResponseHandler
             return false;
         }
 
-        $job->setHeader(
-            'Access-Control-Allow-Methods',
-            implode(', ', array_column(Method::cases(), 'value'))
-        );
-
         $requestedHeaders = $job->request->serverData['HTTP_ACCESS_CONTROL_REQUEST_HEADERS'] ?? '';
 
-        if ($requestedHeaders !== '') {
-            // Prevents a crafted Access-Control-Request-Headers value from
-            // splitting the response into extra headers - browsers
-            // themselves constrain this value, but nothing stops a
-            // non-browser client from sending an arbitrary one directly.
-            $requestedHeaders = str_replace(["\r", "\n", "\0"], '', $requestedHeaders);
+        $headers = $this->corsHeaders->resolvePreflightHeaders(
+            array_column(Method::cases(), 'value'),
+            $requestedHeaders,
+        );
 
-            $job->setHeader('Access-Control-Allow-Headers', $requestedHeaders);
+        foreach ($headers as $name => $value) {
+            $job->setHeader($name, $value);
         }
 
         $job->responseCode = 204;
