@@ -7,6 +7,7 @@ namespace Medas\HttpRequestHandler\ResponseHandlers;
 use Medas\Core\Attributes\Service;
 use Medas\HttpRequestHandler\{
     Exceptions\DoesNotImplementJsonLdResponse,
+    ResponseDispatcher\ClientExceptionNormalizer,
     ResponseDispatcher\ExceptionJob,
     ResponseDispatcher\Job,
     ResponseTypes\JsonLdResponse
@@ -17,7 +18,8 @@ use Medas\Json\JsonEncoder;
 readonly class JsonLdHandler implements ResponseHandler
 {
     public function __construct(
-        private JsonEncoder $jsonEncoder,
+        private ClientExceptionNormalizer $clientExceptionNormalizer,
+        private JsonEncoder               $jsonEncoder,
     )
     {
     }
@@ -59,12 +61,7 @@ readonly class JsonLdHandler implements ResponseHandler
         $job->setHeader('Content-Type', 'application/ld+json');
 
         // TODO: craft a real jsonld error response
-        $job->output = $this->jsonEncoder->encode([
-            'message' => $job->exception->getMessage(),
-            'code' => $job->exception->getCode(),
-            'fileName' => $job->exception->getFile(),
-            'lineNumber' => $job->exception->getLine(),
-        ]);
+        $job->output = $this->jsonEncoder->encode($this->clientExceptionNormalizer->normalize($job->exception));
 
         return true;
     }

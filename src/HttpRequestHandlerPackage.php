@@ -35,5 +35,11 @@ class HttpRequestHandlerPackage extends BasePackage
             ->addParameterResolver(DataResolvers\QueryDataResolver::class)
             ->addParameterResolver(DataResolvers\RequestDataObjectResolver::class)
             ->addParameterResolver(DataResolvers\HeaderValueResolver::class);
+
+        $config->addManualBinding(
+            ResponseDispatcher\ClientExceptionNormalizer::class,
+            'isDev',
+            $config->isDev
+        );
     }
 }

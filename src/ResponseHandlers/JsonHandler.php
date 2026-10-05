@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Medas\HttpRequestHandler\ResponseHandlers;
 
 use Medas\Core\Attributes\Service;
-use Medas\ErrorReporting\Normalizing\ThrowableNormalizer;
 use Medas\HttpRequestHandler\{
     Exceptions\DoesNotImplementJsonResponse,
+    ResponseDispatcher\ClientExceptionNormalizer,
     ResponseDispatcher\ExceptionJob,
     ResponseDispatcher\Job,
     ResponseTypes\JsonResponse
@@ -18,8 +18,8 @@ use Medas\Json\{JsonEncoder, Settings};
 readonly class JsonHandler implements ResponseHandler
 {
     public function __construct(
-        private JsonEncoder         $jsonEncoder,
-        private ThrowableNormalizer $throwableNormalizer,
+        private ClientExceptionNormalizer $clientExceptionNormalizer,
+        private JsonEncoder               $jsonEncoder,
     )
     {
     }
@@ -68,7 +68,7 @@ readonly class JsonHandler implements ResponseHandler
         $job->setHeader('Content-Type', 'application/json');
 
         $job->output = $this->jsonEncoder->encode(
-            $this->throwableNormalizer->normalize($job->exception),
+            $this->clientExceptionNormalizer->normalize($job->exception),
             new Settings(urlSafe: true)
         );
 

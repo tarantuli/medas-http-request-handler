@@ -7,6 +7,7 @@ namespace Medas\HttpRequestHandler\ResponseHandlers;
 use Medas\Core\Attributes\Service;
 use Medas\HttpRequestHandler\{
     Request\Request,
+    ResponseDispatcher\ClientExceptionNormalizer,
     ResponseDispatcher\ExceptionJob,
     ResponseDispatcher\Job,
     ResponseTypes\HtmlResponse
@@ -50,12 +51,19 @@ readonly class HtmlHandler implements ResponseHandler
 
         $job->setHeader('Content-Type', 'text/html; charset=utf-8');
 
+        // Resolved here instead of injected: subclasses declare their own
+        // constructor without calling this class's.
+        $exception = service(ClientExceptionNormalizer::class)->normalize($job->exception);
+
+        $location = isset($exception['fileName'])
+            ? htmlspecialchars($exception['fileName']) . ':' . $exception['lineNumber'] . ' '
+            : '';
+
         $job->output = sprintf(
-            '<p>%s:%u [%u] %s</p>',
-            htmlspecialchars($job->exception->getFile()),
-            $job->exception->getLine(),
-            $job->exception->getCode(),
-            htmlspecialchars($job->exception->getMessage())
+            '<p>%s[%u] %s</p>',
+            $location,
+            $exception['code'],
+            htmlspecialchars($exception['message'])
         );
 
         return true;
