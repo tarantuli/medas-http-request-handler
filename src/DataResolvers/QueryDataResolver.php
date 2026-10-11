@@ -4,30 +4,40 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler\DataResolvers;
 
-use Medas\Core\{Interfaces\ParameterResolver, ParameterResolverResult};
+use Medas\Core\{
+    HandlesByCompiling,
+    Interfaces\CompilableParameterResolver,
+    ParameterResolverResult
+};
 use Medas\HttpRequestHandler\{Attributes\QueryArgument, Exceptions, RequestFactory};
 
-readonly class QueryDataResolver implements ParameterResolver
+readonly class QueryDataResolver implements CompilableParameterResolver
 {
+    use HandlesByCompiling;
+
     public function priority(): int
     {
         return -40;
     }
 
-    public function handle(\ReflectionParameter|\ReflectionProperty $parameter): ParameterResolverResult
+    public function compile(\ReflectionParameter|\ReflectionProperty $parameter): QueryArgument|null
     {
-        if (!$argument = attribute(QueryArgument::class, $parameter)) {
-            return new ParameterResolverResult(false);
-        }
+        return attribute(QueryArgument::class, $parameter);
+    }
 
+    /**
+     * @param QueryArgument $compiled
+     */
+    public function resolveCompiled(object $compiled): ParameterResolverResult
+    {
         // Cannot inject via constructor — this resolver is instantiated directly by ArgumentResolver,
         // which is part of the DI bootstrap chain
         $queryData = service(RequestFactory::class)->get()->uri->query;
 
-        if (!array_key_exists($argument->name, $queryData)) {
-            throw new Exceptions\QueryArgumentIsMissing($argument->name);
+        if (!array_key_exists($compiled->name, $queryData)) {
+            throw new Exceptions\QueryArgumentIsMissing($compiled->name);
         }
 
-        return new ParameterResolverResult(true, $queryData[$argument->name]);
+        return new ParameterResolverResult(true, $queryData[$compiled->name]);
     }
 }

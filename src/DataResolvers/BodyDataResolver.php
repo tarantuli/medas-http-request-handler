@@ -4,26 +4,36 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler\DataResolvers;
 
-use Medas\Core\{Interfaces\ParameterResolver, ParameterResolverResult};
+use Medas\Core\{
+    HandlesByCompiling,
+    Interfaces\CompilableParameterResolver,
+    ParameterResolverResult
+};
 use Medas\HttpRequestHandler\{Attributes\BodyArgument, RequestFactory};
 
-readonly class BodyDataResolver implements ParameterResolver
+readonly class BodyDataResolver implements CompilableParameterResolver
 {
+    use HandlesByCompiling;
+
     public function priority(): int
     {
         return -50;
     }
 
-    public function handle(\ReflectionParameter|\ReflectionProperty $parameter): ParameterResolverResult
+    public function compile(\ReflectionParameter|\ReflectionProperty $parameter): BodyArgument|null
     {
-        if (!$argument = attribute(BodyArgument::class, $parameter)) {
-            return new ParameterResolverResult(false);
-        }
+        return attribute(BodyArgument::class, $parameter);
+    }
 
+    /**
+     * @param BodyArgument $compiled
+     */
+    public function resolveCompiled(object $compiled): ParameterResolverResult
+    {
         // Cannot inject via constructor — this resolver is instantiated directly by ArgumentResolver,
         // which is part of the DI bootstrap chain
         $bodyData = service(RequestFactory::class)->get()->bodyData->data();
-        $parts = explode('.', $argument->name);
+        $parts = explode('.', $compiled->name);
         $array = &$bodyData;
 
         foreach ($parts as $part) {
