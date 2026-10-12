@@ -12,13 +12,18 @@ use Medas\Core\{
 };
 
 /**
- * This authorization vote handler checks if the route handler method or its declaring class are tagged with PublicResource.
+ * This authorisation vote handler checks if the route handler method or its declaring class are tagged with PublicResource.
  * If so, then access is allowed. In all other cases, it expresses no opinion.
+ *
+ * It runs after the other vote handlers, so an application's path-based handlers (e.g. "everything under /items needs
+ * a user") can't overrule a public resource by voting Unauthenticated - which made CORS preflight requests, matched by
+ * OptionsController and never carrying credentials, fail with 401. An explicit Denied still stops the vote before
+ * this runs.
  */
 #[Service]
 readonly class PublicResourceHandler
 {
-    #[EventListener]
+    #[EventListener(priority: -1000)]
     public function handleAuthorizationVote(AuthorizationVote $vote): void
     {
         if (!$vote->requestHandler instanceof HttpRequestHandlerDefersToMethod) {
