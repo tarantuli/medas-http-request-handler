@@ -17,12 +17,20 @@ readonly class ResponseHandlerRegistry
     {
     }
 
-    /** @return ResponseHandlers\ResponseHandler[] */
-    public function get(): array
+    /**
+     * The handlers, highest priority first.
+     *
+     * @return iterable<ResponseHandlers\ResponseHandler>
+     */
+    public function get(): iterable
     {
         $classNames = $this->cacheManager->get()->get(__CLASS__, fn() => $this->gatherClassNames());
 
-        return namesToServices($classNames);
+        // One at a time: the dispatchers stop at the first handler that takes the job,
+        // so the handlers after it are never needed and never created.
+        foreach ($classNames as $className) {
+            yield service($className);
+        }
     }
 
     /** @return string[] */
