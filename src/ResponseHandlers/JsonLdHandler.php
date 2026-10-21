@@ -61,7 +61,10 @@ readonly class JsonLdHandler implements ResponseHandler
         $job->setHeader('Content-Type', 'application/ld+json');
 
         // TODO: craft a real jsonld error response
-        $job->output = $this->jsonEncoder->encode($this->clientExceptionNormalizer->normalize($job->exception));
+        $job->output = $this->jsonEncoder->encode($this->clientExceptionNormalizer->normalize(
+            $job->exception,
+            $job->responseCode
+        ));
 
         return true;
     }

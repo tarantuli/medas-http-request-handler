@@ -53,7 +53,10 @@ readonly class HtmlHandler implements ResponseHandler
 
         // Resolved here instead of injected: subclasses declare their own
         // constructor without calling this class's.
-        $exception = service(ClientExceptionNormalizer::class)->normalize($job->exception);
+        $exception = service(ClientExceptionNormalizer::class)->normalize(
+            $job->exception,
+            $job->responseCode
+        );
 
         $location = isset($exception['fileName'])
             ? htmlspecialchars($exception['fileName']) . ':' . $exception['lineNumber'] . ' '

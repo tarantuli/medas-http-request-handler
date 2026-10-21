@@ -6,8 +6,10 @@ namespace Medas\HttpRequestHandler;
 
 use Medas\Core\{AsSingleton, BasePackage, Interfaces\ServiceConfigBuilder};
 use Medas\ErrorReporting\ErrorReportingPackage;
+use Medas\Events\EventsPackage;
 use Medas\Files\FilesPackage;
 use Medas\Json\JsonPackage;
+use Medas\ObjectInstantiator\ObjectInstantiatorPackage;
 
 class HttpRequestHandlerPackage extends BasePackage
 {
@@ -19,6 +21,14 @@ class HttpRequestHandlerPackage extends BasePackage
             ErrorReportingPackage::instance(),
             FilesPackage::instance(),
             JsonPackage::instance(),
+        ];
+    }
+
+    public function devDependencies(): array
+    {
+        return [
+            EventsPackage::instance(),
+            ObjectInstantiatorPackage::instance(),
         ];
     }
 

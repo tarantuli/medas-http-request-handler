@@ -68,7 +68,7 @@ readonly class JsonHandler implements ResponseHandler
         $job->setHeader('Content-Type', 'application/json');
 
         $job->output = $this->jsonEncoder->encode(
-            $this->clientExceptionNormalizer->normalize($job->exception),
+            $this->clientExceptionNormalizer->normalize($job->exception, $job->responseCode),
             new Settings(urlSafe: true)
         );
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\HttpRequestHandler\ResponseDispatcher;
 
-use Medas\Core\Attributes\Service;
+use Medas\Core\{Attributes\Service, Exceptions\BaseException, StringMaker};
 use Medas\ErrorReporting\Normalizing\ThrowableNormalizer;
 
 /**
@@ -25,10 +25,36 @@ readonly class ClientExceptionNormalizer
     {
     }
 
-    public function normalize(\Throwable $exception): array
+    public function normalize(\Throwable $exception, int $responseCode = 500): array
     {
         $normalized = $this->throwableNormalizer->normalize($exception);
 
-        return $this->isDev ? $normalized : array_intersect_key($normalized, self::ALWAYS_VISIBLE);
+        if (!$this->isDev) {
+            $normalized = array_intersect_key($normalized, self::ALWAYS_VISIBLE);
+        }
+
+        // A refusal (4xx) also carries a message identifier and the values its message was
+        // made from, so a client can show it in its own language. A server error has
+        // nothing for the user to act on and gets neither.
+        if ($exception instanceof BaseException && $responseCode >= 400 && $responseCode < 500) {
+            $normalized['messageIdentifier'] = $exception->messageIdentifier();
+
+            $normalized['messageParameters'] = array_map(
+                $this->parameterForClient(...),
+                $exception->parameters()
+            );
+        }
+
+        return $normalized;
+    }
+
+    // Scalars go as they are; anything else as the text it has in the message.
+    private function parameterForClient(mixed $parameter): string|int|float|bool|null
+    {
+        if ($parameter === null || is_scalar($parameter)) {
+            return $parameter;
+        }
+
+        return StringMaker::instance()->fromVariable($parameter);
     }
 }
