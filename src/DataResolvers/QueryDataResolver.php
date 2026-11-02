@@ -11,6 +11,11 @@ use Medas\Core\{
 };
 use Medas\HttpRequestHandler\{Attributes\QueryArgument, Exceptions, RequestFactory};
 
+/**
+ * Injects #[QueryArgument('name')]: a query string parameter. Query values are always strings, so
+ * they're converted to an int, float or bool parameter's type; an array (?search[tags][]=3) is cast
+ * into an object when the parameter's type is a class (see RequestValueCaster).
+ */
 readonly class QueryDataResolver implements CompilableParameterResolver
 {
     use HandlesByCompiling;
@@ -20,16 +25,18 @@ readonly class QueryDataResolver implements CompilableParameterResolver
         return -40;
     }
 
-    public function compile(\ReflectionParameter|\ReflectionProperty $parameter): QueryArgument|null
+    public function compile(\ReflectionParameter|\ReflectionProperty $parameter): CompiledRequestArgument|null
     {
-        return attribute(QueryArgument::class, $parameter);
+        if (!$attribute = attribute(QueryArgument::class, $parameter)) {
+            return null;
+        }
+
+        return CompiledRequestArgument::fromParameter($attribute->name, $parameter);
     }
 
-    /**
-     * @param QueryArgument $compiled
-     */
     public function resolveCompiled(object $compiled): ParameterResolverResult
     {
+        /** @var CompiledRequestArgument $compiled */
         // Cannot inject via constructor — this resolver is instantiated directly by ArgumentResolver,
         // which is part of the DI bootstrap chain
         $queryData = service(RequestFactory::class)->get()->uri->query;
@@ -38,6 +45,13 @@ readonly class QueryDataResolver implements CompilableParameterResolver
             throw new Exceptions\QueryArgumentIsMissing($compiled->name);
         }
 
-        return new ParameterResolverResult(true, $queryData[$compiled->name]);
+        return new ParameterResolverResult(
+            true,
+            service(RequestValueCaster::class)->resolve(
+                $queryData[$compiled->name],
+                $compiled,
+                coerceStrings: true
+            )
+        );
     }
 }

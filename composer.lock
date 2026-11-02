@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bb45e2b17dd5b34bb7c439fd4b9b4dcc",
+    "content-hash": "d1503e015813e452fdea75b795efb0f3",
     "packages": [
         {
             "name": "morphp/medas-console",
@@ -57,16 +57,16 @@
         },
         {
             "name": "morphp/medas-core",
-            "version": "v4.8.0",
+            "version": "v4.8.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tarantuli/medas-core.git",
-                "reference": "2c872bb52224f8ab08dd4cdbdf15fd6cc5495f09"
+                "reference": "8a331ea0a7cd65624d116e1d2d19c4d48c6aeab7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/2c872bb52224f8ab08dd4cdbdf15fd6cc5495f09",
-                "reference": "2c872bb52224f8ab08dd4cdbdf15fd6cc5495f09",
+                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/8a331ea0a7cd65624d116e1d2d19c4d48c6aeab7",
+                "reference": "8a331ea0a7cd65624d116e1d2d19c4d48c6aeab7",
                 "shasum": ""
             },
             "require": {
@@ -99,10 +99,10 @@
                 "medas"
             ],
             "support": {
-                "source": "https://github.com/tarantuli/medas-core/tree/v4.8.0",
+                "source": "https://github.com/tarantuli/medas-core/tree/v4.8.3",
                 "issues": "https://github.com/tarantuli/medas-core/issues"
             },
-            "time": "2026-10-21T12:34:07+00:00"
+            "time": "2026-10-26T11:37:53+00:00"
         },
         {
             "name": "morphp/medas-error-reporting",
@@ -312,6 +312,162 @@
                 "issues": "https://github.com/tarantuli/medas-json/issues"
             },
             "time": "2026-08-26T10:42:34+00:00"
+        },
+        {
+            "name": "morphp/medas-object-to-array-serializer",
+            "version": "v3.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tarantuli/medas-object-to-array-serializer.git",
+                "reference": "a3428c40315e1146b02d79b2311f8fb999b8aadd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tarantuli/medas-object-to-array-serializer/zipball/a3428c40315e1146b02d79b2311f8fb999b8aadd",
+                "reference": "a3428c40315e1146b02d79b2311f8fb999b8aadd",
+                "shasum": ""
+            },
+            "require": {
+                "morphp/medas-core": "^4",
+                "morphp/medas-php-class-analysis": "^3",
+                "php": "^8.4"
+            },
+            "require-dev": {
+                "morphp/medas-object-instantiator": "^4",
+                "morphp/medas-ramsey-uuid-bridge": "^3",
+                "morphp/medas-service-manager": "^4",
+                "phpunit/phpunit": "^10"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Medas\\ObjectToArraySerializer\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Medas\\ObjectToArraySerializerTest\\": "tests/"
+                }
+            },
+            "authors": [
+                {
+                    "name": "Patrick Morpey",
+                    "email": "patrick@morphp.nl"
+                }
+            ],
+            "description": "Medas object to array serializer",
+            "keywords": [
+                "data manipulation"
+            ],
+            "support": {
+                "source": "https://github.com/tarantuli/medas-object-to-array-serializer/tree/v3.3.0",
+                "issues": "https://github.com/tarantuli/medas-object-to-array-serializer/issues"
+            },
+            "time": "2026-11-02T09:32:40+00:00"
+        },
+        {
+            "name": "morphp/medas-php-class-analysis",
+            "version": "v3.1.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tarantuli/medas-php-class-analysis.git",
+                "reference": "a8751126d9f17a381b67e75a7928b673adb9dcbe"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tarantuli/medas-php-class-analysis/zipball/a8751126d9f17a381b67e75a7928b673adb9dcbe",
+                "reference": "a8751126d9f17a381b67e75a7928b673adb9dcbe",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "morphp/medas-core": "^4",
+                "morphp/medas-php-tokenizer": "^3",
+                "php": "^8.4"
+            },
+            "require-dev": {
+                "morphp/medas-object-instantiator": "^4",
+                "morphp/medas-service-manager": "^4",
+                "phpunit/phpunit": "^10"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Medas\\PhpClassAnalysis\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Medas\\PhpClassAnalysisTest\\": "tests/"
+                }
+            },
+            "authors": [
+                {
+                    "name": "Patrick Morpey",
+                    "email": "patrick@morphp.nl"
+                }
+            ],
+            "description": "Medas PHP class analysis",
+            "keywords": [
+                "backend"
+            ],
+            "support": {
+                "source": "https://github.com/tarantuli/medas-php-class-analysis/tree/v3.1.5",
+                "issues": "https://github.com/tarantuli/medas-php-class-analysis/issues"
+            },
+            "time": "2026-10-22T07:39:07+00:00"
+        },
+        {
+            "name": "morphp/medas-php-tokenizer",
+            "version": "v3.1.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tarantuli/medas-php-tokenizer.git",
+                "reference": "e284cbc96b0ec13633ddb28210963644731341ad"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tarantuli/medas-php-tokenizer/zipball/e284cbc96b0ec13633ddb28210963644731341ad",
+                "reference": "e284cbc96b0ec13633ddb28210963644731341ad",
+                "shasum": ""
+            },
+            "require": {
+                "morphp/medas-console": "^4",
+                "morphp/medas-core": "^4",
+                "php": "^8.4"
+            },
+            "require-dev": {
+                "morphp/medas-console-printer": "^4|^5",
+                "morphp/medas-object-instantiator": "^4",
+                "morphp/medas-service-manager": "^4",
+                "phpunit/phpunit": "^10"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Medas\\PhpTokenizer\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Medas\\PhpTokenizerTest\\": "tests/"
+                }
+            },
+            "authors": [
+                {
+                    "name": "Patrick Morpey",
+                    "email": "patrick@morphp.nl"
+                }
+            ],
+            "description": "Medas PHP tokenizer",
+            "keywords": [
+                "backend"
+            ],
+            "support": {
+                "source": "https://github.com/tarantuli/medas-php-tokenizer/tree/v3.1.7",
+                "issues": "https://github.com/tarantuli/medas-php-tokenizer/issues"
+            },
+            "time": "2026-10-22T07:34:55+00:00"
         },
         {
             "name": "morphp/medas-routing",

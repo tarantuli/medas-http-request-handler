@@ -6,7 +6,6 @@ namespace Medas\HttpRequestHandler\DataResolvers;
 
 use Medas\Core\{
     HandlesByCompiling,
-    Interfaces\ArrayToObjectCaster,
     Interfaces\CompilableParameterResolver,
     ParameterResolverResult
 };
@@ -58,7 +57,13 @@ readonly class RequestDataObjectResolver implements CompilableParameterResolver
             $values = array_merge($values, $requestData->uri->query);
         }
 
-        $object = service(ArrayToObjectCaster::class)->cast($values, $compiled->className);
+        // Query values are all strings, so they're converted to the properties' types
+        $object = service(RequestValueCaster::class)->toObject(
+            $values,
+            $compiled->className,
+            $compiled->attribute->fromQuery,
+            $compiled->className
+        );
 
         return new ParameterResolverResult(true, $object);
     }

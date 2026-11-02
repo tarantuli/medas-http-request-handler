@@ -10,6 +10,7 @@ use Medas\Events\EventsPackage;
 use Medas\Files\FilesPackage;
 use Medas\Json\JsonPackage;
 use Medas\ObjectInstantiator\ObjectInstantiatorPackage;
+use Medas\ObjectToArraySerializer\ObjectToArraySerializerPackage;
 
 class HttpRequestHandlerPackage extends BasePackage
 {
@@ -21,6 +22,7 @@ class HttpRequestHandlerPackage extends BasePackage
             ErrorReportingPackage::instance(),
             FilesPackage::instance(),
             JsonPackage::instance(),
+            ObjectToArraySerializerPackage::instance(),
         ];
     }
 

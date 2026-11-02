@@ -31,6 +31,8 @@ The HTTP layer of the Medas framework. It handles the full lifecycle of an HTTP 
 | `#[QueryArgument('param')]` | `QueryDataResolver`         | A named query string parameter                   |
 | `#[RequestDataObject]`      | `RequestDataObjectResolver` | A typed DTO hydrated from body and/or query data |
 
+All three convert the value to the parameter's type through `RequestValueCaster`: an array becomes an object of the parameter's class (via medas-object-to-array-serializer), and query values -- always strings -- become the `int`, `float` or `bool` the parameter or property expects (`"3"`, `"2.5"`, `"true"`). A value that doesn't fit is an `InvalidRequestArgument`, a 400, instead of a server error.
+
 **Authorization** — `AuthorizationVote` is dispatched as an event before the handler is called. Listeners set `$vote->allowedAccess` to `AllowedAccess::Allowed`, `Denied`, or `Abstain`. Two built-in vote handlers are provided: `AnyUserHandler` (grants access when `$request->authentication` is set) and `PublicResourceHandler` (always grants access when the handler is annotated with `#[PublicResource]`).
 
 ## Configuration options
@@ -120,6 +122,35 @@ readonly class CreateInvoiceHandler implements HttpRequestHandler
 ```
 
 Dot notation is supported for nested body fields: `#[BodyArgument('address.city')]`.
+
+**Injecting a parameters object from one argument:**
+
+When the parameter's type is a class and the argument is an array, it's cast into an object of that class. The class
+needs properties with defaults rather than constructor parameters, since the caster doesn't call the constructor.
+
+```php
+class InvoiceSearch
+{
+    public string|null $customer = null;
+
+    /** @var int[] */
+    public array $statuses = [];
+
+    public bool $overdueOnly = false;
+}
+
+#[Service]
+readonly class InvoiceListHandler implements HttpRequestHandler
+{
+    public function __construct(
+        // GET invoices?search[customer]=acme&search[statuses][]=2&search[overdueOnly]=true
+        #[QueryArgument('search')]
+        private InvoiceSearch $search,
+    ) {}
+}
+```
+
+The same class works with `#[BodyArgument('search')]` for a JSON body, where values keep their JSON types.
 
 **Using a typed DTO:**
 
