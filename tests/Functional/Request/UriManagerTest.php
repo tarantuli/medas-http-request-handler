@@ -18,4 +18,18 @@ class UriManagerTest extends TestCase
         self::assertEquals('json', $uri->extension);
         self::assertEquals(['width' => 200, 'height' => 50], $uri->query);
     }
+
+    public function testDotsInNamesSurvive(): void
+    {
+        $uri = service(UriManager::class)->fromString('subscriptions?products.name*=IAT&page=1');
+
+        self::assertSame(['products.name*' => 'IAT', 'page' => '1'], $uri->query);
+    }
+
+    public function testEncodedDotsAndArraysStillParse(): void
+    {
+        $uri = service(UriManager::class)->fromString('items?products%2Ename=a.b&ids[]=1&ids[]=2');
+
+        self::assertSame(['products.name' => 'a.b', 'ids' => ['1', '2']], $uri->query);
+    }
 }
